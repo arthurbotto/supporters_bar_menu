@@ -1,0 +1,9 @@
+__pycache__
+.vscode
+.pytest_cache
+.env
+CLAUDE.md
+bar_menu_venv/
+*.pyc
+*.log
+.DS_Store

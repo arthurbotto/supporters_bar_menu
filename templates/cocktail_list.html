@@ -1,0 +1,36 @@
+{% for cocktail in cocktails %}
+  <li class="product-item">
+    <button
+      class="cocktail-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="panel-{{ cocktail.id }}"
+      data-cocktail-id="{{ cocktail.id }}"
+    >
+      <span class="product-name">{{ cocktail.name|e }}</span>
+      <span class="product-price-cell">£{{ cocktail.price }}</span>
+      <span class="chevron" aria-hidden="true">▾</span>
+    </button>
+
+    <div class="cocktail-panel" id="panel-{{ cocktail.id }}" hidden>
+      <span class="cocktail-description">{{ cocktail.description }}</span>
+      <ul class="ingredients">
+        {% for item in cocktail.recipe_items %}
+          {% if item.ingredient_category != 'garnish' %}
+          <li class="ingredient">
+            {% if item.amount is not none %}
+              {{ ('%g' % (item.amount|float)) }} {{ item.unit }} {{ item.ingredient_name|e }}
+            {% else %}
+              {{ item.unit }} {{ item.ingredient_name|e }}
+            {% endif %}
+          </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+
+      <button class="more-button" type="button" data-more-id="{{ cocktail.id }}">
+        More
+      </button>
+    </div>
+  </li>
+{% endfor %}

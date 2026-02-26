@@ -1,0 +1,125 @@
+.wine-cols-1 .wine-price-header,
+.wine-cols-1 .wine-price-row {
+  grid-template-columns: 1fr 6rem;
+}
+
+.wine-cols-2 .wine-price-header,
+.wine-cols-2 .wine-price-row {
+  grid-template-columns: 1fr 6rem 6rem;
+}
+
+.wine-cols-3 .wine-price-header,
+.wine-cols-3 .wine-price-row {
+  grid-template-columns: 1fr 6rem 6rem 6rem;
+}
+
+.wine-price-header {
+  display: grid;
+  padding: 4px 14px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.wine-price-row {
+  display: grid;
+  padding: 16px 14px;
+  align-items: center;
+}
+
+.wine-price-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.125rem;
+}
+
+.more-button-wines {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  padding: 16px 14px;
+  cursor: pointer;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-align: left;
+  font-size: 18px;
+}
+
+
+.more-button-wines:hover {
+  background: rgba(153, 54, 51, 0.05);
+}
+
+.more-button-wines .wine-price-row {
+   flex: 1;
+   padding: 0;
+ }
+
+ .modal {
+  width: min(760px, 100%);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 18px;
+  position: relative;
+  box-shadow: 0 25px 80px rgba(31, 41, 55, 0.20);
+  max-height: calc(100vh - 36px);
+  overflow-y: auto;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: var(--text);
+}
+
+.modal-title {
+  margin: 0 0 10px;
+  color: var(--accent);
+}
+
+.modal-description {
+  margin: 0 0 12px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.modal-meta {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #fffaf2;
+}
+
+.modal-subtitle {
+  margin: 16px 0 10px;
+}
+
+.modal-image-placeholder {
+  height: 180px;
+  border: 2px dashed rgba(153, 54, 51, 0.25);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  background: rgba(153, 54, 51, 0.03);
+  margin-bottom: 12px;
+}
+
+body.modal-open {
+  overflow: hidden;
+}

@@ -1,0 +1,86 @@
+:root {
+  --bg: #fbf7ef;          /* warm off-white */
+  --surface: #ffffff;     /* card surfaces */
+  --panel: #fff3e6;       /* warm light panel */
+  --text: #1f2937;        /* dark slate */
+  --muted: #6b7280;       /* grey */
+  --border: #eadfce;      /* warm border */
+  --accent: rgb(153, 54, 51);
+  --accent-soft: rgba(153, 54, 51, 0.12);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.header {
+  padding: 26px 18px 14px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #fff 0%, var(--bg) 100%);
+}
+
+.title {
+  margin: 0 0 6px;
+  font-size: 30px;
+  letter-spacing: 0.2px;
+}
+
+.subtitle {
+  margin: 0;
+  color: var(--muted);
+}
+
+.container {
+  padding: 18px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.home-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.home-btn:hover {
+  background: rgba(153, 54, 51, 0.2);
+}
+
+.product-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.product-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(31, 41, 55, 0.05);
+}
+
+.product-name {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1.125rem;
+}
+
+.product-price-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.125rem;
+}
+

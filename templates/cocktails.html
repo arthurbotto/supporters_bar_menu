@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cocktail Menu</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+  <script defer src="{{ url_for('static', filename='js/menu.js') }}"></script>
+</head>
+
+<body>
+  <header class="header">
+    <h1 class="title">Cocktails</h1>
+    <p class="subtitle">Click a cocktail to see ingredients.</p>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+  <div class="search">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search cocktails..."
+      hx-get="/search"
+      hx-trigger="keyup changed delay:300ms"
+      hx-target="#cocktailResults"
+      hx-swap="innerHTML"
+      autocomplete="off"
+    >
+  </div>
+
+  <main class="container">
+    <ul class="product-list" id="cocktailResults">
+      {% include "cocktail_list.html" %}
+    </ul>
+  </main>
+
+  <!-- Modal overlay -->
+  <div class="overlay" id="overlay" hidden aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="close" id="closeModal" type="button" aria-label="Close">✕</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+</body>
+</html>
+

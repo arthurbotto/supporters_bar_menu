@@ -1,0 +1,35 @@
+<h2 class="modal-title">{{ cocktail.name|e }}</h2>
+
+<div class="modal-image-placeholder">
+  <span>Image coming soon</span>
+</div>
+
+{% if cocktail.history %}
+  <p class="modal-description">{{ cocktail.history|e }}</p>
+{% endif %}
+
+<div class="modal-meta">
+  <div><strong>Method:</strong> {{ cocktail.method|e }}</div>
+  <div><strong>Glass:</strong> {{ cocktail.glass|e }}</div>
+  <div><strong>Garnish:</strong> {{ cocktail.garnish|e }}</div>
+  <div><strong>Alcohol Content:</strong> {{ cocktail.abv|e }}</div>
+</div>
+
+<h3 class="modal-subtitle">Ingredients</h3>
+<ul class="ingredients">
+  {% for item in cocktail.recipe_items %}
+    {% if item.ingredient_category != 'garnish' %}
+    <li class="ingredient"> 
+      {% if item.amount is not none %}
+        {{ ('%g' % (item.amount|float)) }} {{ item.unit }} {{ item.ingredient_name|e }}
+      {% else %}
+        {{ item.unit }} {{ item.ingredient_name|e }}
+      {% endif %}
+
+      {% if item.optional %}
+        <span class="optional">(optional)</span>
+      {% endif %}
+      </li>
+      {% endif %}
+  {% endfor %}
+</ul>
