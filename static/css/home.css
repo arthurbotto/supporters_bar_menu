@@ -23,11 +23,11 @@
 }
 
 .grid {
-  max-width: 400px;
+  max-width: 860px;
   margin: 24px auto 0;
   padding: 0 18px;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -35,17 +35,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1 / 1;
+  height: 180px;
   background: var(--surface);
   border-radius: 14px;
+  border: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: transform 0.08s ease;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
 }
 
 .tile:hover {
   transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(153, 54, 51, 0.15);
 }
 
 .tile-title {
