@@ -105,3 +105,18 @@ class ProductRepository:
         if len(rows) == 0:
             return None
         return self._row_to_product(rows[0])
+    
+    def search(self, query):
+        query = query.strip()
+        
+        pattern_name = f"%{query}%"
+
+        rows = self._connection.execute(
+            """
+            SELECT p.*, wd.region, wd.vintage
+            FROM products p
+            LEFT JOIN wine_details wd ON wd.product_id = p.id
+            WHERE p.category = 'wine' AND p.name ILIKE %s
+            ORDER BY p.name            
+            """, [pattern_name])
+        return [self._row_to_product(r) for r in rows]

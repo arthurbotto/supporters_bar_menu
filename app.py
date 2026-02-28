@@ -118,6 +118,41 @@ def search_cocktails():
     
     return render_template("cocktail_list.html", cocktails=cocktails)
 
+@app.route('/search_wines')
+def search_wines():
+    q = request.args.get('q', '').strip()
+
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+
+    if q == '':
+        wines = product_repo.all_wines()
+    else:
+        wines = product_repo.search(q)
+    
+    grouped = {}
+    for wine in wines:
+        wine.variants = product_repo.product_variants(wine.id)
+        wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
+        if wine.subcategory not in grouped:
+            grouped[wine.subcategory] = []
+        grouped[wine.subcategory].append(wine)
+
+    for wines_list in grouped.values():
+        wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
+
+    section_sizes = {}
+    for section, wines_list in grouped.items():
+        sizes = set()
+        for wine in wines_list:
+            for ml in wine.price_by_ml:
+                sizes.add(ml)
+        section_sizes[section] = sorted(sizes)
+
+    section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
+
+    return render_template('wines_list.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
+
 
 
 

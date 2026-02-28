@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/wines.css') }}">
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
   <script defer src="{{ url_for('static', filename='js/wine_modal.js') }}"></script>
 </head>
 <body>
@@ -14,41 +15,20 @@
     <h1 class="title">All Wines</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
   </header>
-  <main class="container">
-    {% for section in section_order %}
-      {% if section in grouped %}
-        {% set sizes = section_sizes[section] %}
-        <div class="wine-cols-{{ sizes|length }}">
-          <h2>{{ section|capitalize }}</h2>
-          <div class="wine-price-header">
-            <span></span>
-            {% for size in sizes %}
-              <span class="wine-price-cell">{{ size }}ml</span>
-            {% endfor %}
-          </div>
-          <ul class="product-list">
-            {% for wine in grouped[section] %}
-              <li class="product-item">
-              <button class="more-button-wines" type="button" data-more-id="{{ wine.id }}">
-                  <div class="wine-price-row">
-                    <span class="product-name">{{ wine.name|e }}</span>
-                    {% for size in sizes %}
-                      <span class="wine-price-cell">
-                        {% if size in wine.price_by_ml %}
-                          £{{ "%.2f"|format(wine.price_by_ml[size]) }}
-                        {% else %}
-                          &mdash;
-                        {% endif %}
-                      </span>
-                    {% endfor %}
-                  </div>
-                </button>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
-    {% endfor %}
+  <div class="search">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search wines..."
+      hx-get="/search_wines"
+      hx-trigger="keyup changed delay:300ms"
+      hx-target="#wineResults"
+      hx-swap="innerHTML"
+      autocomplete="off"
+    >
+  </div>
+  <main class="container" id="wineResults">
+    {% include "wines_list.html" %}
   </main>
 
   <div class="overlay" id="overlay" hidden aria-hidden="true">

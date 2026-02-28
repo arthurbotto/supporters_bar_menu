@@ -65,10 +65,21 @@ duplicating template code.
 **Search** — `CocktailRepository.search()` uses `ILIKE` for name matching and `~*`
 (regex, word-boundary) for ingredient matching, with a `CASE` rank to put name matches first.
 
+### Home page grid (updated)
+
+`static/css/home.css` — layout expanded to match the rest of the site:
+
+- `.grid`: `max-width` raised from `400px` → `860px` (matches `.container` width); columns changed from `1fr 1fr` → `repeat(3, 1fr)`
+- `.tile`: square `aspect-ratio: 1/1` replaced with fixed `height: 180px` (landscape); added `border: 1px solid var(--border)` to match site card style; `transition` extended to include `box-shadow`
+- `.tile:hover`: added `box-shadow: 0 6px 20px rgba(153, 54, 51, 0.15)` — accent-tinted lift shadow
+
+No HTML changes were needed.
+
 ### Wines (fully built)
 
 - `GET /wines` — renders `wines.html`
 - `GET /wines/<id>/modal` — AJAX fragment, returns `wine_modal.html`
+- `GET /search_wines` — HTMX endpoint, returns `wines_list.html` partial
 
 **Route logic in `app.py` (`get_wines`):**
 
@@ -84,6 +95,17 @@ duplicating template code.
 
 `wine_modal.js` listens for clicks on `.more-button-wines`, fetches the fragment from
 `/wines/<id>/modal`, and injects it into `#wineModalBody`. Same pattern as the cocktail modal.
+
+**Wine search** follows the exact same partial pattern as cocktail search:
+
+- The initial search implementation had issues: the route was returning the full wines.html template instead of just the list partial, the repository search wasn't filtering by category or joining wine details, and the partial
+didn't exist yet. I fixed this by extracting wines_list.html from the main template and refactoring the route to return only that partial.
+
+- `wines_list.html` — partial extracted from `wines.html`; contains all the section/grouping markup
+- `wines.html` now does `{% include "wines_list.html" %}` for the initial page load
+- `/search_wines` runs the same grouping/sorting/section_sizes logic as `/wines`, then returns `wines_list.html` (the partial only — not the full page)
+- HTMX on the search input: `hx-get="/search_wines"`, `hx-target="#wineResults"`, `hx-swap="innerHTML"`, `hx-trigger="keyup changed delay:300ms"`
+- `ProductRepository.search(query)` — filters `WHERE p.category = 'wine'` and LEFT JOINs `wine_details` so region/vintage are populated in results
 
 `ProductRepository.find_wine(parameter, column)` — fetches a single wine with a LEFT JOIN
 on `wine_details`. The `column` argument lets callers look up by `id` or `code`.
@@ -177,7 +199,7 @@ Each test class gets a `seeded_db` fixture that seeds schema + test data before 
 ### Medium
 - [ ] Tests for `IngredientRepository`
 - [ ] Route integration tests using `web_client` fixture (currently unused)
-- [ ] Wine search — new `ProductRepository.search()`, new `/wines/search` HTMX endpoint, same pattern as cocktail search
+- [x] ~~Wine search~~ — built (`wines_list.html` partial, `/search_wines` HTMX endpoint, `ProductRepository.search()`)
 
 ### Stretch
 - [ ] Remove `/products`; replace with per-category pages (`/beers`, `/spirits`, `/soft-drinks`, `/coffee`, etc.) — `category` column already in DB
