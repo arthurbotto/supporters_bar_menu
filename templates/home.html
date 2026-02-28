@@ -11,23 +11,24 @@
 
 <body>
   <header class="header">
-    <h1 class="title">Supporters House Menu</h1>
-
-    <!-- add image later in /static/logo.png -->
-    <!-- <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Supporters House logo"> -->
+    <div class="title-row">
+      <h1 class="title">Supporters House Bar Menu</h1>
+      <img class="logo" src="{{ url_for('static', filename='logo.png') }}" alt="Supporters House logo">
+    </div>
+    <p class="header-description">
+      The members' bar, lounge and dining room at the National Gallery, Trafalgar Square.
+      Open to House Members, patrons and supporters — offering cocktails, coffee and
+      dining in the beautifully restored Wilkins Building.
+    </p>
   </header>
 
   <div class="grid">
     <a class="tile" href="{{ url_for('get_cocktails_page') }}">
       <p class="tile-title">Cocktails</p>
     </a>
-  </div>
-  <div class="grid">
     <a class="tile" href="{{ url_for('get_wines') }}">
       <p class="tile-title">Wines</p>
     </a>
-  </div>
-  <div class="grid">
     <a class="tile" href="{{ url_for('get_products') }}">
       <p class="tile-title">All Products</p>
     </a>
