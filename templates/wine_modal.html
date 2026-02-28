@@ -3,3 +3,26 @@
 <div class="modal-image-placeholder">
   <span>Image coming soon</span>
 </div>
+
+<p class="modal-description">{{wine.description|e}}</p>
+
+<h3 class="modal-subtitle">Details</h3>
+
+<div class="modal-meta">
+  <div><strong>Producer:</strong> {{ wine.producer|e }}</div>
+  <div><strong>Country:</strong> {{ wine.country|e }}</div>
+  <div><strong>Region:</strong> {{ wine.region|e }}</div>
+  <div><strong>Vintage:</strong> {{ wine.vintage|e }}</div>
+  {% if wine.vegan %}
+    <div><strong>Vegan:</strong> Yes</div>
+  {% else %}
+    <div><strong>Vegan:</strong> No</div>
+  {% endif %}
+  {% if wine.organic %}
+    <div><strong>Organic:</strong> Yes</div>
+  {% else %}
+    <div><strong>Organic:</strong> No</div>
+  {% endif %}
+  <div><strong>Alcohol Content:</strong> {{ wine.abv|e }}%</div>
+</div>
+
