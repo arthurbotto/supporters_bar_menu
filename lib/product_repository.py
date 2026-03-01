@@ -55,6 +55,14 @@ class ProductRepository:
                ORDER BY p.name""")
         return [self._row_to_product(r) for r in rows]
     
+    def all_spirits(self):
+        rows = self._connection.execute(
+            """SELECT p.*
+               FROM products p
+               WHERE p.category = 'spirit'
+               ORDER BY p.subcategory""")
+        return [self._row_to_product(r) for r in rows]
+    
     def product_variants(self, product_id):
         rows = self._connection.execute(
             """

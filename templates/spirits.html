@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spirits</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/spirits.css') }}">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Spirits</h1>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+
+  <main class="container">
+    {% for section in section_order %}
+      {% if section in grouped %}
+        {% set sizes = section_sizes[section] %}
+        <div class="spirit-cols-{{ sizes|length }}">
+          <h2>{{ section|capitalize }}</h2>
+          <div class="spirit-price-header">
+            <span></span>
+            {% for size in sizes %}
+              <span class="spirit-price-cell">{{ size }}ml</span>
+            {% endfor %}
+          </div>
+          <ul class="product-list">
+            {% for spirit in grouped[section] %}
+              <li class="product-item">
+                  <div class="spirit-price-row">
+                    <span class="product-name">{{ spirit.name|e }}, {{ spirit.country|e }} - {{ "%.1f"|format(spirit.abv) }}%</span>
+                    {% for size in sizes %}
+                      <span class="spirit-price-cell">
+                        {% if size in spirit.price_by_ml %}
+                          £{{ "%.2f"|format(spirit.price_by_ml[size]) }}
+                        {% else %}
+                          &mdash;
+                        {% endif %}
+                      </span>
+                    {% endfor %}
+                  </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </main>
+  
+</body>
+</html>

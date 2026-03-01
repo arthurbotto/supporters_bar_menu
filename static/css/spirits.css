@@ -1,0 +1,34 @@
+.spirit-cols-1 .spirit-price-header,
+.spirit-cols-1 .spirit-price-row {
+  grid-template-columns: 1fr 6rem;
+}
+
+.spirit-cols-2 .spirit-price-header,
+.spirit-cols-2 .spirit-price-row {
+  grid-template-columns: 1fr 6rem 6rem;
+}
+
+.spirit-cols-3 .spirit-price-header,
+.spirit-cols-3 .spirit-price-row {
+  grid-template-columns: 1fr 6rem 6rem 6rem;
+}
+
+.spirit-price-header {
+  display: grid;
+  padding: 4px 14px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.spirit-price-row {
+  display: grid;
+  padding: 16px 14px;
+  align-items: center;
+}
+
+.spirit-price-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.125rem;
+}

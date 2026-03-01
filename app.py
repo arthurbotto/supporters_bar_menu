@@ -23,6 +23,36 @@ def get_products():
 
     return render_template('products.html', products=products)
 
+@app.route('/spirits')
+def get_spirits():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    spirits = product_repo.all_spirits()
+
+    grouped = {}
+
+    for spirit in spirits:
+        spirit.variants = product_repo.product_variants(spirit.id)
+        spirit.price_by_ml = {v.serve_ml: v.price for v in spirit.variants}
+        if spirit.subcategory not in grouped:
+            grouped[spirit.subcategory] = []
+        grouped[spirit.subcategory].append(spirit)
+    
+    for spirit_list in grouped.values():
+        spirit_list.sort(key=lambda s: min(s.price_by_ml.values()))
+    
+    section_sizes = {}
+
+    for section, spirit_list in grouped.items():
+        sizes = set()
+        for spirit in spirit_list:
+            for ml in spirit.price_by_ml:
+                sizes.add(ml)
+        section_sizes[section] = sorted(sizes)
+    
+    section_order = ['gin', 'vodka', 'rum', 'tequila', 'whisky', 'vermouth', 'liqueur', 'brandy']
+
+    return render_template('spirits.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
 
 @app.route('/wines')
 def get_wines():
