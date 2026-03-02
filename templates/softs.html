@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Softs</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/softs.css') }}">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Soft Drinks / Juices / Water</h1>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+
+  <main class="container">
+    {% for section in section_order %}
+      {% if section in grouped %}
+        {% set sizes = section_sizes[section] %}
+        <div class="soft-cols-{{ sizes|length }}">
+          <h2>{{ section|replace('_', ' ')|title }}</h2>
+          {% if sizes|length > 1 %}
+            <div class="soft-price-header">
+              <span></span>
+              {% for size in sizes %}
+                <span class="soft-price-cell">{{ size }}ml</span>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <ul class="product-list">
+            {% for s in grouped[section] %}
+              <li class="product-item">
+                <div class="soft-price-row">
+                  <span class="product-name">{{ s.name|e }}</span>
+                  {% for size in sizes %}
+                    <span class="soft-price-cell">
+                      {% if size in s.price_by_ml %}
+                        £{{ "%.2f"|format(s.price_by_ml[size]) }}
+                      {% else %}
+                        &mdash;
+                      {% endif %}
+                    </span>
+                  {% endfor %}
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </main>
+  
+</body>
+</html>

@@ -100,49 +100,38 @@ for wine in wines:
 print()
 
 
-# --- Step 2: Group wines by subcategory (the actual logic from app.py) ---
+# --- Step 2: Group wines, attach variants, and build section_sizes in one pass ---
 grouped = {}
-for wine in wines:
-    if wine.subcategory not in grouped:
-        grouped[wine.subcategory] = []
-    grouped[wine.subcategory].append(wine)
+section_sizes = {}
 
-print("=" * 60)
-print("STEP 2: grouped (dictionary after grouping)")
-print("=" * 60)
-print(f"Type: {type(grouped)}")
-print(f"Keys: {list(grouped.keys())}")
-print()
-for subcategory, wine_list in grouped.items():
-    print(f"  '{subcategory}' -> {[w.name for w in wine_list]}")
-print()
-
-
-# --- Step 3: Attach variants and build price_by_ml ---
-# In app.py this is:
-#   wine.variants = product_repo.product_variants(wine.id)
-#   wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
 for wine in wines:
     wine.variants = fake_variants[wine.id]
     wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
+    if wine.subcategory not in grouped:
+        grouped[wine.subcategory] = []
+        section_sizes[wine.subcategory] = set()
+    grouped[wine.subcategory].append(wine)
+    for ml in wine.price_by_ml:
+        section_sizes[wine.subcategory].add(ml)
+
+section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
 
 print("=" * 60)
-print("STEP 3: After attaching variants and price_by_ml")
+print("STEP 2: grouped + section_sizes (single pass)")
 print("=" * 60)
-for wine in wines:
-    print(f"\n  {wine.name}")
-    print(f"    wine.variants    = {wine.variants}")
-    print(f"    wine.price_by_ml = {wine.price_by_ml}")
+for subcategory, wine_list in grouped.items():
+    print(f"  '{subcategory}' -> {[w.name for w in wine_list]}")
+    print(f"    sizes: {section_sizes[subcategory]}")
 print()
 
 
-# --- Step 4: sort() with lambda ---
+# --- Step 3: sort() with lambda ---
 # lambda w: min(w.price_by_ml.values())
 # For each wine w, this extracts the cheapest price across all serve sizes.
 # sort() compares those numbers to rank wines within each section.
 
 print("=" * 60)
-print("STEP 4: Showing what the lambda extracts from each wine (reds)")
+print("STEP 3: Showing what the lambda extracts from each wine (reds)")
 print("=" * 60)
 for wine in grouped['red']:
     sort_value = min(wine.price_by_ml.values())
@@ -152,7 +141,7 @@ for wine in grouped['red']:
 print()
 
 print("=" * 60)
-print("STEP 4b: Reds BEFORE sort")
+print("STEP 3b: Reds BEFORE sort")
 print("=" * 60)
 print([w.name for w in grouped['red']])
 print()
@@ -161,17 +150,17 @@ for wines_list in grouped.values():
     wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
 
 print("=" * 60)
-print("STEP 4c: Reds AFTER sort (cheapest first)")
+print("STEP 3c: Reds AFTER sort (cheapest first)")
 print("=" * 60)
 print([w.name for w in grouped['red']])
 print()
 
 
-# --- Step 5: section_order controls display order ---
+# --- Step 4: section_order controls display order ---
 section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
 
 print("=" * 60)
-print("STEP 5: Final output — each section sorted by price, low to high")
+print("STEP 4: Final output — each section sorted by price, low to high")
 print("=" * 60)
 for section in section_order:
     wine_list = grouped.get(section, [])

@@ -75,6 +75,23 @@ class ProductRepository:
             "SELECT p.* FROM products p WHERE p.category = 'beer'"
         )
         return [self._row_to_product(r) for r in rows]
+    
+    def all_softs(self):
+        rows = self._connection.execute(
+            """SELECT p.*
+               FROM products p
+               WHERE p.category = 'soft'
+               OR
+               p.category = 'juice'
+               ORDER BY p.id ASC"""
+        )
+        return [self._row_to_product(r) for r in rows]
+
+    def all_hot_drinks(self):
+        rows = self._connection.execute(
+            "SELECT p.* FROM products p WHERE p.category = 'hot' ORDER BY p.id ASC"
+        )
+        return [self._row_to_product(r) for r in rows]
 
         
     

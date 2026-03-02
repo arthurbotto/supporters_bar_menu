@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hot Drinks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/hot_drinks.css') }}">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Hot Drinks</h1>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+
+  <main class="container">
+    <ul class="product-list">
+      {% for h in hot_drinks %}
+        <li class="product-item">
+          <div class="hot-row">
+            <span class="product-name">{{ h.name|e }}</span>
+            {% for variant in h.variants %}
+              <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+            {% endfor %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </main>
+</body>
+</html>

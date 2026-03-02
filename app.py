@@ -35,25 +35,22 @@ def get_spirits():
     spirits = product_repo.all_spirits()
 
     grouped = {}
+    section_sizes = {}
 
     for spirit in spirits:
         spirit.variants = product_repo.product_variants(spirit.id)
         spirit.price_by_ml = {v.serve_ml: v.price for v in spirit.variants}
         if spirit.subcategory not in grouped:
             grouped[spirit.subcategory] = []
+            section_sizes[spirit.subcategory] = set()
         grouped[spirit.subcategory].append(spirit)
-    
+        for ml in spirit.price_by_ml:
+            section_sizes[spirit.subcategory].add(ml)
+
+    section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
+
     for spirit_list in grouped.values():
         spirit_list.sort(key=lambda s: min(s.price_by_ml.values()))
-    
-    section_sizes = {}
-
-    for section, spirit_list in grouped.items():
-        sizes = set()
-        for spirit in spirit_list:
-            for ml in spirit.price_by_ml:
-                sizes.add(ml)
-        section_sizes[section] = sorted(sizes)
     
     section_order = ['gin', 'vodka', 'rum', 'tequila', 'whisky', 'vermouth', 'liqueur', 'brandy']
 
@@ -69,27 +66,23 @@ def get_wines():
     product_repo = ProductRepository(connection)
     wines = product_repo.all_wines()
 
-    # Group wines by subcategory into a dictionary
     grouped = {}
+    section_sizes = {}
+
     for wine in wines:
         wine.variants = product_repo.product_variants(wine.id)
         wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
         if wine.subcategory not in grouped:
             grouped[wine.subcategory] = []
+            section_sizes[wine.subcategory] = set()
         grouped[wine.subcategory].append(wine)
+        for ml in wine.price_by_ml:
+            section_sizes[wine.subcategory].add(ml)
 
-    # Sort wines by price.
+    section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
+
     for wines_list in grouped.values():
         wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
-
-    # Compute the distinct serve sizes present in each section (for column headers)
-    section_sizes = {}
-    for section, wines_list in grouped.items():
-        sizes = set()
-        for wine in wines_list:
-            for ml in wine.price_by_ml:
-                sizes.add(ml)
-        section_sizes[section] = sorted(sizes)
 
     # The order that sections should appear in the page
     section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
@@ -121,23 +114,22 @@ def search_wines():
         wines = product_repo.search_wine(q)
     
     grouped = {}
+    section_sizes = {}
+
     for wine in wines:
         wine.variants = product_repo.product_variants(wine.id)
         wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
         if wine.subcategory not in grouped:
             grouped[wine.subcategory] = []
+            section_sizes[wine.subcategory] = set()
         grouped[wine.subcategory].append(wine)
+        for ml in wine.price_by_ml:
+            section_sizes[wine.subcategory].add(ml)
+
+    section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
 
     for wines_list in grouped.values():
         wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
-
-    section_sizes = {}
-    for section, wines_list in grouped.items():
-        sizes = set()
-        for wine in wines_list:
-            for ml in wine.price_by_ml:
-                sizes.add(ml)
-        section_sizes[section] = sorted(sizes)
 
     section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
 
@@ -231,11 +223,54 @@ def get_beers_page():
         for ml in b.price_by_ml:
             sizes.add(ml)
     
-    
-    
-
-    
     return render_template('beers.html', beers=beers, sizes=sorted(sizes))
+
+
+# -------------------------------
+# soft drinks, juices, water page
+# -------------------------------
+
+@app.route('/softs')
+def get_softs_page():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    softs = product_repo.all_softs()
+
+    grouped = {}
+    section_sizes = {}
+
+    for s in softs:
+        s.variants = product_repo.product_variants(s.id)
+        s.price_by_ml = {v.serve_ml: v.price for v in s.variants}
+        if s.subcategory not in grouped:
+            grouped[s.subcategory] = []
+            section_sizes[s.subcategory] = set()
+        grouped[s.subcategory].append(s)
+        for ml in s.price_by_ml:
+            section_sizes[s.subcategory].add(ml)
+
+    section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
+    section_order = ['fever_tree', 'san_pellegrino', 'classic', 'juice', 'water']
+
+    return render_template('softs.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
+
+
+
+
+# ---------------
+# hot drinks page
+# ---------------
+
+@app.route('/hot-drinks')
+def get_hot_drinks_page():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    hot_drinks = product_repo.all_hot_drinks()
+
+    for h in hot_drinks:
+        h.variants = product_repo.product_variants(h.id)
+
+    return render_template('hot_drinks.html', hot_drinks=hot_drinks)
 
 
 @app.errorhandler(404)
@@ -245,10 +280,6 @@ def not_found(e):
 @app.errorhandler(500)
 def server_error(e):
     return render_template('500.html'), 500
-
-
-
-
 
 
 
