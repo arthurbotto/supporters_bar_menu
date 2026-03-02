@@ -212,6 +212,30 @@ def get_mocktails_page():
     return render_template('mocktails.html', mocktails=mocktails)
 
 
+# ---------------
+# beers page
+# ---------------
+
+@app.route('/beers')
+def get_beers_page():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    beers = product_repo.all_beers()
+
+    sizes = set()
+
+    for b in beers:
+        b.variants = product_repo.product_variants(b.id)
+        b.price_by_ml = {v.serve_ml: v.price for v in b.variants}
+        
+        for ml in b.price_by_ml:
+            sizes.add(ml)
+    
+    
+    
+
+    
+    return render_template('beers.html', beers=beers, sizes=sorted(sizes))
 
 
 @app.errorhandler(404)
@@ -230,4 +254,4 @@ def server_error(e):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=int(os.environ.get('PORT', 5001)))
+    app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 5001)))

@@ -65,10 +65,17 @@ class ProductRepository:
 
     def all_mocktails(self):
         rows = self._connection.execute(
-            """SELECT P.*
+            """SELECT p.*
                FROM products p
                WHERE p.category = 'mocktail'""")
         return [self._row_to_product(r) for r in rows]
+    
+    def all_beers(self):
+        rows = self._connection.execute(
+            "SELECT p.* FROM products p WHERE p.category = 'beer'"
+        )
+        return [self._row_to_product(r) for r in rows]
+
         
     
     def product_variants(self, product_id):
