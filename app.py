@@ -9,7 +9,9 @@ app = Flask(__name__)
 
 
 
-
+# ----------------------
+# home page
+# ----------------------
 @app.route('/')
 def get_home_page():
     return render_template('home.html')
@@ -23,6 +25,9 @@ def get_products():
 
     return render_template('products.html', products=products)
 
+# ----------------------
+# spirits page
+# ----------------------
 @app.route('/spirits')
 def get_spirits():
     connection = get_flask_database_connection(app)
@@ -53,6 +58,10 @@ def get_spirits():
     section_order = ['gin', 'vodka', 'rum', 'tequila', 'whisky', 'vermouth', 'liqueur', 'brandy']
 
     return render_template('spirits.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
+
+# ----------------------
+# wines page
+# ----------------------
 
 @app.route('/wines')
 def get_wines():
@@ -95,58 +104,9 @@ def wine_modal(wine_id):
     wine = product_repo.find_wine(wine_id, "id")
 
     if wine is None:
-        return "Not Found", 404
+        return render_template('404.html'), 404
 
     return render_template("wine_modal.html", wine=wine)
-
-
-@app.route('/cocktails')
-def get_cocktails_page():
-    connection = get_flask_database_connection(app)
-    cocktail_repo = CocktailRepository(connection)
-    recipe_repo = RecipeItemRepository(connection)
-    cocktails = cocktail_repo.all()
-    
-
-    for cocktail in cocktails:
-        cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
-
-    return render_template('cocktails.html', cocktails=cocktails)
-
-
-
-
-@app.route('/cocktails/<int:cocktail_id>/modal')
-def cocktail_modal(cocktail_id):
-    connection = get_flask_database_connection(app)
-    cocktail_repo = CocktailRepository(connection)
-    recipe_repo = RecipeItemRepository(connection)
-
-    cocktail = cocktail_repo.find_cocktail(cocktail_id, "id")
-    if cocktail is None:
-        return "Not found", 404
-
-    cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
-
-    return render_template("cocktail_modal.html", cocktail=cocktail)
-
-@app.route('/search')
-def search_cocktails():
-    q = request.args.get('q', '').strip()
-
-    connection = get_flask_database_connection(app)
-    cocktail_repo = CocktailRepository(connection)
-    recipe_repo = RecipeItemRepository(connection)
-
-    if q == '':
-        cocktails = cocktail_repo.all()
-    else:
-        cocktails = cocktail_repo.search(q)
-    
-    for cocktail in cocktails:
-        cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
-    
-    return render_template("cocktail_list.html", cocktails=cocktails)
 
 @app.route('/search_wines')
 def search_wines():
@@ -158,7 +118,7 @@ def search_wines():
     if q == '':
         wines = product_repo.all_wines()
     else:
-        wines = product_repo.search(q)
+        wines = product_repo.search_wine(q)
     
     grouped = {}
     for wine in wines:
@@ -184,16 +144,68 @@ def search_wines():
     return render_template('wines_list.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
 
 
+# ---------------------
+# cocktails page
+# ---------------------
+
+@app.route('/cocktails')
+def get_cocktails_page():
+    connection = get_flask_database_connection(app)
+    cocktail_repo = CocktailRepository(connection)
+    recipe_repo = RecipeItemRepository(connection)
+    cocktails = cocktail_repo.all()
+    
+
+    for cocktail in cocktails:
+        cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
+
+    return render_template('cocktails.html', cocktails=cocktails)
 
 
 
 
+@app.route('/cocktails/<int:cocktail_id>/modal')
+def cocktail_modal(cocktail_id):
+    connection = get_flask_database_connection(app)
+    cocktail_repo = CocktailRepository(connection)
+    recipe_repo = RecipeItemRepository(connection)
+
+    cocktail = cocktail_repo.find_cocktail(cocktail_id, "id")
+    if cocktail is None:
+        return render_template('404.html'), 404
+
+    cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
+
+    return render_template("cocktail_modal.html", cocktail=cocktail)
+
+@app.route('/search_cocktails')
+def search_cocktails():
+    q = request.args.get('q', '').strip()
+
+    connection = get_flask_database_connection(app)
+    cocktail_repo = CocktailRepository(connection)
+    recipe_repo = RecipeItemRepository(connection)
+
+    if q == '':
+        cocktails = cocktail_repo.all()
+    else:
+        cocktails = cocktail_repo.search_cocktail(q)
+    
+    for cocktail in cocktails:
+        cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
+    
+    return render_template("cocktail_list.html", cocktails=cocktails)
 
 
 
 
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('404.html'), 404
 
-
+@app.errorhandler(500)
+def server_error(e):
+    return render_template('500.html'), 500
 
 
 

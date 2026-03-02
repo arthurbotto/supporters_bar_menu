@@ -21,7 +21,7 @@ class CocktailRepository:
         row = rows[0]
         return Cocktail(row["id"], row["name"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
     
-    def search(self, query):
+    def search_cocktail(self, query):
         query = query.strip()
         pattern_name = f"%{query}%"
         pattern_ing = rf"(^|\s){re.escape(query)}"

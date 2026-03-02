@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Server Error</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Something went wrong</h1>
+    <p class="subtitle">An unexpected error occurred. Try again in a moment</p>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>  
+  </header>
+  
+</body>
+</html>

@@ -114,7 +114,7 @@ class ProductRepository:
             return None
         return self._row_to_product(rows[0])
     
-    def search(self, query):
+    def search_wine(self, query):
         query = query.strip()
         
         pattern_name = f"%{query}%"

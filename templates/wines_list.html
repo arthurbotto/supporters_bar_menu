@@ -1,3 +1,6 @@
+{% if grouped|length == 0 %}
+  <p>No wines found</p>
+{% endif %}
 {% for section in section_order %}
       {% if section in grouped %}
         {% set sizes = section_sizes[section] %}

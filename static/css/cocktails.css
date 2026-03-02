@@ -175,3 +175,10 @@
 body.modal-open {
   overflow: hidden;
 }
+
+.no-cocktail-message {
+  color: #000;          
+  font-size: 1.125rem;   
+  margin-top: 1rem;      
+  text-align: center;
+}
