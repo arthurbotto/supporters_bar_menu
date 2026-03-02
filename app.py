@@ -196,6 +196,21 @@ def search_cocktails():
     
     return render_template("cocktail_list.html", cocktails=cocktails)
 
+# ---------------
+# mocktails page
+# ---------------
+
+@app.route('/mocktails')
+def get_mocktails_page():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    mocktails = product_repo.all_mocktails()
+
+    for m in mocktails:
+        m.variants = product_repo.product_variants(m.id)
+    
+    return render_template('mocktails.html', mocktails=mocktails)
+
 
 
 

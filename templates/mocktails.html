@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mocktails</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mocktails.css') }}">
+</head>
+<body>
+  <header class="header">
+    <h1 class="title">Mocktails</h1>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+
+  <main class="container">
+    <ul class="product-list">
+      {% for m in mocktails %}
+        <li class="product-item">
+          <div class="mocktail-price-row">
+            <span class="product-name">{{ m.name|e }}</span>
+            <span class="subtitle">{{ m.description }}</span>
+            {% for variant in m.variants %}
+              <span class="mocktail-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+            {% endfor %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </main>
+  
+</body>
+</html>

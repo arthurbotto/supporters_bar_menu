@@ -1,0 +1,19 @@
+.mocktail-price-header {
+  display: grid;
+  padding: 4px 14px 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.mocktail-price-row {
+  display: grid;
+  padding: 16px 14px;
+  align-items: center;
+}
+
+.mocktail-price-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-size: 1.125rem;
+}
