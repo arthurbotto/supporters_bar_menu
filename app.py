@@ -2,6 +2,7 @@ import os
 from flask import Flask, redirect, request, render_template, url_for
 from lib.database_connection import get_flask_database_connection
 from lib.cocktail_repository import CocktailRepository
+from lib.product import Product
 from lib.product_repository import ProductRepository
 from lib.recipe_item_repository import RecipeItemRepository
 
@@ -78,6 +79,8 @@ def get_wines():
 
     # The order that sections should appear in the page
     section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
+
+    
 
     return render_template('wines.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
 
@@ -261,7 +264,8 @@ def get_hot_drinks_page():
 
     for h in hot_drinks:
         h.variants = product_repo.product_variants(h.id)
-
+    
+    
     return render_template('hot_drinks.html', hot_drinks=hot_drinks)
 
 

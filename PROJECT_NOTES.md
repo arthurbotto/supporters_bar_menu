@@ -7,12 +7,16 @@ Update this file whenever something meaningful changes.
 
 ## What This App Is
 
-A digital bar menu for Supporters House Bar. Customers browse cocktails and wines.
+A digital bar menu for Supporters House Bar. Customers browse all drink categories.
 
 - **Cocktails page** — full list, ingredient accordion, search, modal with full details
+- **Mocktails page** — flat list with name and price
 - **Wines page** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), sorted by price; individual wine modal with full details
-- **Products page** — all products (to be removed; will be replaced with per-category pages)
-- **Home page** — landing page
+- **Spirits page** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), sorted by cheapest serve
+- **Beers page** — flat list with price columns per serve size
+- **Soft Drinks page** — grouped by subcategory (fever_tree, san_pellegrino, classic, juice, water)
+- **Hot Drinks page** — flat list with name and price
+- **Home page** — landing page with tiles linking to all category pages
 
 Run with: `python app.py` (port 5001)
 
@@ -52,14 +56,33 @@ codebase returns model objects, not dicts.
 
 ## Feature Log
 
+### Routes
+
+| Route | Template | Notes |
+|---|---|---|
+| `GET /` | `home.html` | |
+| `GET /cocktails` | `cocktails.html` | |
+| `GET /cocktails/<id>/modal` | `cocktail_modal.html` | AJAX fragment |
+| `GET /search_cocktails` | `cocktail_list.html` | HTMX partial (was `/search`) |
+| `GET /wines` | `wines.html` | |
+| `GET /wines/<id>/modal` | `wine_modal.html` | AJAX fragment |
+| `GET /search_wines` | `wines_list.html` | HTMX partial |
+| `GET /spirits` | `spirits.html` | grouped by subcategory |
+| `GET /mocktails` | `mocktails.html` | flat list |
+| `GET /beers` | `beers.html` | flat list, price columns per serve |
+| `GET /softs` | `softs.html` | grouped by subcategory |
+| `GET /hot-drinks` | `hot_drinks.html` | flat list |
+
+`GET /products` has been removed.
+
 ### Cocktails (fully built)
 
 - `GET /cocktails` — fetches all cocktails + recipe items, renders `cocktails.html`
 - `GET /cocktails/<id>/modal` — AJAX fragment, returns `cocktail_modal.html`
-- `GET /search` — HTMX endpoint, returns `cocktail_list.html` partial
+- `GET /search_cocktails` — HTMX endpoint, returns `cocktail_list.html` partial
 
 `cocktail_list.html` is both `{% include %}`d on initial page load **and** returned
-directly by `/search`. This means it works for both full render and HTMX swap without
+directly by `/search_cocktails`. This means it works for both full render and HTMX swap without
 duplicating template code.
 
 **Search** — `CocktailRepository.search()` uses `ILIKE` for name matching and `~*`
@@ -114,6 +137,34 @@ on `wine_details`. The `column` argument lets callers look up by `id` or `code`.
 Variants require a DB call per product. The model class should not know about the database.
 The route is the right place to fetch and attach extra data.
 
+### Spirits (fully built)
+
+- `GET /spirits` — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), sorted by cheapest serve within each section
+- Same grouping/`section_sizes` pattern as wines: monkey-patches `variants`, `price_by_ml`, groups into dict, sorts by `min(price_by_ml.values())`, builds per-section column headers
+- `all_spirits()` in `ProductRepository`
+
+### Mocktails (fully built)
+
+- `GET /mocktails` — flat list, name + price; simplest category page
+- `all_mocktails()` in `ProductRepository`
+
+### Beers (fully built)
+
+- `GET /beers` — flat list with price columns per serve size; shared `sizes` set for column headers (same logic as wines but not grouped by subcategory)
+- `all_beers()` in `ProductRepository`
+
+### Soft Drinks (fully built)
+
+- `GET /softs` — grouped by subcategory (fever_tree, san_pellegrino, classic, juice, water)
+- Same grouping pattern as wines/spirits
+- `all_softs()` queries `category = 'soft' OR category = 'juice'`
+
+### Hot Drinks (fully built)
+
+- `GET /hot-drinks` — flat list, name + price
+- `all_hot_drinks()` queries `category = 'hot'`
+- `hot_drinks.css` adds only `.hot-row` (flex, space-between); all other styles from `base.css`
+
 ### ProductVariant model (added)
 
 `lib/product_variant.py` — fields: `id, product_id, serve_label, serve_ml, price, sort_order`
@@ -121,6 +172,22 @@ The route is the right place to fetch and attach extra data.
 Added `__eq__` for test comparisons, `__repr__` for debugging.
 `_row_to_variants()` private helper in `ProductRepository` maps DB rows to `ProductVariant` objects,
 consistent with the existing `_row_to_product()` pattern.
+
+### ProductRepository — full method list
+
+| Method | Description |
+|---|---|
+| `all_wines()` | All wines; LEFT JOINs `wine_details` |
+| `all_spirits()` | All spirits |
+| `all_mocktails()` | All mocktails |
+| `all_beers()` | All beers |
+| `all_softs()` | Soft drinks (`category = 'soft' OR category = 'juice'`) |
+| `all_hot_drinks()` | Hot drinks (`category = 'hot'`) |
+| `product_variants(product_id)` | All variants for a given product |
+| `find(product_id)` | Single product by id |
+| `find_wine(parameter, column)` | Single wine with LEFT JOIN on `wine_details`; `column` is `id` or `code` |
+| `find_by_code(code)` | Single product by code |
+| `search_wine(query)` | Wine search; filters by category, LEFT JOINs `wine_details` |
 
 ---
 
@@ -139,9 +206,16 @@ consistent with the existing `_row_to_product()` pattern.
 
 | File | What it covers |
 |---|---|
-| `base.css` | Shared classes: `.product-name` (1.125rem), `.product-price-cell` (1.125rem), layout primitives |
-| `cocktails.css` | `.cocktail-toggle` (flex, full-width button), accordion panel, modal, search input |
-| `wines.css` | `.more-button-wines` (block, full-width button), `.wine-price-row` (grid), `.wine-price-header`, `.wine-price-cell` |
+| `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `.product-cols-*` grid rules, `.search` input |
+| `home.css` | Home grid: `.grid` (3-col, max-width 860px), `.tile` (180px height, hover shadow) |
+| `cocktails.css` | `.cocktail-toggle` (accordion button), `.cocktail-panel`, `.chevron`, `.ingredients`, `.more-button` |
+| `wines.css` | `.more-button-wines` (full-width button), `.product-price-row` override inside button |
+| `modal.css` | `.overlay`, `.modal`, `.close`, `.modal-title`, `.modal-description`, `.modal-meta`, `body.modal-open` |
+| `spirits.css` | (empty — spirits uses base.css classes only) |
+| `beers.css` | (empty — beers uses base.css classes only) |
+| `mocktails.css` | (empty — mocktails uses base.css classes only) |
+| `softs.css` | (empty — softs uses base.css classes only) |
+| `hot_drinks.css` | `.hot-row` (flex, space-between) |
 
 **The accordion evolution:** the original `menu.js` (kept in `old_menu_dot_js.md` for reference)
 attached `addEventListener` to each `.cocktail-toggle` on page load. After HTMX was added for search,
@@ -193,27 +267,27 @@ Each test class gets a `seeded_db` fixture that seeds schema + test data before 
 ## What Still Needs Doing (priority order)
 
 ### High value
-- [ ] Tests for `ProductRepository` — follow class-based pattern (TestAll, TestAllWines, TestFind, TestFindByCode, TestProductVariants)
+- [ ] Tests for `ProductRepository` — follow class-based pattern (TestAllWines, TestAllSpirits, TestAllMocktails, TestAllBeers, TestAllSofts, TestAllHotDrinks, TestFind, TestFindByCode, TestProductVariants)
 - [ ] Tests for `RecipeItemRepository` — test `for_cocktail()`: correct items, sort_order, empty case
 
 ### Medium
 - [ ] Tests for `IngredientRepository`
 - [ ] Route integration tests using `web_client` fixture (currently unused)
-- [x] ~~Wine search~~ — built (`wines_list.html` partial, `/search_wines` HTMX endpoint, `ProductRepository.search()`)
+- [x] ~~Wine search~~ — built (`wines_list.html` partial, `/search_wines` HTMX endpoint, `ProductRepository.search_wine()`)
 
 ### Stretch
-- [ ] Remove `/products`; replace with per-category pages (`/beers`, `/spirits`, `/soft-drinks`, `/coffee`, etc.) — `category` column already in DB
+- [x] ~~Remove `/products`; replace with per-category pages~~ — all 5 category pages built and linked from home; `/products` route and `products.html` removed
 - [x] ~~Individual wine detail page~~ — built (wine modal, mirrors cocktail modal pattern)
-- [ ] Rate-limit `/search` with Flask-Limiter (already in `requirements.txt`)
+- [ ] Rate-limit `/search_cocktails` with Flask-Limiter (already in `requirements.txt`)
 - [ ] Playwright E2E tests (already in `requirements.txt`)
 
 ---
 
 ## Known Issues / Technical Debt
 
-- `wine.variants` and `wine.price_by_ml` are monkey-patched onto `Product` in the route.
-  The `Product` model has no default `variants = []` field, so accessing it before the route
-  populates it would raise `AttributeError`. Minor — not urgent.
+- `wine.variants` and `wine.price_by_ml` are monkey-patched onto `Product` in the route. 
+  The `Product` model has no default `variants = []` field, so accessing it before the route 
+  populates it would raise `AttributeError`. Minor — not urgent. (fixed)
+
 - Unused dependencies in `requirements.txt`: Flask-Limiter, Flask-WTF, playwright, python-slugify.
   None are wired into `app.py` yet.
-- `/products` route fetches all products with no grouping — will be removed entirely and replaced with per-category pages (`/beers`, `/spirits`, `/soft-drinks`, `/coffee`, etc.).

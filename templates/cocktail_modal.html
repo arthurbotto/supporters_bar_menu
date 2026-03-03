@@ -12,7 +12,7 @@
   <div><strong>Method:</strong> {{ cocktail.method|e }}</div>
   <div><strong>Glass:</strong> {{ cocktail.glass|e }}</div>
   <div><strong>Garnish:</strong> {{ cocktail.garnish|e }}</div>
-  <div><strong>Alcohol Content:</strong> {{ cocktail.abv|e }}</div>
+  <div><strong>Alcohol Content:</strong> {{ "%.1f"|format(cocktail.abv) }}%</div>
 </div>
 
 <h3 class="modal-subtitle">Ingredients</h3>

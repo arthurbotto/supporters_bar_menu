@@ -1,4 +1,4 @@
--- Test seed for cocktail repository tests.
+-- Test seed for recipe_item repository tests.
 -- Requires seeds/schema.sql to have been run first to create tables.
 
 INSERT INTO cocktails (name, description, history, method, glass, garnish, abv, price) VALUES

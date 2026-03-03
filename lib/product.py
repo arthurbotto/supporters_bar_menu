@@ -31,6 +31,8 @@ class Product:
         self.organic = organic
         self.region = region
         self.vintage = vintage
+        self.variants = []
+        self.price_by_ml = {}
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
