@@ -84,59 +84,59 @@ class TestSearch:
 
     def test_search_by_full_cocktail_name(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("Negroni")
+        results = repo.search_cocktail("Negroni")
         assert len(results) == 1
         assert results[0].name == "Negroni"
 
     def test_search_is_case_insensitive_for_name(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("negroni")
+        results = repo.search_cocktail("negroni")
         assert len(results) == 1
         assert results[0].name == "Negroni"
 
     def test_search_by_partial_name(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("Mar")
+        results = repo.search_cocktail("Mar")
         assert len(results) == 1
         assert results[0].name == "Margarita"
 
     def test_search_by_ingredient_name(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("Tequila")
+        results = repo.search_cocktail("Tequila")
         assert len(results) == 1
         assert results[0].name == "Margarita"
 
     def test_search_ingredient_is_case_insensitive(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("tequila")
+        results = repo.search_cocktail("tequila")
         assert len(results) == 1
         assert results[0].name == "Margarita"
 
     def test_search_returns_multiple_results(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         # Lime Juice is shared between Mojito and Margarita
-        results = repo.search("Lime")
+        results = repo.search_cocktail("Lime")
         assert {c.name for c in results} == {"Mojito", "Margarita"}
 
     def test_search_multiple_results_ordered_alphabetically(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         # Both match via ingredient (same rank), so result order is alphabetical
-        results = repo.search("Lime")
+        results = repo.search_cocktail("Lime")
         assert results[0].name == "Margarita"
         assert results[1].name == "Mojito"
 
     def test_search_returns_cocktail_instances(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("Negroni")
+        results = repo.search_cocktail("Negroni")
         assert all(isinstance(c, Cocktail) for c in results)
 
     def test_search_returns_empty_list_for_no_match(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        assert repo.search("zzz") == []
+        assert repo.search_cocktail("zzz") == []
 
     def test_search_strips_surrounding_whitespace(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        results = repo.search("  Negroni  ")
+        results = repo.search_cocktail("  Negroni  ")
         assert len(results) == 1
         assert results[0].name == "Negroni"
 
@@ -144,7 +144,7 @@ class TestSearch:
         repo = CocktailRepository(seeded_db)
         # 'rum' matches 'White Rum' at a word boundary (space before 'Rum').
         # No other ingredient or cocktail name contains 'rum', so only Mojito is returned.
-        results = repo.search("rum")
+        results = repo.search_cocktail("rum")
         assert len(results) == 1
         assert results[0].name == "Mojito"
 
@@ -158,6 +158,6 @@ class TestSearch:
             ["Gin Fizz", "A classic highball", "British origin", "Built", "Highball", "Lemon wheel", 10, 7.50],
         )
         repo = CocktailRepository(seeded_db)
-        results = repo.search("gin")
+        results = repo.search_cocktail("gin")
         assert results[0].name == "Gin Fizz"
         assert results[1].name == "Negroni"
