@@ -17,14 +17,6 @@ def get_home_page():
     return render_template('home.html')
 
 
-@app.route('/products')
-def get_products():
-    connection = get_flask_database_connection(app)
-    product_repo = ProductRepository(connection)
-    products = product_repo.all()
-
-    return render_template('products.html', products=products)
-
 # ----------------------
 # spirits page
 # ----------------------

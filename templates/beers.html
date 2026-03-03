@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Beers</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/beers.css') }}">
 </head>
 <body>
   <header class="header">
@@ -15,19 +13,19 @@
   </header>
 
   <main class="container">
-    <div class="beer-price-header">
+    <div class="product-price-header">
       <span></span>
       {% for size in sizes %}
-        <span class="beer-price-cell">{{ size }}ml</span>
+        <span class="product-price-cell">{{ size }}ml</span>
       {% endfor %}
     </div>
     <ul class="product-list">
       {% for b in beers %}
         <li class="product-item">
-          <div class="beer-price-row">
+          <div class="product-price-row">
             <span class="product-name">{{ b.name|e }}, {{ b.country }} - {{ "%.1f"|format(b.abv) }}%</span>
             {% for size in sizes %}
-              <span class="beer-price-cell">
+              <span class="product-price-cell">
                 {% if size in b.price_by_ml %}
                   £{{ "%.2f"|format(b.price_by_ml[size]) }}
                 {% else %}

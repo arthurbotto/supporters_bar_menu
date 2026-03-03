@@ -4,22 +4,22 @@
 {% for section in section_order %}
       {% if section in grouped %}
         {% set sizes = section_sizes[section] %}
-        <div class="wine-cols-{{ sizes|length }}">
+        <div class="product-cols-{{ sizes|length }}">
           <h2>{{ section|capitalize }}</h2>
-          <div class="wine-price-header">
+          <div class="product-price-header">
             <span></span>
             {% for size in sizes %}
-              <span class="wine-price-cell">{{ size }}ml</span>
+              <span class="product-price-cell">{{ size }}ml</span>
             {% endfor %}
           </div>
           <ul class="product-list">
             {% for wine in grouped[section] %}
               <li class="product-item">
               <button class="more-button-wines" type="button" data-more-id="{{ wine.id }}">
-                  <div class="wine-price-row">
+                  <div class="product-price-row">
                     <span class="product-name">{{ wine.name|e }}</span>
                     {% for size in sizes %}
-                      <span class="wine-price-cell">
+                      <span class="product-price-cell">
                         {% if size in wine.price_by_ml %}
                           £{{ "%.2f"|format(wine.price_by_ml[size]) }}
                         {% else %}

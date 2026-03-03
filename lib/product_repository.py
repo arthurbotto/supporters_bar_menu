@@ -42,9 +42,6 @@ class ProductRepository:
     
     # -------------------------------
 
-    def all(self):
-        rows = self._connection.execute("SELECT * FROM products ORDER BY id")
-        return [self._row_to_product(r) for r in rows]
     
     def all_wines(self):
         rows = self._connection.execute(

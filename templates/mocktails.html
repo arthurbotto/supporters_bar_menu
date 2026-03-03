@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mocktails</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/mocktails.css') }}">
 </head>
 <body>
   <header class="header">
@@ -18,11 +16,11 @@
     <ul class="product-list">
       {% for m in mocktails %}
         <li class="product-item">
-          <div class="mocktail-price-row">
+          <div class="product-price-row">
             <span class="product-name">{{ m.name|e }}</span>
             <span class="subtitle">{{ m.description }}</span>
             {% for variant in m.variants %}
-              <span class="mocktail-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+              <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
             {% endfor %}
           </div>
         </li>

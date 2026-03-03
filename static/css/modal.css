@@ -1,29 +1,18 @@
-
-.more-button-wines {
-  width: 100%;
-  background: transparent;
-  border: 0;
-  color: var(--text);
-  padding: 16px 14px;
-  cursor: pointer;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  text-align: left;
-  font-size: 18px;
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 41, 55, 0.45);
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  overflow-y: auto;
 }
 
-
-.more-button-wines:hover {
-  background: rgba(153, 54, 51, 0.05);
+.overlay[hidden] {
+  display: none;
 }
 
-.more-button-wines .product-price-row {
-   flex: 1;
-   padding: 0;
- }
-
- .modal {
+.modal {
   width: min(760px, 100%);
   background: var(--surface);
   border: 1px solid var(--border);
