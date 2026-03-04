@@ -23,6 +23,6 @@
   {% else %}
     <div><strong>Organic:</strong> No</div>
   {% endif %}
-  <div><strong>Alcohol Content:</strong> {{ wine.abv|e }}%</div>
+  <div><strong>Alcohol Content:</strong> {{ "%.1f"|format(wine.abv) }}%</div>
 </div>
 

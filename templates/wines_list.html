@@ -17,7 +17,13 @@
               <li class="product-item">
               <button class="more-button-wines" type="button" data-more-id="{{ wine.id }}">
                   <div class="product-price-row">
-                    <span class="product-name">{{ wine.name|e }}</span>
+                    <span class="product-name">
+                      {{ wine.name|e }}
+                       {{ '- ' + wine.country if wine.country else '' }}
+                        {{ '- ' + wine.region if wine.region else '' }}
+                         {{ '- ' + (wine.vintage|string) if wine.vintage else '' }}
+                          {{'- ' + "%.1f"|format(wine.abv)}}%
+                           {{ ' (ve)' if wine.vegan else '' }}</span>
                     {% for size in sizes %}
                       <span class="product-price-cell">
                         {% if size in wine.price_by_ml %}
