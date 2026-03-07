@@ -122,13 +122,13 @@ class ProductRepository:
             return None
         return self._row_to_product(rows[0])
     
-    def find_wine(self, parameter, column):
+    def find_wine(self, wine_id):
         rows = self._connection.execute(
             f"""SELECT p.*, wd.region, wd.vintage 
             FROM products p 
             LEFT JOIN wine_details wd ON wd.product_id = p.id
-            WHERE {column} = %s""",
-            [parameter]
+            WHERE p.id = %s AND p.category = 'wine'""",
+            [wine_id]
         )
         if len(rows) == 0:
             return None

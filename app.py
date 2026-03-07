@@ -53,43 +53,47 @@ def get_spirits():
 # wines page
 # ----------------------
 
+# on this route, i will leave the wine logic commented, as reference.
+# I realised i dont really need it here, if i change hx-trigger="load"
+# on wines.html.
+# to make it work with the logic again just change
+# hx-trigger="keyup changed delay:300ms".
 @app.route('/wines')
 def get_wines():
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
-    wines = product_repo.all_wines()
+    return render_template('wines.html')
+    # wines = product_repo.all_wines()
 
-    grouped = {}
-    section_sizes = {}
+    # grouped = {}
+    # section_sizes = {}
 
-    for wine in wines:
-        wine.variants = product_repo.product_variants(wine.id)
-        wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
-        if wine.subcategory not in grouped:
-            grouped[wine.subcategory] = []
-            section_sizes[wine.subcategory] = set()
-        grouped[wine.subcategory].append(wine)
-        for ml in wine.price_by_ml:
-            section_sizes[wine.subcategory].add(ml)
+    # for wine in wines:
+    #     wine.variants = product_repo.product_variants(wine.id)
+    #     wine.price_by_ml = {v.serve_ml: v.price for v in wine.variants}
+    #     if wine.subcategory not in grouped:
+    #         grouped[wine.subcategory] = []
+    #         section_sizes[wine.subcategory] = set()
+    #     grouped[wine.subcategory].append(wine)
+    #     for ml in wine.price_by_ml:
+    #         section_sizes[wine.subcategory].add(ml)
 
-    section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
+    # section_sizes = {k: sorted(v) for k, v in section_sizes.items()}
 
-    for wines_list in grouped.values():
-        wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
+    # for wines_list in grouped.values():
+    #     wines_list.sort(key=lambda w: min(w.price_by_ml.values()))
 
-    # The order that sections should appear in the page
-    section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
+    # # The order that sections should appear in the page
+    # section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']
 
-    
-
-    return render_template('wines.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
+    # return render_template('wines.html', grouped=grouped, section_order=section_order, section_sizes=section_sizes)
 
 @app.route('/wines/<int:wine_id>/modal')
 def wine_modal(wine_id):
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
     
-    wine = product_repo.find_wine(wine_id, "id")
+    wine = product_repo.find_wine(wine_id)
 
     if wine is None:
         return render_template('404.html'), 404
