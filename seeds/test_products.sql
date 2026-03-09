@@ -15,7 +15,7 @@ INSERT INTO products (section_id, code, name, category, subcategory, description
   (NULL, 'BEER-001',   'Camden Hells',            'beer',     NULL,        NULL,                'Camden Town', 'England',        4.6, NULL, NULL),
   (NULL, 'BEER-002',   'Guinness',                'beer',     NULL,        NULL,                'Guinness',    'Ireland',        4.1, NULL, NULL),
   (NULL, 'SOFT-001',   'Coca-Cola',               'soft',     'classic',   NULL,                NULL,          NULL,            NULL, NULL, NULL),
-  (NULL, 'SOFT-002',   'Orange Juice',            'juice',    NULL,        NULL,                NULL,          NULL,            NULL, NULL, NULL),
+  (NULL, 'SOFT-002',   'Orange Juice',            'soft',    'juice',        NULL,                NULL,          NULL,            NULL, NULL, NULL),
   (NULL, 'HOT-001',    'Espresso',                'hot',      'coffee',    NULL,                NULL,          NULL,            NULL, NULL, NULL),
   (NULL, 'HOT-002',    'English Breakfast Tea',   'hot',      'tea',       NULL,                NULL,          NULL,            NULL, NULL, NULL),
   (NULL, 'MOCK-001',   'Virgin Mojito',           'mocktail', NULL,        'Mint and lime',     NULL,          NULL,               0, NULL, NULL),

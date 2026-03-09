@@ -77,15 +77,13 @@ codebase returns model objects, not dicts.
 
 ### Cocktails (fully built)
 
-- `GET /cocktails` — fetches all cocktails + recipe items, renders `cocktails.html`
+- `GET /cocktails` — shell route; renders `cocktails.html` with no data. Cocktail list loads via HTMX `hx-trigger="load, keyup changed delay:300ms"` calling `/search_cocktails`
 - `GET /cocktails/<id>/modal` — AJAX fragment, returns `cocktail_modal.html`
-- `GET /search_cocktails` — HTMX endpoint, returns `cocktail_list.html` partial
+- `GET /search_cocktails` — HTMX endpoint, returns `cocktail_list.html` partial; handles both initial load and live search
 
-`cocktail_list.html` is both `{% include %}`d on initial page load **and** returned
-directly by `/search_cocktails`. This means it works for both full render and HTMX swap without
-duplicating template code.
+`cocktail_list.html` is returned directly by `/search_cocktails`. `cocktails.html` includes it via `{% include %}` for initial render (but initial render is now done via HTMX load trigger, not pre-rendered by the route).
 
-**Search** — `CocktailRepository.search()` uses `ILIKE` for name matching and `~*`
+**Search** — `CocktailRepository.search_cocktails()` uses `ILIKE` for name matching and `~*`
 (regex, word-boundary) for ingredient matching, with a `CASE` rank to put name matches first.
 
 ### Home page grid (updated)
@@ -104,12 +102,13 @@ No HTML changes were needed.
 - `GET /wines/<id>/modal` — AJAX fragment, returns `wine_modal.html`
 - `GET /search_wines` — HTMX endpoint, returns `wines_list.html` partial
 
-**Route logic in `app.py` (`get_wines`):**
+**Route logic in `app.py` (`search_wines`):**
+
+`/wines` is a shell — renders `wines.html` with no data. The wine list loads via HTMX `hx-trigger="load, keyup changed delay:300ms"` on the search input, calling `/search_wines`. This means all grouping/sorting logic lives in one place only.
 
 1. `all_wines()` — SQL query returns `Product` objects, ordered by name
 2. For each wine, call `product_variants(wine.id)` → returns list of `ProductVariant` objects
-3. Monkey-patch `wine.variants` and `wine.price_by_ml` onto each Product in the route
-   - `wine.variants` = list of `ProductVariant` objects
+3. `wine.variants` and `wine.price_by_ml` set on each Product in the route
    - `wine.price_by_ml` = `{serve_ml: price}` dict (convenient for template lookups)
 4. Group into `grouped` dict: `{subcategory: [wine, wine, ...]}`
 5. Sort each group by cheapest serve: `lambda w: min(w.price_by_ml.values())`
@@ -119,19 +118,11 @@ No HTML changes were needed.
 `wine_modal.js` listens for clicks on `.more-button-wines`, fetches the fragment from
 `/wines/<id>/modal`, and injects it into `#wineModalBody`. Same pattern as the cocktail modal.
 
-**Wine search** follows the exact same partial pattern as cocktail search:
+- `wines_list.html` — partial returned by `/search_wines`; contains all section/grouping markup
+- HTMX: `hx-get="/search_wines"`, `hx-target="#wineResults"`, `hx-trigger="load, keyup changed delay:300ms"`
+- `ProductRepository.search_wine(query)` — filters `WHERE p.category = 'wine'` and LEFT JOINs `wine_details`
 
-- The initial search implementation had issues: the route was returning the full wines.html template instead of just the list partial, the repository search wasn't filtering by category or joining wine details, and the partial
-didn't exist yet. I fixed this by extracting wines_list.html from the main template and refactoring the route to return only that partial.
-
-- `wines_list.html` — partial extracted from `wines.html`; contains all the section/grouping markup
-- `wines.html` now does `{% include "wines_list.html" %}` for the initial page load
-- `/search_wines` runs the same grouping/sorting/section_sizes logic as `/wines`, then returns `wines_list.html` (the partial only — not the full page)
-- HTMX on the search input: `hx-get="/search_wines"`, `hx-target="#wineResults"`, `hx-swap="innerHTML"`, `hx-trigger="keyup changed delay:300ms"`
-- `ProductRepository.search(query)` — filters `WHERE p.category = 'wine'` and LEFT JOINs `wine_details` so region/vintage are populated in results
-
-`ProductRepository.find_wine(parameter, column)` — fetches a single wine with a LEFT JOIN
-on `wine_details`. The `column` argument lets callers look up by `id` or `code`.
+`ProductRepository.find_wine(wine_id)` — fetches a single wine by id with LEFT JOIN on `wine_details`, filtered by `category = 'wine'`.
 
 **Why monkey-patch instead of putting variants on the Product model?**
 Variants require a DB call per product. The model class should not know about the database.
@@ -157,7 +148,7 @@ The route is the right place to fetch and attach extra data.
 
 - `GET /softs` — grouped by subcategory (fever_tree, san_pellegrino, classic, juice, water)
 - Same grouping pattern as wines/spirits
-- `all_softs()` queries `category = 'soft' OR category = 'juice'`
+- `all_softs()` queries `category = 'soft'` only — juices were previously a separate category but are now `category='soft', subcategory='juice'` for consistency
 
 ### Hot Drinks (fully built)
 
@@ -181,11 +172,11 @@ consistent with the existing `_row_to_product()` pattern.
 | `all_spirits()` | All spirits |
 | `all_mocktails()` | All mocktails |
 | `all_beers()` | All beers |
-| `all_softs()` | Soft drinks (`category = 'soft' OR category = 'juice'`) |
+| `all_softs()` | Soft drinks (`category = 'soft'`; juices are now `subcategory = 'juice'`) |
 | `all_hot_drinks()` | Hot drinks (`category = 'hot'`) |
 | `product_variants(product_id)` | All variants for a given product |
 | `find(product_id)` | Single product by id |
-| `find_wine(parameter, column)` | Single wine with LEFT JOIN on `wine_details`; `column` is `id` or `code` |
+| `find_wine(wine_id)` | Single wine by id with LEFT JOIN on `wine_details`; filters by `category='wine'` |
 | `find_by_code(code)` | Single product by code |
 | `search_wine(query)` | Wine search; filters by category, LEFT JOINs `wine_details` |
 
@@ -228,16 +219,23 @@ on `document` that checks `e.target` at click time, so it always works regardles
 
 ### Current coverage
 
-| File | Tests | Classes |
-|---|---|---|
-| `tests/test_cocktail_repository.py` | 22 | TestAll, TestFindCocktail, TestSearch |
-| `tests/test_database_connection.py` | exists | — |
-| ProductRepository | none yet | — |
-| RecipeItemRepository | none yet | — |
-| IngredientRepository | none yet | — |
+**Repository tests** (all complete):
+
+| File | Classes |
+|---|---|
+| `tests/test_cocktail_repository.py` | TestAll, TestFindCocktail, TestSearch |
+| `tests/test_product_repository.py` | TestAllWines, TestAllSpirits, TestAllBeers, TestAllSofts, TestAllHotDrinks, TestAllMocktails, TestProductVariants, TestFind, TestFindWine, TestFindByCode, TestSearchWine |
+| `tests/test_ingredient_repository.py` | TestAllIngredients, TestFindIngredient |
+| `tests/test_recipe_item_repository.py` | TestForCocktail |
+
+**Route tests** (all complete):
+
+| File | Classes |
+|---|---|
+| `tests/test_app.py` | TestHomeRoute, TestWineRoute, TestSearchWinesRoute, TestWineModalRoute, TestSpiritsRoute, TestCocktailsRoute, TestSearchCocktailsRoute, TestCocktailModalRoute, TestMocktailsRoute, TestBeersRoute, TestSoftsRoute, TestHotDrinksRoute |
 
 Run all tests: `pytest`
-Run one file: `pytest tests/test_cocktail_repository.py`
+Run one file: `pytest tests/test_app.py`
 
 ### Test fixtures (`tests/conftest.py`)
 
@@ -245,14 +243,10 @@ Run one file: `pytest tests/test_cocktail_repository.py`
 - `test_web_address` — starts Flask test server on random port 4000–4999
 - `web_client` — Flask test client with `TESTING=True`
 
-### Test pattern to follow
+### Test pattern
 
-See `test_cocktail_repository.py` as the reference. Tests are class-based, one class per method:
-```
-class TestAll:       → tests for repo.all()
-class TestFind:      → tests for repo.find()
-```
-Each test class gets a `seeded_db` fixture that seeds schema + test data before each test.
+Repository tests: class-based, one class per method, each with a local `seeded_db` fixture.
+Route tests: class-based per route, `web_client` for all, `seeded_db_products` or `seeded_db_cocktails` when the route queries the DB. Home and shell routes (`/wines`, `/cocktails`) need no seed.
 
 ---
 
@@ -264,22 +258,10 @@ Each test class gets a `seeded_db` fixture that seeds schema + test data before 
 
 ---
 
-## What Still Needs Doing (priority order)
+## What Still Needs Doing
 
-### High value
-- [ ] Tests for `ProductRepository` — follow class-based pattern (TestAllWines, TestAllSpirits, TestAllMocktails, TestAllBeers, TestAllSofts, TestAllHotDrinks, TestFind, TestFindByCode, TestProductVariants)
-- [ ] Tests for `RecipeItemRepository` — test `for_cocktail()`: correct items, sort_order, empty case
-
-### Medium
-- [ ] Tests for `IngredientRepository`
-- [ ] Route integration tests using `web_client` fixture (currently unused)
-- [x] ~~Wine search~~ — built (`wines_list.html` partial, `/search_wines` HTMX endpoint, `ProductRepository.search_wine()`)
-
-### Stretch
-- [x] ~~Remove `/products`; replace with per-category pages~~ — all 5 category pages built and linked from home; `/products` route and `products.html` removed
-- [x] ~~Individual wine detail page~~ — built (wine modal, mirrors cocktail modal pattern)
-- [ ] Rate-limit `/search_cocktails` with Flask-Limiter (already in `requirements.txt`)
-- [ ] Playwright E2E tests (already in `requirements.txt`)
+- [ ] Playwright E2E tests — test HTMX search updates, modal open/close, accordion (already in `requirements.txt`)
+- [ ] Rate-limit `/search_cocktails` and `/search_wines` with Flask-Limiter (already in `requirements.txt`)
 
 ---
 

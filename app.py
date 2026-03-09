@@ -103,7 +103,6 @@ def wine_modal(wine_id):
 @app.route('/search_wines')
 def search_wines():
     q = request.args.get('q', '').strip()
-
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
 
@@ -141,16 +140,16 @@ def search_wines():
 
 @app.route('/cocktails')
 def get_cocktails_page():
-    connection = get_flask_database_connection(app)
-    cocktail_repo = CocktailRepository(connection)
-    recipe_repo = RecipeItemRepository(connection)
-    cocktails = cocktail_repo.all()
+    # connection = get_flask_database_connection(app)
+    # cocktail_repo = CocktailRepository(connection)
+    # recipe_repo = RecipeItemRepository(connection)
+    # cocktails = cocktail_repo.all()
     
 
-    for cocktail in cocktails:
-        cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
+    # for cocktail in cocktails:
+    #     cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
 
-    return render_template('cocktails.html', cocktails=cocktails)
+    return render_template('cocktails.html')
 
 
 

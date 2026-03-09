@@ -24,7 +24,7 @@
       name="q"
       placeholder="Search cocktails..."
       hx-get="/search_cocktails"
-      hx-trigger="keyup changed delay:300ms"
+      hx-trigger="load, keyup changed delay:300ms"
       hx-target="#cocktailResults"
       hx-swap="innerHTML"
       autocomplete="off"

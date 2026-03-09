@@ -78,8 +78,6 @@ class ProductRepository:
             """SELECT p.*
                FROM products p
                WHERE p.category = 'soft'
-               OR
-               p.category = 'juice'
                ORDER BY p.id ASC"""
         )
         return [self._row_to_product(r) for r in rows]
