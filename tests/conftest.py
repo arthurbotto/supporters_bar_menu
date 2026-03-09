@@ -4,6 +4,19 @@ from xprocess import ProcessStarter
 from lib.database_connection import DatabaseConnection
 from app import app
 
+@pytest.fixture
+def seeded_db_products(db_connection):
+    # schema.sql drops and recreates all tables, giving a clean slate with correct types.
+    db_connection.seed("seeds/schema.sql")
+    db_connection.seed("seeds/test_products.sql")
+    return db_connection
+
+@pytest.fixture
+def seeded_db_cocktails(db_connection):
+    db_connection.seed("seeds/schema.sql")
+    db_connection.seed("seeds/test_cocktails.sql")
+    return db_connection
+
 # This is a Pytest fixture.
 # It creates an object that we can use in our tests.
 # We will use it to create a database connection.

@@ -1,18 +1,5 @@
 import pytest
-
-@pytest.fixture
-def seeded_db_products(db_connection):
-    # schema.sql drops and recreates all tables, giving a clean slate with correct types.
-    db_connection.seed("seeds/schema.sql")
-    db_connection.seed("seeds/test_products.sql")
-    return db_connection
-
-@pytest.fixture
-def seeded_db_cocktails(db_connection):
-    db_connection.seed("seeds/schema.sql")
-    db_connection.seed("seeds/test_cocktails.sql")
-    return db_connection
-
+from app import app as flask_app, server_error
 
 
 class TestHomeRoute:
@@ -190,3 +177,17 @@ class TestHotDrinksRoute:
         response = web_client.get("/hot-drinks")
         assert b'Espresso' in response.data
         assert b'English Breakfast Tea' in response.data
+
+
+class TestErrorHandlers:
+
+    def test_404_returns_not_found_page(self, web_client):
+        response = web_client.get('/nonexistent-route')
+        assert response.status_code == 404
+        assert b'Page not found' in response.data
+
+    def test_500_returns_error_page(self):
+        with flask_app.test_request_context():
+            html, status_code = server_error(Exception('test'))
+        assert status_code == 500
+        assert 'Something went wrong' in html
