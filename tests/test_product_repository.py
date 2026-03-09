@@ -32,7 +32,7 @@ class TestAllWines:
         malbec = next(w for w in wines if w.name == 'Malbec Reserva')
         assert malbec == Product(
             malbec.id, None, 'WINE-001', 'Malbec Reserva', 'wine', 'red',
-            'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None,
+            'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None,True,
             'Mendoza', 2021
         )
 
@@ -68,7 +68,7 @@ class TestAllSpirits:
         hendricks = next(s for s in spirits if s.name == 'Hendricks Gin')
         assert hendricks == Product(
             hendricks.id, None, 'SPIRIT-001', 'Hendricks Gin', 'spirit', 'gin',
-            None, "Hendrick's", 'Scotland', Decimal('41.4'), None, None,
+            None, "Hendrick's", 'Scotland', Decimal('41.4'), None, None, True,
             None, None
         )
 

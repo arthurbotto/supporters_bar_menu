@@ -87,7 +87,8 @@ CREATE TABLE products (
     abv NUMERIC(5,2),
 
     vegan BOOLEAN,
-    organic BOOLEAN
+    organic BOOLEAN,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_products_code_unique ON products (code);

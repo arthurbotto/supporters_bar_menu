@@ -14,6 +14,7 @@ class Product:
             abv, 
             vegan, 
             organic,
+            is_active,
             region,
             vintage):
         
@@ -29,6 +30,7 @@ class Product:
         self.abv = abv
         self.vegan = vegan
         self.organic = organic
+        self.is_active = is_active
         self.region = region
         self.vintage = vintage
         self.variants = []
@@ -51,6 +53,7 @@ class Product:
         {self.abv},
         {self.vegan},
         {self.organic},
+        {self.is_active},
         {self.region},
         {self.vintage}
         )"""

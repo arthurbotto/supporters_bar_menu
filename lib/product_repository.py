@@ -23,6 +23,7 @@ class ProductRepository:
             row["abv"],
             row["vegan"],
             row["organic"],
+            row["is_active"],
             row.get("region"),
             row.get("vintage")
         )
@@ -48,7 +49,7 @@ class ProductRepository:
             """SELECT p.*, wd.region, wd.vintage
                FROM products p
                LEFT JOIN wine_details wd ON wd.product_id = p.id
-               WHERE p.category = 'wine'
+               WHERE p.category = 'wine' AND p.is_active = TRUE
                ORDER BY p.name""")
         return [self._row_to_product(r) for r in rows]
     
@@ -56,7 +57,7 @@ class ProductRepository:
         rows = self._connection.execute(
             """SELECT p.*
                FROM products p
-               WHERE p.category = 'spirit'
+               WHERE p.category = 'spirit' AND p.is_active = TRUE
                ORDER BY p.subcategory""")
         return [self._row_to_product(r) for r in rows]
 
@@ -64,12 +65,12 @@ class ProductRepository:
         rows = self._connection.execute(
             """SELECT p.*
                FROM products p
-               WHERE p.category = 'mocktail'""")
+               WHERE p.category = 'mocktail' AND p.is_active = TRUE""")
         return [self._row_to_product(r) for r in rows]
     
     def all_beers(self):
         rows = self._connection.execute(
-            "SELECT p.* FROM products p WHERE p.category = 'beer'"
+            "SELECT p.* FROM products p WHERE p.category = 'beer' AND p.is_active = TRUE"
         )
         return [self._row_to_product(r) for r in rows]
     
@@ -77,14 +78,14 @@ class ProductRepository:
         rows = self._connection.execute(
             """SELECT p.*
                FROM products p
-               WHERE p.category = 'soft'
+               WHERE p.category = 'soft' AND p.is_active = TRUE
                ORDER BY p.id ASC"""
         )
         return [self._row_to_product(r) for r in rows]
 
     def all_hot_drinks(self):
         rows = self._connection.execute(
-            "SELECT p.* FROM products p WHERE p.category = 'hot' ORDER BY p.id ASC"
+            "SELECT p.* FROM products p WHERE p.category = 'hot' AND p.is_active = TRUE ORDER BY p.id ASC"
         )
         return [self._row_to_product(r) for r in rows]
 
@@ -151,7 +152,7 @@ class ProductRepository:
             SELECT p.*, wd.region, wd.vintage
             FROM products p
             LEFT JOIN wine_details wd ON wd.product_id = p.id
-            WHERE p.category = 'wine' AND p.name ILIKE %s
+            WHERE p.category = 'wine' AND p.is_active = TRUE AND p.name ILIKE %s
             ORDER BY p.name            
             """, [pattern_name])
         return [self._row_to_product(r) for r in rows]

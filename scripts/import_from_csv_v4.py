@@ -301,6 +301,7 @@ def upsert_product_base(cur, row, generated_codes_out):
     abv = to_decimal(row.get("abv"))
     vegan = to_bool(row.get("vegan"))
     organic = to_bool(row.get("organic"))
+    is_active = to_bool(row.get("is_active"))
 
     cur.execute("SELECT id FROM products WHERE code=%s LIMIT 1", [code])
     existing = fetch_one_or_none(cur)
@@ -309,13 +310,13 @@ def upsert_product_base(cur, row, generated_codes_out):
         cur.execute(
             """
             INSERT INTO products
-              (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic)
+              (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active)
             VALUES
-              (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+              (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)
             RETURNING id
             """,
             [section_id, code, name, category, subcategory, description,
-             producer, country, abv, vegan, organic],
+             producer, country, abv, vegan, organic, is_active],
         )
         return cur.fetchone()["id"]
 
@@ -324,11 +325,11 @@ def upsert_product_base(cur, row, generated_codes_out):
         """
         UPDATE products
         SET section_id=%s, name=%s, category=%s, subcategory=%s, description=%s,
-            producer=%s, country=%s, abv=%s, vegan=%s, organic=%s
+            producer=%s, country=%s, abv=%s, vegan=%s, organic=%s, is_active=%s
         WHERE id=%s
         """,
         [section_id, name, category, subcategory, description,
-         producer, country, abv, vegan, organic, product_id],
+         producer, country, abv, vegan, organic, is_active, product_id],
     )
     return product_id
 
