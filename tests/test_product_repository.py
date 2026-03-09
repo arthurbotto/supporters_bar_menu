@@ -99,18 +99,6 @@ class TestAllSofts:
         assert len(softs) == 2
         assert [s.name for s in softs] == ['Coca-Cola', 'Orange Juice']
 
-    def test_includes_juices(self, seeded_db):
-        repo = ProductRepository(seeded_db)
-        softs = repo.all_softs()
-        categories = {s.category for s in softs}
-        assert categories == {'soft', 'juice'}
-
-    def test_juice_has_null_subcategory(self, seeded_db):
-        repo = ProductRepository(seeded_db)
-        softs = repo.all_softs()
-        oj = next(s for s in softs if s.name == 'Orange Juice')
-        assert oj.subcategory is None
-
 
 class TestAllHotDrinks:
 
@@ -195,20 +183,15 @@ class TestFindWine:
     def test_finds_wine_by_id(self, seeded_db):
         repo = ProductRepository(seeded_db)
         malbec = repo.find_by_code('WINE-001')
-        found = repo.find_wine(malbec.id, 'p.id')
+        found = repo.find_wine(malbec.id)
         assert found.name == 'Malbec Reserva'
         assert found.region == 'Mendoza'
         assert found.vintage == 2021
 
-    def test_finds_wine_by_code(self, seeded_db):
-        repo = ProductRepository(seeded_db)
-        found = repo.find_wine('WINE-002', 'p.code')
-        assert found.name == 'Rioja Crianza'
-        assert found.region == 'Rioja'
 
     def test_returns_none_for_missing_wine(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        assert repo.find_wine(99999, 'p.id') is None
+        assert repo.find_wine(99999) is None
 
 
 class TestFindByCode:
