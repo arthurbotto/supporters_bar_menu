@@ -2,13 +2,6 @@ from playwright.sync_api import Page, expect
 import pytest
 
 
-@pytest.fixture
-def seeded_db_products(db_connection):
-    db_connection.seed("seeds/schema.sql")
-    db_connection.seed("seeds/test_products.sql")
-    return db_connection
-
-
 def test_home_button(page):
     page.goto("/hot-drinks")
     page.get_by_role("link", name="Home").click()
