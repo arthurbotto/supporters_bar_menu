@@ -21,12 +21,22 @@ INSERT INTO products (section_id, code, name, category, subcategory, description
   (NULL, 'MOCK-001',   'Virgin Mojito',           'mocktail', NULL,        'Mint and lime',     NULL,          NULL,               0, NULL, NULL, TRUE),
   (NULL, 'MOCK-002',   'Shirley Temple',          'mocktail', NULL,        'Ginger and cherry', NULL,          NULL,               0, NULL, NULL, TRUE);
 
+-- Inactive products (one per category — should be excluded from all_*() queries)
+INSERT INTO products (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
+  (NULL, 'WINE-OFF',   'Delisted Bordeaux',       'wine',     'red',       NULL,   NULL,    'France', 13.0,  NULL, NULL, FALSE),
+  (NULL, 'SPIRIT-OFF', 'Delisted Rum',            'spirit',   'rum',       NULL,   NULL,    'Jamaica', 40.0, NULL, NULL, FALSE),
+  (NULL, 'BEER-OFF',   'Delisted Lager',          'beer',     NULL,        NULL,   NULL,    'Germany', 4.8,  NULL, NULL, FALSE),
+  (NULL, 'SOFT-OFF',   'Delisted Lemonade',       'soft',     'classic',   NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
+  (NULL, 'HOT-OFF',    'Delisted Green Tea',      'hot',      'tea',       NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
+  (NULL, 'MOCK-OFF',   'Delisted Mocktail',       'mocktail', NULL,        NULL,   NULL,      NULL,     0,   NULL, NULL, FALSE);
+
 -- Wine details (wines only)
 INSERT INTO wine_details (product_id, region, vintage) VALUES
   ((SELECT id FROM products WHERE code = 'WINE-001'), 'Mendoza',     2021),
   ((SELECT id FROM products WHERE code = 'WINE-002'), 'Rioja',       2020),
   ((SELECT id FROM products WHERE code = 'WINE-003'), 'Marlborough', 2023),
-  ((SELECT id FROM products WHERE code = 'WINE-004'), 'Veneto',      NULL);
+  ((SELECT id FROM products WHERE code = 'WINE-004'), 'Veneto',      NULL),
+  ((SELECT id FROM products WHERE code = 'WINE-OFF'), NULL,          NULL);
 
 -- Product variants
 -- Wines: 125ml (sort 1) and 175ml (sort 2)

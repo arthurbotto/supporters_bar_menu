@@ -24,7 +24,7 @@ Paloma,Grapefruit juice,20,ml,3,false
 Paloma,Agave syrup,10,ml,4,false
 Paloma,Grapefruit soda,,top up with,5,false
 Paloma,Grapefruit wedge,1,wedge,6,true
-Bloody Mary,Vodka 42 Below,50,ml,1,false
+Bloody Mary,Chase Vodka,50,ml,1,false
 Bloody Mary,Tomato juice,40,ml,2,false
 Bloody Mary,Worcester sauce,10,ml,3,false
 Bloody Mary,Tabasco,3,dash,4,false
@@ -33,9 +33,18 @@ Bloody Mary,Black pepper,1,pinch,6,false
 Bloody Mary,Olives,3,pcs,7,true
 Bloody Mary,Rosemary,1,sprig,8,true
 Bloody Mary,Lime wedge,1,wedge,9,true
-Espresso Martini,Vodka 42 Below,50,ml,1,false
+Espresso Martini,Chase Vodka,50,ml,1,false
 Espresso Martini,Coffee liqueur,20,ml,2,false
 Espresso Martini,Vanilla syrup,10,ml,3,false
 Espresso Martini,Montenegro liqueur,10,ml,4,false
 Espresso Martini,Espresso,1,shot,5,false
 Espresso Martini,Coffee beans,3,beans,6,true
+Margarita,Olmeca silver tequila,50,ml,1,false
+Margarita,Cointreau,20,ml,2,false
+Margarita,Lime juice,15,ml,3,false
+Margarita,Lime twist,1,twist,4,true
+Cosmopolitan,Chase Vodka,50,ml,1,false
+Cosmopolitan,Cointreau,15,ml,2,false
+Cosmopolitan,Lime juice, 15,ml,3,false
+Cosmopolitan,Cranberry juice,30,ml,4,false
+Cosmopolitan,Lime twist,1,twist,5,true

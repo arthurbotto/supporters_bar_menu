@@ -34,7 +34,7 @@ class TestAll:
         cocktails = repo.all()
         negroni = next(c for c in cocktails if c.name == "Negroni")
         assert negroni == Cocktail(
-            1, "Negroni", "Bitter Italian classic", "Invented in Florence",
+            1, "Negroni", "from_menu", "Bitter Italian classic", "Invented in Florence",
             "Stirred", "Rocks", "Orange peel", Decimal("24"), Decimal("9.50"),
         )
 
@@ -153,9 +153,9 @@ class TestSearch:
         # Searching 'gin' should return it (rank 0, name match)
         # before Negroni (rank 1, ingredient match on 'Gin').
         seeded_db.execute(
-            "INSERT INTO cocktails (name, description, history, method, glass, garnish, abv, price) "
-            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
-            ["Gin Fizz", "A classic highball", "British origin", "Built", "Highball", "Lemon wheel", 10, 7.50],
+            "INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            ["Gin Fizz", "classic", "A classic highball", "British origin", "Built", "Highball", "Lemon wheel", 10, 7.50],
         )
         repo = CocktailRepository(seeded_db)
         results = repo.search_cocktail("gin")

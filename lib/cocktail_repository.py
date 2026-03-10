@@ -10,7 +10,7 @@ class CocktailRepository:
         rows = self._connection.execute('SELECT * FROM cocktails')
         cocktails = []
         for row in rows:
-            item = Cocktail(row["id"], row["name"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
+            item = Cocktail(row["id"], row["name"], row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
             cocktails.append(item)
         return cocktails
     
@@ -19,7 +19,7 @@ class CocktailRepository:
         if not rows:
             return None
         row = rows[0]
-        return Cocktail(row["id"], row["name"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
+        return Cocktail(row["id"], row["name"], row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
     
     def search_cocktail(self, query):
         query = query.strip()
@@ -43,7 +43,7 @@ class CocktailRepository:
     )
         cocktails = []
         for row in rows:
-            item = Cocktail(row["id"], row["name"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
+            item = Cocktail(row["id"], row["name"],row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
             cocktails.append(item)
         return cocktails
     

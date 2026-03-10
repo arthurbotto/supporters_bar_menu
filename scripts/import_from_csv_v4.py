@@ -133,13 +133,14 @@ def make_product_code(category, name, producer=None):
 def upsert_cocktail(cur, row):
     """
     cocktails.csv columns:
-    name,description,history,method,glass,garnish,abv,price
+    name,subcategory,description,history,method,glass,garnish,abv,price
     """
     name = row["name"].strip()
 
     cur.execute("SELECT id FROM cocktails WHERE name = %s LIMIT 1", [name])
     existing = fetch_one_or_none(cur)
 
+    subcategory = (row.get("subcategory") or "").strip() or None
     description = (row.get("description") or "").strip() or None
     history = (row.get("history") or "").strip() or None
     method = (row.get("method") or "").strip() or None
@@ -151,11 +152,11 @@ def upsert_cocktail(cur, row):
     if existing is None:
         cur.execute(
             """
-            INSERT INTO cocktails (name, description, history, method, glass, garnish, abv, price)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
+            INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s)
             RETURNING id
             """,
-            [name, description, history, method, glass, garnish, abv, price],
+            [name, subcategory, description, history, method, glass, garnish, abv, price],
         )
         return cur.fetchone()["id"]
 
@@ -163,10 +164,10 @@ def upsert_cocktail(cur, row):
     cur.execute(
         """
         UPDATE cocktails
-        SET description=%s, history=%s, method=%s, glass=%s, garnish=%s, abv=%s, price=%s
+        SET subcategory=%s, description=%s, history=%s, method=%s, glass=%s, garnish=%s, abv=%s, price=%s
         WHERE id=%s
         """,
-        [description, history, method, glass, garnish, abv, price, cocktail_id],
+        [subcategory, description, history, method, glass, garnish, abv, price, cocktail_id],
     )
     return cocktail_id
 

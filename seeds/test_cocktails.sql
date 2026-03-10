@@ -1,10 +1,10 @@
 -- Test seed for cocktail repository tests.
 -- Requires seeds/schema.sql to have been run first to create tables.
 
-INSERT INTO cocktails (name, description, history, method, glass, garnish, abv, price) VALUES
-  ('Negroni',   'Bitter Italian classic',      'Invented in Florence', 'Stirred', 'Rocks',    'Orange peel', 24,  9.50),
-  ('Mojito',    'Refreshing Cuban highball',   'Cuban origin',         'Muddled', 'Highball', 'Mint sprig',  12,  8.50),
-  ('Margarita', 'Tart and tangy tequila sour', 'Mexican origin',       'Shaken',  'Coupe',    'Salt rim',    20,  9.00);
+INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price) VALUES
+  ('Negroni', 'from_menu',   'Bitter Italian classic',      'Invented in Florence', 'Stirred', 'Rocks',    'Orange peel', 24,  9.50),
+  ('Mojito', 'classic',    'Refreshing Cuban highball',   'Cuban origin',         'Muddled', 'Highball', 'Mint sprig',  12,  8.50),
+  ('Margarita', 'classic', 'Tart and tangy tequila sour', 'Mexican origin',       'Shaken',  'Coupe',    'Salt rim',    20,  9.00);
 
 INSERT INTO ingredients (name, category) VALUES
   ('Gin',            'spirit'),

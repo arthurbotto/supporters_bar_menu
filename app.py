@@ -181,10 +181,19 @@ def search_cocktails():
     else:
         cocktails = cocktail_repo.search_cocktail(q)
     
+    grouped = {}
+    
     for cocktail in cocktails:
         cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
+        if cocktail.subcategory not in grouped:
+            grouped[cocktail.subcategory] = []
+        grouped[cocktail.subcategory].append(cocktail)
     
-    return render_template("cocktail_list.html", cocktails=cocktails)
+    section_order = ['from_menu', 'classic']
+    
+
+    
+    return render_template("cocktail_list.html", grouped=grouped, section_order=section_order)
 
 # ---------------
 # mocktails page

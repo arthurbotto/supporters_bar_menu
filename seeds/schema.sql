@@ -16,6 +16,7 @@ DROP TABLE IF EXISTS cocktails;
 CREATE TABLE cocktails (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
+    subcategory TEXT,
     description TEXT,
     history TEXT,
     method VARCHAR(50),

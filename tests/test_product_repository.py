@@ -48,6 +48,11 @@ class TestAllWines:
         repo = ProductRepository(db_connection)
         assert repo.all_wines() == []
 
+    def test_all_wines_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        wines = repo.all_wines()
+        assert all(w.is_active for w in wines)
+        assert not any(w.name == 'Delisted Bordeaux' for w in wines)
 
 class TestAllSpirits:
 
@@ -71,6 +76,12 @@ class TestAllSpirits:
             None, "Hendrick's", 'Scotland', Decimal('41.4'), None, None, True,
             None, None
         )
+    
+    def test_all_spirits_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        spirits = repo.all_spirits()
+        assert all(s.is_active for s in spirits)
+        assert not any(s.name == 'Delisted Rum' for s in spirits)
 
 
 class TestAllBeers:
@@ -89,6 +100,12 @@ class TestAllBeers:
         repo = ProductRepository(seeded_db)
         beers = repo.all_beers()
         assert all(b.subcategory is None for b in beers)
+    
+    def test_all_beers_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        beers = repo.all_beers()
+        assert all(b.is_active for b in beers)
+        assert not any(s.name == 'Delisted Lager' for s in beers)
 
 
 class TestAllSofts:
@@ -98,6 +115,12 @@ class TestAllSofts:
         softs = repo.all_softs()
         assert len(softs) == 2
         assert [s.name for s in softs] == ['Coca-Cola', 'Orange Juice']
+    
+    def test_all_spirits_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        softs = repo.all_softs()
+        assert all(s.is_active for s in softs)
+        assert not any(s.name == 'Delisted Lemonade' for s in softs)
 
 
 class TestAllHotDrinks:
@@ -113,6 +136,12 @@ class TestAllHotDrinks:
         hot = repo.all_hot_drinks()
         assert all(isinstance(h, Product) for h in hot)
 
+    def test_all_hot_drinks_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        hot_drinks = repo.all_hot_drinks()
+        assert all(h.is_active for h in hot_drinks)
+        assert not any(s.name == 'Delisted Green Tea' for s in hot_drinks)
+
 
 class TestAllMocktails:
 
@@ -126,6 +155,12 @@ class TestAllMocktails:
         repo = ProductRepository(seeded_db)
         mocktails = repo.all_mocktails()
         assert all(m.abv == Decimal('0') for m in mocktails)
+    
+    def test_all_mocktails_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        mocktails = repo.all_mocktails()
+        assert all(m.is_active for m in mocktails)
+        assert not any(m.name == 'Delisted Mocktail' for m in mocktails)
 
 
 class TestProductVariants:
