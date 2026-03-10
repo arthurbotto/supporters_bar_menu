@@ -14,7 +14,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 
 ## Features
 
-- **Cocktails** — full listing, ingredient accordion, live search (HTMX), detail modal
+- **Cocktails** — listed by subcategory ("From our menu" / "Classics"), ingredient accordion, live search (HTMX), detail modal
 - **Mocktails** — flat list with name and price
 - **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, detail modal
 - **Spirits** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), price columns by serve size
@@ -22,6 +22,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Soft Drinks** — grouped by subcategory (classic, juice, fever tree, san pellegrino, water)
 - **Hot Drinks** — flat list with name and price
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
+- **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
 - **Architecture** — repository pattern, psycopg v3 with `dict_row` results, per-request DB connection via Flask's `g` object
 
 ---
@@ -33,6 +34,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - HTMX (live search, initial list load, no full page reloads)
 - Vanilla JS (modals, event-delegation accordion)
 - Jinja2 templates
+- Playwright (E2E tests)
 
 ---
 
@@ -81,10 +83,10 @@ Menu data is managed via CSV files in `data/` and imported with a script:
 
 | File | Contents |
 |---|---|
-| `data/products_base.csv` | All products (name, category, subcategory, producer, country, ABV, vegan, organic) |
+| `data/products_base.csv` | All products (name, category, subcategory, producer, country, ABV, vegan, organic, is_active) |
 | `data/wine_details.csv` | Wine-only fields (region, vintage), keyed by product code |
 | `data/product_variants.csv` | Serve sizes and prices per product, keyed by product code |
-| `data/cocktails.csv` | Cocktail definitions |
+| `data/cocktails.csv` | Cocktail definitions (including subcategory) |
 | `data/ingredients.csv` | Ingredients |
 | `data/recipe_items.csv` | Cocktail recipes (ingredient, amount, unit, sort order) |
 
@@ -93,17 +95,26 @@ To import:
 python scripts/import_from_csv_v4.py
 ```
 
-The script auto-generates product codes from category + name + producer if none are provided in the CSV, and prints generated codes at the end for reference.
+The script upserts — existing records are updated, not duplicated. It auto-generates product codes from category + name + producer if none are provided in the CSV, and prints generated codes at the end for reference.
+
+To hide a product from all menus without deleting it, set `is_active` to `FALSE` in the CSV and re-run the importer.
 
 ---
 
 ## Running tests
 
 ```bash
+# All unit + integration tests (with coverage)
+pytest tests/ --cov=app --cov-report=term-missing
+
+# E2E tests (Playwright — requires Flask server to start)
+pytest tests/e2e/
+
+# All tests
 pytest
 ```
 
-Tests cover all repositories (cocktail, product, ingredient, recipe item) and all Flask routes.
+Tests cover all repositories, all Flask routes (including error handlers), and full E2E browser behaviour for every page (search, accordion, modals, detail field rendering).
 
 ---
 
@@ -112,10 +123,11 @@ Tests cover all repositories (cocktail, product, ingredient, recipe item) and al
 ```
 app.py                  # Flask routes
 lib/
-  cocktail_repository.py
-  ingredient_repository.py
-  recipe_item_repository.py
-  product_repository.py
+  cocktail.py / cocktail_repository.py
+  ingredient.py / ingredient_repository.py
+  recipe_item.py / recipe_item_repository.py
+  product.py / product_repository.py
+  product_variant.py
   database_connection.py
 templates/              # Jinja2 templates + HTMX/modal fragments
 static/
@@ -123,6 +135,11 @@ static/
   js/
 seeds/
   schema.sql
+  test_cocktails.sql
+  test_products.sql
+data/                   # CSV source files for importer
+scripts/
+  import_from_csv_v4.py
 tests/
   conftest.py
   test_cocktail_repository.py
@@ -130,11 +147,21 @@ tests/
   test_ingredient_repository.py
   test_recipe_item_repository.py
   test_app.py
+  e2e/
+    conftest.py
+    test_home.py
+    test_cocktails.py
+    test_wines.py
+    test_spirits.py
+    test_mocktails.py
+    test_beers.py
+    test_softs.py
+    test_hot_drinks.py
 ```
 
 ---
 
 ## What's coming next
 
-- Playwright E2E tests — HTMX search, modal, accordion (already in requirements)
 - Rate limiting on search endpoints — Flask-Limiter already in requirements
+- Admin login + product management forms (deferred)

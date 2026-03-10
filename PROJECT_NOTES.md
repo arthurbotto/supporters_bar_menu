@@ -9,7 +9,7 @@ Update this file whenever something meaningful changes.
 
 A digital bar menu for Supporters House Bar. Customers browse all drink categories.
 
-- **Cocktails page** — full list, ingredient accordion, search, modal with full details
+- **Cocktails page** — full list grouped by subcategory ("From our menu" / "Classics"), ingredient accordion, search, modal with full details
 - **Mocktails page** — flat list with name and price
 - **Wines page** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), sorted by price; individual wine modal with full details
 - **Spirits page** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), sorted by cheapest serve
@@ -61,10 +61,10 @@ codebase returns model objects, not dicts.
 | Route | Template | Notes |
 |---|---|---|
 | `GET /` | `home.html` | |
-| `GET /cocktails` | `cocktails.html` | |
+| `GET /cocktails` | `cocktails.html` | shell route |
 | `GET /cocktails/<id>/modal` | `cocktail_modal.html` | AJAX fragment |
-| `GET /search_cocktails` | `cocktail_list.html` | HTMX partial (was `/search`) |
-| `GET /wines` | `wines.html` | |
+| `GET /search_cocktails` | `cocktail_list.html` | HTMX partial — groups by subcategory |
+| `GET /wines` | `wines.html` | shell route |
 | `GET /wines/<id>/modal` | `wine_modal.html` | AJAX fragment |
 | `GET /search_wines` | `wines_list.html` | HTMX partial |
 | `GET /spirits` | `spirits.html` | grouped by subcategory |
@@ -81,9 +81,9 @@ codebase returns model objects, not dicts.
 - `GET /cocktails/<id>/modal` — AJAX fragment, returns `cocktail_modal.html`
 - `GET /search_cocktails` — HTMX endpoint, returns `cocktail_list.html` partial; handles both initial load and live search
 
-`cocktail_list.html` is returned directly by `/search_cocktails`. `cocktails.html` includes it via `{% include %}` for initial render (but initial render is now done via HTMX load trigger, not pre-rendered by the route).
+**Subcategory grouping** — cocktails have a `subcategory` field (`'from_menu'` or `'classic'`). `search_cocktails` in `app.py` groups by subcategory and passes `section_order = ['from_menu', 'classic']`. `cocktail_list.html` uses a `section_labels` mapping dict to display human-readable headings ("From our menu", "Classics").
 
-**Search** — `CocktailRepository.search_cocktails()` uses `ILIKE` for name matching and `~*`
+**Search** — `CocktailRepository.search_cocktail()` uses `ILIKE` for name matching and `~*`
 (regex, word-boundary) for ingredient matching, with a `CASE` rank to put name matches first.
 
 ### Home page grid (updated)
@@ -106,7 +106,7 @@ No HTML changes were needed.
 
 `/wines` is a shell — renders `wines.html` with no data. The wine list loads via HTMX `hx-trigger="load, keyup changed delay:300ms"` on the search input, calling `/search_wines`. This means all grouping/sorting logic lives in one place only.
 
-1. `all_wines()` — SQL query returns `Product` objects, ordered by name
+1. `all_wines()` — SQL query returns active `Product` objects, ordered by name
 2. For each wine, call `product_variants(wine.id)` → returns list of `ProductVariant` objects
 3. `wine.variants` and `wine.price_by_ml` set on each Product in the route
    - `wine.price_by_ml` = `{serve_ml: price}` dict (convenient for template lookups)
@@ -116,45 +116,46 @@ No HTML changes were needed.
 7. Enforce display order via `section_order = ['red', 'white', 'rose', 'sparkling', 'dessert']`
 
 `wine_modal.js` listens for clicks on `.more-button-wines`, fetches the fragment from
-`/wines/<id>/modal`, and injects it into `#wineModalBody`. Same pattern as the cocktail modal.
-
-- `wines_list.html` — partial returned by `/search_wines`; contains all section/grouping markup
-- HTMX: `hx-get="/search_wines"`, `hx-target="#wineResults"`, `hx-trigger="load, keyup changed delay:300ms"`
-- `ProductRepository.search_wine(query)` — filters `WHERE p.category = 'wine'` and LEFT JOINs `wine_details`
-
-`ProductRepository.find_wine(wine_id)` — fetches a single wine by id with LEFT JOIN on `wine_details`, filtered by `category = 'wine'`.
-
-**Why monkey-patch instead of putting variants on the Product model?**
-Variants require a DB call per product. The model class should not know about the database.
-The route is the right place to fetch and attach extra data.
+`/wines/<id>/modal`, and injects it into `#modalBody`. Same pattern as the cocktail modal.
 
 ### Spirits (fully built)
 
 - `GET /spirits` — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), sorted by cheapest serve within each section
-- Same grouping/`section_sizes` pattern as wines: monkey-patches `variants`, `price_by_ml`, groups into dict, sorts by `min(price_by_ml.values())`, builds per-section column headers
-- `all_spirits()` in `ProductRepository`
+- Same grouping/`section_sizes` pattern as wines
+- `all_spirits()` in `ProductRepository` — filters `is_active = TRUE`
 
 ### Mocktails (fully built)
 
 - `GET /mocktails` — flat list, name + price; simplest category page
-- `all_mocktails()` in `ProductRepository`
+- `all_mocktails()` in `ProductRepository` — filters `is_active = TRUE`
 
 ### Beers (fully built)
 
-- `GET /beers` — flat list with price columns per serve size; shared `sizes` set for column headers (same logic as wines but not grouped by subcategory)
-- `all_beers()` in `ProductRepository`
+- `GET /beers` — flat list with price columns per serve size; shared `sizes` set for column headers
+- `all_beers()` in `ProductRepository` — filters `is_active = TRUE`
 
 ### Soft Drinks (fully built)
 
 - `GET /softs` — grouped by subcategory (fever_tree, san_pellegrino, classic, juice, water)
 - Same grouping pattern as wines/spirits
-- `all_softs()` queries `category = 'soft'` only — juices were previously a separate category but are now `category='soft', subcategory='juice'` for consistency
+- `all_softs()` queries `category = 'soft'` only — juices are `category='soft', subcategory='juice'`
+- `all_softs()` filters `is_active = TRUE`
 
 ### Hot Drinks (fully built)
 
 - `GET /hot-drinks` — flat list, name + price
-- `all_hot_drinks()` queries `category = 'hot'`
+- `all_hot_drinks()` queries `category = 'hot'`, filters `is_active = TRUE`
 - `hot_drinks.css` adds only `.hot-row` (flex, space-between); all other styles from `base.css`
+
+### is_active field (added)
+
+`products.is_active BOOLEAN NOT NULL DEFAULT TRUE`
+
+- All `all_*()` and `search_wine()` methods filter by `is_active = TRUE`
+- `find()`, `find_wine()`, `find_by_code()` do NOT filter — intentional for direct lookups
+- Managed via `products_base.csv` and the importer — set to `FALSE` in CSV to hide a product
+- Future admin UI: when built, drop `is_active` from the importer's UPDATE clause so admin changes aren't overwritten by CSV re-imports
+- `test_products.sql` includes one inactive product per category for filter tests
 
 ### ProductVariant model (added)
 
@@ -168,17 +169,17 @@ consistent with the existing `_row_to_product()` pattern.
 
 | Method | Description |
 |---|---|
-| `all_wines()` | All wines; LEFT JOINs `wine_details` |
-| `all_spirits()` | All spirits |
-| `all_mocktails()` | All mocktails |
-| `all_beers()` | All beers |
-| `all_softs()` | Soft drinks (`category = 'soft'`; juices are now `subcategory = 'juice'`) |
-| `all_hot_drinks()` | Hot drinks (`category = 'hot'`) |
+| `all_wines()` | Active wines; LEFT JOINs `wine_details` |
+| `all_spirits()` | Active spirits |
+| `all_mocktails()` | Active mocktails |
+| `all_beers()` | Active beers |
+| `all_softs()` | Active soft drinks (`category = 'soft'`; juices are `subcategory = 'juice'`) |
+| `all_hot_drinks()` | Active hot drinks (`category = 'hot'`) |
 | `product_variants(product_id)` | All variants for a given product |
-| `find(product_id)` | Single product by id |
+| `find(product_id)` | Single product by id (no is_active filter) |
 | `find_wine(wine_id)` | Single wine by id with LEFT JOIN on `wine_details`; filters by `category='wine'` |
-| `find_by_code(code)` | Single product by code |
-| `search_wine(query)` | Wine search; filters by category, LEFT JOINs `wine_details` |
+| `find_by_code(code)` | Single product by code (no is_active filter) |
+| `search_wine(query)` | Active wine search; filters by category, LEFT JOINs `wine_details` |
 
 ---
 
@@ -217,14 +218,14 @@ on `document` that checks `e.target` at click time, so it always works regardles
 
 ## Tests
 
-### Current coverage
+### Unit / Integration tests (`tests/`)
 
 **Repository tests** (all complete):
 
 | File | Classes |
 |---|---|
 | `tests/test_cocktail_repository.py` | TestAll, TestFindCocktail, TestSearch |
-| `tests/test_product_repository.py` | TestAllWines, TestAllSpirits, TestAllBeers, TestAllSofts, TestAllHotDrinks, TestAllMocktails, TestProductVariants, TestFind, TestFindWine, TestFindByCode, TestSearchWine |
+| `tests/test_product_repository.py` | TestAllWines, TestAllSpirits, TestAllBeers, TestAllSofts, TestAllHotDrinks, TestAllMocktails, TestProductVariants, TestFind, TestFindWine, TestFindByCode, TestSearchWine, TestIsActiveFilter |
 | `tests/test_ingredient_repository.py` | TestAllIngredients, TestFindIngredient |
 | `tests/test_recipe_item_repository.py` | TestForCocktail |
 
@@ -232,21 +233,49 @@ on `document` that checks `e.target` at click time, so it always works regardles
 
 | File | Classes |
 |---|---|
-| `tests/test_app.py` | TestHomeRoute, TestWineRoute, TestSearchWinesRoute, TestWineModalRoute, TestSpiritsRoute, TestCocktailsRoute, TestSearchCocktailsRoute, TestCocktailModalRoute, TestMocktailsRoute, TestBeersRoute, TestSoftsRoute, TestHotDrinksRoute |
+| `tests/test_app.py` | TestHomeRoute, TestWineRoute, TestSearchWinesRoute, TestWineModalRoute, TestSpiritsRoute, TestCocktailsRoute, TestSearchCocktailsRoute, TestCocktailModalRoute, TestMocktailsRoute, TestBeersRoute, TestSoftsRoute, TestHotDrinksRoute, TestErrorHandlers |
 
-Run all tests: `pytest`
-Run one file: `pytest tests/test_app.py`
+**Coverage:** `pytest tests/ --cov=app --cov-report=term-missing` → 98% (only error handlers and `__main__` block uncovered). Run `tests/` not `tests/e2e/` — E2E tests use a subprocess and don't contribute to coverage.
 
-### Test fixtures (`tests/conftest.py`)
+### E2E tests (`tests/e2e/`)
 
-- `db_connection` — TestMode DB connection, seeded per test, closed after
-- `test_web_address` — starts Flask test server on random port 4000–4999
-- `web_client` — Flask test client with `TESTING=True`
+Playwright + pytest-playwright + xprocess. Covers all routes.
+
+| File | What it tests |
+|---|---|
+| `test_home.py` | tile links |
+| `test_cocktails.py` | list render, search, accordion (expand/collapse/one-at-a-time), modal (open, details, close, Escape, click-outside) |
+| `test_wines.py` | list render, detail fields, (ve) label, null vintage, search, modal |
+| `test_spirits.py` | list, subcategory headings, detail string, prices |
+| `test_mocktails.py` | list, descriptions, prices |
+| `test_beers.py` | list, detail string, prices, serve size header |
+| `test_softs.py` | list, subcategory headings, prices |
+| `test_hot_drinks.py` | list, prices |
+
+- Shared fixtures in `tests/e2e/conftest.py`: `seeded_db_products`, `seeded_db_cocktails`
+- Server port range: `8100–8900` (avoids Chromium unsafe ports like 4045)
+
+### Test fixtures
+
+- `tests/conftest.py` — `db_connection`, `web_client`
+- `tests/e2e/conftest.py` — `db_connection`, `seeded_db_products`, `seeded_db_cocktails`, `base_url`
 
 ### Test pattern
 
-Repository tests: class-based, one class per method, each with a local `seeded_db` fixture.
-Route tests: class-based per route, `web_client` for all, `seeded_db_products` or `seeded_db_cocktails` when the route queries the DB. Home and shell routes (`/wines`, `/cocktails`) need no seed.
+- Repository tests: class-based, one class per method, local `seeded_db` fixture
+- Route tests: `web_client` for all; `seeded_db_products` or `seeded_db_cocktails` when DB is queried; shell routes need no seed
+- Error handler tests: 404 via `web_client.get('/nonexistent')`; 500 via calling `server_error()` directly inside `flask_app.test_request_context()`
+
+---
+
+## Data Import
+
+`scripts/import_from_csv_v4.py` — upserts from `data/` CSV files into the production DB.
+
+- Keyed on `product_code` (auto-generated from category+name+producer if missing in CSV)
+- `is_active` column in `products_base.csv` — controls visibility on all menu pages
+- `to_bool()` helper handles `true/false/yes/no/1/0`
+- Re-running the importer is safe — existing records are updated, not duplicated
 
 ---
 
@@ -260,16 +289,12 @@ Route tests: class-based per route, `web_client` for all, `seeded_db_products` o
 
 ## What Still Needs Doing
 
-- [ ] Playwright E2E tests — test HTMX search updates, modal open/close, accordion (already in `requirements.txt`)
 - [ ] Rate-limit `/search_cocktails` and `/search_wines` with Flask-Limiter (already in `requirements.txt`)
+- [ ] Admin login + product management forms (deferred — future feature)
 
 ---
 
 ## Known Issues / Technical Debt
 
-- `wine.variants` and `wine.price_by_ml` are monkey-patched onto `Product` in the route. 
-  The `Product` model has no default `variants = []` field, so accessing it before the route 
-  populates it would raise `AttributeError`. Minor — not urgent. (fixed)
-
-- Unused dependencies in `requirements.txt`: Flask-Limiter, Flask-WTF, playwright, python-slugify.
-  None are wired into `app.py` yet.
+- Unused dependencies in `requirements.txt`: Flask-Limiter, Flask-WTF, python-slugify. None are wired into `app.py` yet.
+- `_normalize_query()` in `lib/product_repository.py` is defined but never called — dead code.
