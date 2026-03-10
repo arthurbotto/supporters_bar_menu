@@ -139,3 +139,9 @@ body {
 .product-cols-3 .product-price-row {
   grid-template-columns: 1fr 6rem 6rem 6rem;
 }
+
+.product-name-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mocktails</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/mocktails.css') }}">
 </head>
 <body>
   <header class="header">
@@ -13,19 +14,25 @@
   </header>
 
   <main class="container">
-    <ul class="product-list">
-      {% for m in mocktails %}
-        <li class="product-item">
-          <div class="product-price-row">
-            <span class="product-name">{{ m.name|e }}</span>
-            <span class="subtitle">{{ m.description }}</span>
-            {% for variant in m.variants %}
-              <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
-            {% endfor %}
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
+    <div class="product-cols-1">
+      <ul class="product-list">
+        {% for m in mocktails %}
+          <li class="product-item">
+            <div class="product-price-row">
+              <div class="product-name-stack">
+                <span class="product-name">{{ m.name|e }}</span>
+                {% if m.description %}
+                  <span class="subtitle">{{ m.description }}</span>
+                {% endif %}
+              </div>
+              {% for variant in m.variants %}
+                <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+              {% endfor %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </main>
   
 </body>

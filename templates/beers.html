@@ -13,30 +13,37 @@
   </header>
 
   <main class="container">
-    <div class="product-price-header">
-      <span></span>
-      {% for size in sizes %}
-        <span class="product-price-cell">{{ size }}ml</span>
-      {% endfor %}
-    </div>
-    <ul class="product-list">
-      {% for b in beers %}
-        <li class="product-item">
-          <div class="product-price-row">
-            <span class="product-name">{{ b.name|e }}, {{ b.country }} - {{ "%.1f"|format(b.abv) }}%</span>
-            {% for size in sizes %}
-              <span class="product-price-cell">
-                {% if size in b.price_by_ml %}
-                  £{{ "%.2f"|format(b.price_by_ml[size]) }}
-                {% else %}
-                  &mdash;
+    <div class="product-cols-1">
+      <div class="product-price-header">
+        <span></span>
+        {% for size in sizes %}
+          <span class="product-price-cell">{{ size }}ml</span>
+        {% endfor %}
+      </div>
+      <ul class="product-list">
+        {% for b in beers %}
+          <li class="product-item">
+            <div class="product-price-row">
+              <div class="product-name-stack">
+                <span class="product-name">{{ b.name|e }}, {{ b.country }} - {{ "%.1f"|format(b.abv) }}% {{ ' (ve)' if b.vegan else '' }}</span>
+                {% if b.description %}
+                  <span class="subtitle">{{ b.description }}</span>
                 {% endif %}
-              </span>
-            {% endfor %}
-          </div>
-        </li>
-      {% endfor %}
-    </ul>
+              </div>
+              {% for size in sizes %}
+                <span class="product-price-cell">
+                  {% if size in b.price_by_ml %}
+                    £{{ "%.2f"|format(b.price_by_ml[size]) }}
+                  {% else %}
+                    &mdash;
+                  {% endif %}
+                </span>
+              {% endfor %}
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </main>
   
 </body>

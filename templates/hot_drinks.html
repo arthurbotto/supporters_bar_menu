@@ -14,18 +14,25 @@
   </header>
 
   <main class="container">
-    <ul class="product-list">
-      {% for h in hot_drinks %}
-        <li class="product-item">
-          <div class="hot-row">
-            <span class="product-name">{{ h.name|e }}</span>
-            {% for variant in h.variants %}
-              <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
-            {% endfor %}
-          </div>
-        </li>
-      {% endfor %}
+    <div class="product-cols-1">
+      <ul class="product-list">
+        {% for h in hot_drinks %}
+          <li class="product-item">
+            <div class="hot-row">
+              <div class="product-name-stack">
+                <span class="product-name">{{ h.name|e }}</span>
+                {% if h.description %}
+                  <span class="subtitle">{{ h.description }}</span>
+                {% endif %}
+                {% for variant in h.variants %}
+              </div>
+                  <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+                {% endfor %}
+            </div>
+          </li>
+        {% endfor %}
     </ul>
+  </div>
   </main>
 </body>
 </html>

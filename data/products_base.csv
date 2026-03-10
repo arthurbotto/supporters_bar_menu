@@ -80,10 +80,11 @@ item,,,,,,,,,,,TRUE
 spirit_janneau_vsop_armagnac_janneau,Janneau VSOP Armagnac,spirit,brandy,Spirits,TBD,40,,,Janneau,France,TRUE
 spirit_courvoisier_vsop_fine_cognac_courvoisier,Courvoisier VSOP Fine Cognac,spirit,brandy,Spirits,TBD,40,,,Courvoisier,France,TRUE
 item,,,,,,,,,,,TRUE
-beer_peroni_nastro_azzurro_non_alcoholic_peroni,Peroni Nastro Azzurro (non-alcoholic),beer,,Beers,TBD,0,,,Peroni,Italy,TRUE
-beer_the_small_beer_session_pale_ale_the_small_beer,The Small Beer Session Pale Ale,beer,,Beers,TBD,2.5,,,The Small Beer,England,TRUE
-beer_peroni_better_peroni_peroni,Peroni (Better Peroni),beer,,Beers,TBD,5.1,,,Peroni,Italy,TRUE
-beer_menabrea_menabrea,Menabrea,beer,,Beers,TBD,4.8,,,Menabrea,Italy,TRUE
+beer_peroni_nastro_azzurro_non_alcoholic_peroni,Peroni Nastro Azzurro (non-alcoholic),beer,lager,Beers,"Alcohol-free Italian lager with the same crisp, clean and refreshing character as the original",0,TRUE,FALSE,Birra Peroni,Italy,TRUE
+beer_the_small_beer_session_pale_ale_the_small_beer,Small Beer Session Pale Ale,beer,pale ale,Beers,"Low-alcohol session pale with toasted malt, lemon citrus and spicy hops, finishing dry and bitter",2.5,TRUE,FALSE,Small Beer Brew Co,England,TRUE
+beer_peroni_better_peroni_peroni,Peroni Nastro Azzuro,beer,lager,Beers,"Premium Italian lager with an intensely crisp, clean and refreshing character",5.1,TRUE,FALSE,Birra Peroni,Italy,TRUE
+beer_menabrea_menabrea,Menabrea Bionda,beer,lager,Beers,"Pale Italian lager, well balanced between citrus and bitter tones with floral, fruity undertones and a refined, crisp finish",4.8,TRUE,FALSE,Birra Menabrea,Italy,TRUE
+beer_birra_moretti_birra_moretti,Birra Moretti,beer,lager,Beers,"Classic Italian premium lager with a finely bitter, balanced taste, floral notes and aromas of barley malt",4.6,TRUE,FALSE,Birra Moretti,Italy,TRUE
 item,,,,,,,,,,,TRUE
 soft_indian_tonic_water_fever_tree,Indian Tonic Water,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
 soft_light_tonic_fever_tree,Light Tonic,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
@@ -113,13 +114,13 @@ item,,,,,,,,,,,TRUE
 soft_harrogate_mineral_water_still,Harrogate Mineral Water Still,soft,water,Water,TBD,,,,,,TRUE
 soft_harrogate_mineral_water_sparkling,Harrogate Mineral Water Sparkling,soft,water,Water,TBD,,,,,,TRUE
 item,,,,,,,,,,,TRUE
-hot_espresso,Espresso,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_espresso_macchiato,Espresso macchiato,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_double_espresso,Double espresso,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_double_macchiato,Double macchiato,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_cappuccino,Cappuccino,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_latte,Latte,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_flat_white,Flat white,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_americano,Americano,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_bicerin,Bicerin,hot,coffee,Hot drinks,TBD,,,,,,TRUE
-hot_tea_and_infusions,Tea and infusions,hot,tea,Hot drinks,TBD,,,,,,TRUE
+hot_espresso,Espresso,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_espresso_macchiato,Espresso macchiato,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_double_espresso,Double espresso,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_double_macchiato,Double macchiato,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_cappuccino,Cappuccino,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_latte,Latte,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_flat_white,Flat white,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_americano,Americano,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_bicerin,Bicerin,hot,coffee,Hot drinks,,,,,,,TRUE
+hot_tea_and_infusions,Tea and infusions,hot,tea,Hot drinks,"English Breakfast, Earl Grey Imperial, Rooibos African Nights, Green Tea, Peppermint Moroccan Secret, Fresh Mint",,,,,,TRUE
