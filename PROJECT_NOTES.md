@@ -86,6 +86,8 @@ codebase returns model objects, not dicts.
 **Search** — `CocktailRepository.search_cocktail()` uses `ILIKE` for name matching and `~*`
 (regex, word-boundary) for ingredient matching, with a `CASE` rank to put name matches first.
 
+**Ordering** — `CocktailRepository.all()` orders by `id ASC` to ensure a stable insertion-order display.
+
 ### Home page grid (updated)
 
 `static/css/home.css` — layout expanded to match the rest of the site:
@@ -291,6 +293,22 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 - [ ] Rate-limit `/search_cocktails` and `/search_wines` with Flask-Limiter (already in `requirements.txt`)
 - [ ] Admin login + product management forms (deferred — future feature)
+
+---
+
+## Changelog
+
+### 2026-03-11 — Add new wines and mocktail, update pricing, and improve wine list display
+
+- Added Bottega Poeti Prosecco Brut DOC (glass 125ml £9 + bottle £39; Treviso, 2024)
+- Added Laurent-Perrier Rosé Brut (bottle only £175; Champagne, NV)
+- Added Cherry-lini Zero mocktail
+- Deactivated Lanson Rosé Brut (is_active=FALSE)
+- Added 125ml glass serve to several wines previously offered at 175ml only; adjusted prices across the list
+- wines_list.html: NV wines now show "- NV" label when no vintage is set
+- Enriched wine_details with regions and vintages (Wild Idol, Searcys Classic, Lanson Père & Fils)
+- CocktailRepository.all() now orders by ID ASC
+- Added .product-cols-4 grid rule to base.css
 
 ---
 
