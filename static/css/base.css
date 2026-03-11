@@ -140,6 +140,11 @@ body {
   grid-template-columns: 1fr 6rem 6rem 6rem;
 }
 
+.product-cols-4 .product-price-header,
+.product-cols-4 .product-price-row {
+  grid-template-columns: 1fr 6rem 6rem 6rem 6rem;
+}
+
 .product-name-stack {
   display: flex;
   flex-direction: column;

@@ -7,7 +7,7 @@ class CocktailRepository:
         self._connection = connection
 
     def all(self):
-        rows = self._connection.execute('SELECT * FROM cocktails')
+        rows = self._connection.execute('SELECT * FROM cocktails ORDER BY ID ASC')
         cocktails = []
         for row in rows:
             item = Cocktail(row["id"], row["name"], row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])

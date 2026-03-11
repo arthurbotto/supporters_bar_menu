@@ -21,7 +21,7 @@
                       {{ wine.name|e }}
                        {{ '- ' + wine.country if wine.country else '' }}
                         {{ '- ' + wine.region if wine.region else '' }}
-                         {{ '- ' + (wine.vintage|string) if wine.vintage else '' }}
+                         {{ '- ' + (wine.vintage|string) if wine.vintage else '- NV' }}
                           {{'- ' + "%.1f"|format(wine.abv)}}%
                            {{ ' (ve)' if wine.vegan else '' }}</span>
                     {% for size in sizes %}
