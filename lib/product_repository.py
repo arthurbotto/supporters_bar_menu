@@ -142,17 +142,51 @@ class ProductRepository:
             return None
         return self._row_to_product(rows[0])
     
-    def search_wine(self, query):
-        query = query.strip()
-        
-        pattern_name = f"%{query}%"
+    def wine_countries(self) -> list[str]:
+        rows = self._connection.execute(
+            """SELECT DISTINCT country FROM products
+                WHERE category = 'wine' AND is_active = TRUE AND country IS NOT NULL
+                ORDER BY country"""
+        )
+        return [row["country"] for row in rows]
+    
+    def wine_producer(self) -> list[str]:
+        rows = self._connection.execute(
+            """SELECT DISTINCT producer FROM products
+                WHERE category = 'wine' AND is_active = TRUE AND producer IS NOT NULL
+                ORDER BY producer"""
+        )
+        return [row["producer"] for row in rows]
+    
+    def search_wine(self, query='', country='', subcategory='', producer='', organic=None, vegan=None):
+        conditions = ["p.category = 'wine'", "p.is_active = TRUE"]
+        params = []
+
+        if query:
+            conditions.append("p.name ILIKE %s")
+            params.append(f"%{query.strip()}%")
+        if country:
+            conditions.append("p.country = %s")
+            params.append(country)
+        if subcategory:
+            conditions.append("p.subcategory = %s")
+            params.append(subcategory)
+        if producer:
+            conditions.append("p.producer = %s")
+            params.append(producer)
+        if organic is not None:
+            conditions.append("p.organic = %s")
+            params.append(organic)
+        if vegan is not None:
+            conditions.append("p.vegan = %s")
+            params.append(vegan)
 
         rows = self._connection.execute(
-            """
+            f"""
             SELECT p.*, wd.region, wd.vintage
             FROM products p
             LEFT JOIN wine_details wd ON wd.product_id = p.id
-            WHERE p.category = 'wine' AND p.is_active = TRUE AND p.name ILIKE %s
+            WHERE {" AND ".join(conditions)}
             ORDER BY p.name            
-            """, [pattern_name])
+            """, params)
         return [self._row_to_product(r) for r in rows]

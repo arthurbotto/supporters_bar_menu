@@ -16,7 +16,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 
 - **Cocktails** — listed by subcategory ("From our menu" / "Classics"), ingredient accordion, live search (HTMX), detail modal
 - **Mocktails** — flat list with name and price
-- **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, detail modal
+- **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, multi-filter bar (country, type, producer, organic, vegan) with Apply/Clear, detail modal
 - **Spirits** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), price columns by serve size
 - **Beers** — flat list with price columns per serve size
 - **Soft Drinks** — grouped by subcategory (classic, juice, fever tree, san pellegrino, water)

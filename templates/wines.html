@@ -15,18 +15,65 @@
     <h1 class="title">All Wines</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
   </header>
-  <div class="search">
-    <input
-      type="text"
-      name="q"
-      placeholder="Search wines..."
-      hx-get="/search_wines"
-      hx-trigger="load, keyup changed delay:300ms"
-      hx-target="#wineResults"
-      hx-swap="innerHTML"
-      autocomplete="off"
-    >
+  <div id="wine-filters" class="wine-filters">
+
+    <div class="filter-search">
+      <input
+        type="text" name="q" placeholder="Search wines..."
+        hx-get="/search_wines"
+        hx-trigger="load, keyup changed delay:300ms"
+        hx-target="#wineResults"
+        hx-swap="innerHTML"
+        hx-include="#wine-filters"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="filter-controls">
+      <select name="country" class="filter-select">
+        <option value="">Country</option>
+        {% for country in countries %}
+         <option value="{{ country }}">{{ country }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="subcategory" class="filter-select">
+        <option value="">Type</option>
+        {% for value, label in subcategory_labels.items() %}
+          <option value="{{ value }}">{{ label }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="producer" class="filter-select">
+        <option value="">Producer</option>
+        {% for producer in producers %}
+          <option value="{{ producer }}">{{ producer }}</option>
+        {% endfor %}
+      </select>
+
+      <label class="filter-checkbox-label">
+        <input type="checkbox" name="organic" value="true">
+        Organic 
+      </label>
+
+      <label class="filter-checkbox-label">
+        <input type="checkbox" name="vegan" value="true">
+        Vegan
+      </label>
+
+      <button type="button" class="filter-apply-btn"
+        hx-get="/search_wines"
+        hx-trigger="click"
+        hx-include="#wine-filters"
+        hx-target="#wineResults"
+        hx-swap="innerHTML"
+        >Apply Filters
+      </button>
+      <a href="/wines" class="filter-clear-btn">Clear</a> 
+    </div>
+
   </div>
+
   <main class="container" id="wineResults">
     {% include "wines_list.html" %}
   </main>

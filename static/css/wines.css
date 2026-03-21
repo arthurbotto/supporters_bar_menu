@@ -89,3 +89,110 @@
 body.modal-open {
   overflow: hidden;
 }
+
+.wine-filters {                                                                                                                                                                                              
+  max-width: 860px;                                                                                                                                                                                          
+  margin: 0 auto;                                                                                                                                                                                            
+  padding: 0 18px;                                                                                                                                                                                           
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-search { margin: 14px 0 10px; }                                                                                                                                                                      
+                                                                                                                                                                                                              
+.filter-search input {                                                                                                                                                                                       
+  width: 100%;                                                                                                                                                                                               
+  padding: 12px 14px;                                                                                                                                                                                        
+  border: 1px solid var(--border);                                                                                                                                                                           
+  border-radius: 12px;                                                                                                                                                                                       
+  background: var(--surface);                                                                                                                                                                                
+  color: var(--text);                                                                                                                                                                                        
+  font-size: 1rem;                                                                                                                                                                                           
+  outline: none;                                                                                                                                                                                             
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-search input:focus {                                                                                                                                                                                 
+  border-color: rgba(153, 54, 51, 0.45);                                                                                                                                                                     
+  box-shadow: 0 0 0 4px var(--accent-soft);                                                                                                                                                                  
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-controls {                                                                                                                                                                                           
+  display: flex;                                                                                                                                                                                             
+  flex-wrap: wrap;                                                                                                                                                                                           
+  gap: 8px;                                                                                                                                                                                                  
+  align-items: center;                                                                                                                                                                                       
+  margin-bottom: 18px;                                                                                                                                                                                       
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-select {                                                                                                                                                                                             
+  padding: 10px 12px;                                                                                                                                                                                        
+  border: 1px solid var(--border);                                                                                                                                                                           
+  border-radius: 12px;                                                                                                                                                                                       
+  background: var(--surface);                                                                                                                                                                                
+  color: var(--text);                                                                                                                                                                                        
+  font-size: 0.9rem;                                                                                                                                                                                         
+  outline: none;                                                                                                                                                                                             
+  cursor: pointer;                                                                                                                                                                                           
+  flex: 1 1 120px;                                                                                                                                                                                           
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-select:focus {                                                                                                                                                                                       
+  border-color: rgba(153, 54, 51, 0.45);                                                                                                                                                                     
+  box-shadow: 0 0 0 4px var(--accent-soft);                                                                                                                                                                  
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-apply-btn {                                                                                                                                                                                          
+  padding: 10px 18px;                                                                                                                                                                                        
+  border-radius: 12px;                                                                                                                                                                                       
+  border: none;                                                                                                                                                                                              
+  background: var(--accent);                                                                                                                                                                                 
+  color: #fff;                                                                                                                                                                                               
+  font-size: 0.9rem;                                                                                                                                                                                         
+  font-weight: 600;                                                                                                                                                                                          
+  cursor: pointer;                                                                                                                                                                                           
+  white-space: nowrap;                                                                                                                                                                                       
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-apply-btn:hover { background: rgba(153, 54, 51, 0.85); }                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-clear-btn {                                                                                                                                                                                          
+  padding: 10px 14px;                                                                                                                                                                                        
+  border-radius: 12px;                                                                                                                                                                                       
+  border: 1px solid var(--border);                                                                                                                                                                           
+  background: var(--surface);                                                                                                                                                                                
+  color: var(--muted);                                                                                                                                                                                       
+  font-size: 0.9rem;                                                                                                                                                                                         
+  font-weight: 600;                                                                                                                                                                                          
+  text-decoration: none;                                                                                                                                                                                     
+  white-space: nowrap;                                                                                                                                                                                       
+}                                                                                                                                                                                                            
+                                                                                                                                                                                                              
+.filter-clear-btn:hover {                                                                                                                                                                                    
+  background: var(--accent-soft);                                                                                                                                                                            
+  color: var(--accent);                                                                                                                                                                                      
+  border-color: rgba(153, 54, 51, 0.3);                                                                                                                                                                      
+}
+
+.filter-checkbox-label {
+    display: flex;                                                                                                                                                                                                     
+    align-items: center;                                
+    gap: 6px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);                                                                                                                                                                                   
+    border-radius: 12px;                                                                                                                                                                                               
+    background: var(--surface);                                                                                                                                                                                        
+    color: var(--muted);                                                                                                                                                                                               
+    font-size: 0.9rem;                                  
+    cursor: pointer;                                                                                                                                                                                                   
+    white-space: nowrap;
+    user-select: none;                                                                                                                                                                                                 
+  }                                                     
+
+  .filter-checkbox-label:has(input:checked) {                                                                                                                                                                          
+    background: var(--accent-soft);
+    border-color: rgba(153, 54, 51, 0.4);                                                                                                                                                                              
+    color: var(--accent);                                                                                                                                                                                              
+    font-weight: 600;
+  }                                                                                                                                                                                                                    
+                                                        
+  .filter-checkbox-label input[type="checkbox"] {                                                                                                                                                                      
+    accent-color: var(--accent);
+  }

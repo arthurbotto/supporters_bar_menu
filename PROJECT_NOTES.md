@@ -181,7 +181,9 @@ consistent with the existing `_row_to_product()` pattern.
 | `find(product_id)` | Single product by id (no is_active filter) |
 | `find_wine(wine_id)` | Single wine by id with LEFT JOIN on `wine_details`; filters by `category='wine'` |
 | `find_by_code(code)` | Single product by code (no is_active filter) |
-| `search_wine(query)` | Active wine search; filters by category, LEFT JOINs `wine_details` |
+| `search_wine(query='', country='', subcategory='', producer='', organic=None, vegan=None)` | Unified wine search + filter; all args optional; builds WHERE dynamically; LEFT JOINs `wine_details` |
+| `wine_countries()` | Distinct active wine countries, alphabetical — used to populate filter dropdown |
+| `wine_producer()` | Distinct active wine producers, alphabetical — used to populate filter dropdown |
 
 ---
 
@@ -203,7 +205,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `.product-cols-*` grid rules, `.search` input |
 | `home.css` | Home grid: `.grid` (3-col, max-width 860px), `.tile` (180px height, hover shadow) |
 | `cocktails.css` | `.cocktail-toggle` (accordion button), `.cocktail-panel`, `.chevron`, `.ingredients`, `.more-button` |
-| `wines.css` | `.more-button-wines` (full-width button), `.product-price-row` override inside button |
+| `wines.css` | `.more-button-wines`, `.wine-filters` container, `.filter-search`, `.filter-controls`, `.filter-select`, `.filter-apply-btn`, `.filter-clear-btn`, `.filter-checkbox-label` |
 | `modal.css` | `.overlay`, `.modal`, `.close`, `.modal-title`, `.modal-description`, `.modal-meta`, `body.modal-open` |
 | `spirits.css` | (empty — spirits uses base.css classes only) |
 | `beers.css` | (empty — beers uses base.css classes only) |
@@ -297,6 +299,17 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 ---
 
 ## Changelog
+
+### 2026-03-21 — Add multi-filter bar to wines page
+
+- Added `wine_countries()` and `wine_producer()` to `ProductRepository` — query distinct values from active wines for dynamic dropdown options
+- Replaced `search_wine(query)` with a unified `search_wine(query='', country='', subcategory='', producer='', organic=None, vegan=None)` — builds WHERE clause dynamically from optional args; handles both search and filter in one method
+- Removed `filter_wines()` — dead code superseded by new `search_wine()`
+- Updated `get_wines()` route to fetch countries/producers and pass `subcategory_labels` dict to template
+- Updated `search_wines()` route to read filter args from `request.args` and forward to `search_wine()`
+- Replaced `<div class="search">` + placeholder filter div in `wines.html` with single `<div id="wine-filters">` container; search input and Apply button both use `hx-include="#wine-filters"` so all filter state is included in every request; selects hold state passively with no HTMX attributes
+- Added filter bar CSS to `wines.css`: `.wine-filters`, `.filter-search`, `.filter-controls`, `.filter-select`, `.filter-apply-btn`, `.filter-clear-btn`, `.filter-checkbox-label`
+- Clear filter is `<a href="/wines">` — simple page reload, no JS needed
 
 ### 2026-03-11 — Add new wines and mocktail, update pricing, and improve wine list display
 

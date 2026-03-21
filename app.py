@@ -62,7 +62,13 @@ def get_spirits():
 def get_wines():
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
-    return render_template('wines.html')
+    countries = product_repo.wine_countries()
+    producers = product_repo.wine_producer()
+    subcategory_labels = {
+        'red': 'Red', 'white': 'White', 'rose': 'Rosé', 
+        'sparkling': 'Sparkling', 'dessert': 'Dessert'
+        }
+    return render_template('wines.html', countries=countries, subcategory_labels=subcategory_labels, producers=producers) 
     # wines = product_repo.all_wines()
 
     # grouped = {}
@@ -103,13 +109,16 @@ def wine_modal(wine_id):
 @app.route('/search_wines')
 def search_wines():
     q = request.args.get('q', '').strip()
+    country = request.args.get('country', '').strip()
+    subcategory = request.args.get('subcategory', '').strip()
+    producer = request.args.get('producer', '').strip()
+    organic = True if request.args.get('organic') == 'true' else None
+    vegan = True if request.args.get('vegan') == 'true' else None
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
 
-    if q == '':
-        wines = product_repo.all_wines()
-    else:
-        wines = product_repo.search_wine(q)
+    wines = product_repo.search_wine(query=q, country=country, subcategory=subcategory, producer=producer, organic=organic, vegan=vegan)
+
     
     grouped = {}
     section_sizes = {}
