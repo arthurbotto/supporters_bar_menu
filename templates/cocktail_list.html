@@ -26,10 +26,14 @@
               {% for item in cocktail.recipe_items %}
                 {% if item.ingredient_category != 'garnish' %}
                 <li class="ingredient">
-                  {% if item.amount is not none %}
-                    {{ ('%g' % (item.amount|float)) }} {{ item.unit }} {{ item.ingredient_name|e }}
+                  {% set amount = ('%g' % (item.amount|float)) if item.amount is not none else '' %}
+      
+                  {% if item.unit == 'cube' or item.unit =='whole' %}
+                    {{ amount }} {{ item.ingredient_name|lower|e }}
+                  {% elif item.unit %}
+                    {{ amount }} {{ item.unit }} {{ item.ingredient_name|e }}
                   {% else %}
-                    {{ item.unit }} {{ item.ingredient_name|e }}
+                    {{ amount }} {{ item.ingredient_name|e }}
                   {% endif %}
                 </li>
                 {% endif %}

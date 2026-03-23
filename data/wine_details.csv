@@ -1,5 +1,5 @@
 product_code,region,vintage,sweetness,body,acidity
-wine_wild_idol_alcohol_free_sparkling_white,Kent,2024,dry,light,high
+wine_wild_idol_alcohol_free_sparkling_white,Kent,2024,off-dry,light,high
 wine_bottega_poeti_prosecco_brut_doc_bottega,Treviso,2024,dry,light,medium
 wine_searcys_classic_cuv_e_brut_searcys,Surrey,,dry,light,high
 wine_chapel_down_ros_brut_chapel_down,Kent,,dry,light,high
@@ -32,13 +32,14 @@ wine_peppoli_antinori_chianti_classico_antinori,Tuscany,2023,dry,medium,high
 wine_luke_s_pinot_noir_balfour,Kent,2023,dry,light,high
 wine_ch_teau_cissac_haut_m_doc_ch_teau_cissac,Bordeaux,2017,dry,medium,medium
 wine_st_joseph_poivre_et_sol_francois_villard,Northern Rhône,2021,dry,medium,high
-wine_la_fleur_d_or_sauternes,Bordeaux,2021,sweet,medium,medium
+wine_la_fleur_d_or_sauternes,Bordeaux,2023,sweet,medium,medium
 wine_angelorum_recioto_della_valpolicella_masi,Veneto,2019,sweet,full,medium
 wine_dindarello_maculan,Breganze,2023,sweet,medium,high
-wine_zuccardi_serie_a_malbec_zuccardi,Mendoza,,dry,full,medium
+wine_zuccardi_serie_a_malbec_zuccardi,Mendoza,2024,dry,full,medium
 wine_tignanello_antinori,Tuscany,2022,dry,full,high
 wine_chablis_jean_marc_brocard,"Chablis, Burdundy",2024,dry,light,high
 wine_bramito_chardonnay_antinori,Umbria,2024,dry,medium,medium
 wine_vespa_bianco_bastianich,Friuli,2018,dry,full,medium
 wine_cervaro_della_sala_antinori,Umbria,2023,dry,full,high
+wine_barbaresco_rizzi_rizzi_2021,Piedmont,2021,dry,medium,high
 

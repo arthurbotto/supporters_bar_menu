@@ -64,7 +64,7 @@ def get_wines():
     product_repo = ProductRepository(connection)
     countries = product_repo.wine_countries()
     producers = product_repo.wine_producer()
-    sweet_levels = ['dry', 'off_dry', 'sweet']
+    sweet_levels = ['dry', 'off-dry', 'sweet']
     bodies = ['light', 'medium', 'full']
     acid_levels = ['low', 'medium', 'high']
     subcategory_labels = {

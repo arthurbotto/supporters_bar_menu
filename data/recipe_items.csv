@@ -48,3 +48,79 @@ Cosmopolitan,Cointreau,15,ml,2,false
 Cosmopolitan,Lime juice, 15,ml,3,false
 Cosmopolitan,Cranberry juice,30,ml,4,false
 Cosmopolitan,Lime twist,1,twist,5,true
+Mojito,Bacardi Carta Blanca,45,ml,1,false
+Mojito,Lime juice,20,ml,2,false
+Mojito,Sugar syrup,15,ml,3,false
+Mojito,Fresh mint,10,leaves,4,false
+Mojito,Soda water,,top up with,5,false
+Mojito,Mint leaves,1,sprig,6,true
+Mojito,Lime wedge,1,wedge,7,true
+Manhattan,Jack Daniel's Rye,50,ml,1,false
+Manhattan,Antica Formula,20,ml,2,false
+Manhattan,Angostura bitters,1,dash,3,false
+Manhattan,Maraschino cherry,1,cherry,4,true
+Daiquiri,Bacardi Carta Blanca,60,ml,1,false
+Daiquiri,Lime juice,20,ml,2,false
+Daiquiri,Sugar syrup,15,ml,3,false
+Daiquiri,Lemon twist,1,twist,4,true
+Long Island Iced Tea,Chase Vodka,15,ml,1,false
+Long Island Iced Tea,Olmeca silver tequila,15,ml,2,false
+Long Island Iced Tea,Bacardi Carta Blanca,15,ml,3,false
+Long Island Iced Tea,Gin Tanqueray,15,ml,4,false
+Long Island Iced Tea,Cointreau,15,ml,5,false
+Long Island Iced Tea,Lemon juice,25,ml,6,false
+Long Island Iced Tea,Sugar syrup,20,ml,7,false
+Long Island Iced Tea,Cola,,top up with,8,false
+Long Island Iced Tea,Lemon slice,1,slice,9,true
+White Lady,Gin Tanqueray,40,ml,1,false
+White Lady,Cointreau,30,ml,2,false
+White Lady,Lemon juice,20,ml,3,false
+White Lady,Lemon twist,1,twist,4,true
+Champagne Cocktail,Sugar cube,1,cube,1,false
+Champagne Cocktail,Angostura bitters,2,dash,2,false
+Champagne Cocktail,Courvoisier Cognac,10,ml,3,false
+Champagne Cocktail,Searcys Champagne,90,ml,4,false
+Champagne Cocktail,Orange zest,1,piece,5,true
+Champagne Cocktail,Maraschino cherry,1,piece,6,true
+Aperol Spritz,Aperol,50,ml,1,false
+Aperol Spritz,Prosecco Bottega,100,ml,2,false
+Aperol Spritz,Soda water,,top up with,3,false
+Aperol Spritz,Orange slice,1,slice,4,true
+Vodka Martini,Chase Vodka,60,ml,1,false
+Vodka Martini,Noilly Prat White Vermouth,10,ml,2,false
+Vodka Martini,Olives,1,piece,3,true
+Vodka Martini,Lemon twist,1,piece,4,true
+Dry Martini,Gin Tanqueray,60,ml,1,false
+Dry Martini,Noilly Prat White Vermouth,10,ml,2,false
+Dry Martini,Olives,1,piece,3,true
+Dry Martini,Lemon twist,1,piece,4,true
+Irish Coffee,Jameson Irish Whiskey,50,ml,1,false
+Irish Coffee,Hot coffee,120,ml,2,false
+Irish Coffee,Sugar syrup,10,ml,3,false
+Irish Coffee,Fresh cream,50,ml,4,false
+Irish Coffee,Coffee beans,3,piece,5,true
+Whiskey Sour,Bulleit Bourbon,50,ml,1,false
+Whiskey Sour,Lemon juice,25,ml,2,false
+Whiskey Sour,Sugar syrup,20,ml,3,false
+Whiskey Sour,Egg white,1,whole,4,false
+Whiskey Sour,Dried orange,1,slice,5,true
+Old Fashioned,Bulleit Bourbon,45,ml,1,false
+Old Fashioned,Sugar cube,1,cube,2,false
+Old Fashioned,Angostura bitters,2,dash,3,false
+Old Fashioned,Water,2,dash,4,false
+Old Fashioned,Orange slice,1,slice,5,true
+Old Fashioned,Maraschino cherry,1,piece,6,true
+Paloma Royale,Olmeca silver tequila,45,ml,1,false
+Paloma Royale,Grapefruit juice,20,ml,2,false
+Paloma Royale,Lime juice,15,ml,3,false
+Paloma Royale,Agave syrup,10,ml,4,false
+Paloma Royale,Searcys Champagne,30,ml,5,false
+Paloma Royale,Grapefruit wedge,1,piece,6,true
+Moscow Mule,Chase Vodka,45,ml,1,false
+Moscow Mule,Lime juice,15,ml,2,false
+Moscow Mule,Ginger beer,120,ml,3,false
+Moscow Mule,Lime wedge,1,piece,4,true
+Sidecar,Courvoisier Cognac,50,ml,1,false
+Sidecar,Cointreau,20,ml,2,false
+Sidecar,Lemon juice,20,ml,3,false
+Sidecar,Lemon twist,1,piece,4,true
