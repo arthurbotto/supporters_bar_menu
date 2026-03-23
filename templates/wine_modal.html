@@ -13,6 +13,9 @@
   <div><strong>Country:</strong> {{ wine.country|e }}</div>
   <div><strong>Region:</strong> {{ wine.region|e }}</div>
   <div><strong>Vintage:</strong> {{ wine.vintage|e }}</div>
+  <div><strong>Sweetness:</strong> {{ wine.sweetness|capitalize }}</div>
+  <div><strong>Body:</strong> {{ wine.body|capitalize }}</div>
+  <div><strong>Acidity:</strong> {{ wine.acidity|capitalize }}</div>
   {% if wine.vegan %}
     <div><strong>Vegan:</strong> Yes</div>
   {% else %}

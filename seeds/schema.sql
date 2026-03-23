@@ -101,7 +101,10 @@ CREATE INDEX IF NOT EXISTS idx_products_section ON products (section_id);
 CREATE TABLE wine_details (
     product_id INTEGER PRIMARY KEY REFERENCES products(id) ON DELETE CASCADE,
     region VARCHAR(255),
-    vintage INTEGER
+    vintage INTEGER,
+    sweetness VARCHAR(50),
+    body VARCHAR(50),
+    acidity VARCHAR(50)
     -- grapes TEXT -- (add later maybe)
 );
 

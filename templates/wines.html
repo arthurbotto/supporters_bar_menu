@@ -19,7 +19,7 @@
 
     <div class="filter-search">
       <input
-        type="text" name="q" placeholder="Search wines..."
+        type="text" name="q" placeholder="Search by name..."
         hx-get="/search_wines"
         hx-trigger="load, keyup changed delay:300ms"
         hx-target="#wineResults"
@@ -48,6 +48,27 @@
         <option value="">Producer</option>
         {% for producer in producers %}
           <option value="{{ producer }}">{{ producer }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="sweetness" class="filter-select">
+        <option value="">Sweetness</option>
+        {% for s_level in sweet_levels %}
+          <option value="{{ s_level }}">{{ s_level }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="body" class="filter-select">
+        <option value="">Body</option>
+        {% for body in bodies %}
+          <option value="{{ body }}">{{ body }}</option>
+        {% endfor %}
+      </select>
+
+      <select name="acidity" class="filter-select">
+        <option value="">Acidity</option>
+        {% for a_level in acid_levels %}
+          <option value="{{ a_level }}">{{ a_level }}</option>
         {% endfor %}
       </select>
 

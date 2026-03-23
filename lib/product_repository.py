@@ -25,7 +25,10 @@ class ProductRepository:
             row["organic"],
             row["is_active"],
             row.get("region"),
-            row.get("vintage")
+            row.get("vintage"),
+            row.get("sweetness"),
+            row.get("body"),
+            row.get("acidity")
         )
     
     def _row_to_variants(self, row):
@@ -46,7 +49,7 @@ class ProductRepository:
     
     def all_wines(self):
         rows = self._connection.execute(
-            """SELECT p.*, wd.region, wd.vintage
+            """SELECT p.*, wd.region, wd.vintage, wd.sweetness, wd.body, wd.acidity
                FROM products p
                LEFT JOIN wine_details wd ON wd.product_id = p.id
                WHERE p.category = 'wine' AND p.is_active = TRUE
@@ -123,7 +126,7 @@ class ProductRepository:
     
     def find_wine(self, wine_id):
         rows = self._connection.execute(
-            f"""SELECT p.*, wd.region, wd.vintage 
+            f"""SELECT p.*, wd.region, wd.vintage, wd.sweetness, wd.body, wd.acidity 
             FROM products p 
             LEFT JOIN wine_details wd ON wd.product_id = p.id
             WHERE p.id = %s AND p.category = 'wine'""",
@@ -158,7 +161,7 @@ class ProductRepository:
         )
         return [row["producer"] for row in rows]
     
-    def search_wine(self, query='', country='', subcategory='', producer='', organic=None, vegan=None):
+    def search_wine(self, query='', country='', subcategory='', producer='', sweetness='', body='', acidity='', organic=None, vegan=None):
         conditions = ["p.category = 'wine'", "p.is_active = TRUE"]
         params = []
 
@@ -174,6 +177,15 @@ class ProductRepository:
         if producer:
             conditions.append("p.producer = %s")
             params.append(producer)
+        if sweetness:
+            conditions.append("wd.sweetness = %s")
+            params.append(sweetness)
+        if body:
+            conditions.append("wd.body = %s")
+            params.append(body)
+        if acidity:
+            conditions.append("wd.acidity = %s")
+            params.append(acidity)            
         if organic is not None:
             conditions.append("p.organic = %s")
             params.append(organic)
@@ -183,7 +195,7 @@ class ProductRepository:
 
         rows = self._connection.execute(
             f"""
-            SELECT p.*, wd.region, wd.vintage
+            SELECT p.*, wd.region, wd.vintage, wd.sweetness, wd.body, wd.acidity
             FROM products p
             LEFT JOIN wine_details wd ON wd.product_id = p.id
             WHERE {" AND ".join(conditions)}

@@ -181,7 +181,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `find(product_id)` | Single product by id (no is_active filter) |
 | `find_wine(wine_id)` | Single wine by id with LEFT JOIN on `wine_details`; filters by `category='wine'` |
 | `find_by_code(code)` | Single product by code (no is_active filter) |
-| `search_wine(query='', country='', subcategory='', producer='', organic=None, vegan=None)` | Unified wine search + filter; all args optional; builds WHERE dynamically; LEFT JOINs `wine_details` |
+| `search_wine(query='', country='', subcategory='', producer='', organic=None, vegan=None, sweetness='', body='', acidity='')` | Unified wine search + filter; all args optional; builds WHERE dynamically; LEFT JOINs `wine_details` |
 | `wine_countries()` | Distinct active wine countries, alphabetical — used to populate filter dropdown |
 | `wine_producer()` | Distinct active wine producers, alphabetical — used to populate filter dropdown |
 
@@ -280,6 +280,7 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 - `is_active` column in `products_base.csv` — controls visibility on all menu pages
 - `to_bool()` helper handles `true/false/yes/no/1/0`
 - Re-running the importer is safe — existing records are updated, not duplicated
+- Wine product codes are **year-free** — vintage lives only in `wine_details.vintage`; changing a vintage year in the CSV updates the existing row, not creates a new one
 
 ---
 
@@ -299,6 +300,15 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 ---
 
 ## Changelog
+
+### 2026-03-23 — Stable wine product codes + wine taste profile filters
+
+- Removed vintage year suffixes from all 29 wine product codes across `products_base.csv`, `wine_details.csv`, and `product_variants.csv` — codes are now stable (e.g. `wine_chablis_jean_marc_brocard` not `wine_chablis_jean_marc_brocard_2024`)
+- Vintage continues to live in `wine_details.vintage`; changing a vintage no longer orphans the old DB row — the importer upserts the existing row
+- Added `sweetness`, `body`, `acidity` columns to `wine_details` schema, importer, `Product` model, and all repository queries (`all_wines`, `find_wine`, `search_wine`)
+- Extended filter bar with sweetness, body, and acidity dropdowns (hardcoded options: dry/off_dry/sweet, light/medium/full, low/medium/high)
+- `search_wine()` now accepts `sweetness`, `body`, `acidity` args; builds `wd.sweetness = %s` etc. dynamically
+- Wine modal (`wine_modal.html`) displays sweetness, body, acidity in the details section
 
 ### 2026-03-21 — Add multi-filter bar to wines page
 

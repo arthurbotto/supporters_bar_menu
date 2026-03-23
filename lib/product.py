@@ -16,7 +16,10 @@ class Product:
             organic,
             is_active,
             region,
-            vintage):
+            vintage,
+            sweetness,
+            body,
+            acidity):
         
         self.id = id
         self.section_id = section_id
@@ -33,6 +36,9 @@ class Product:
         self.is_active = is_active
         self.region = region
         self.vintage = vintage
+        self.sweetness = sweetness
+        self.body = body
+        self.acidity = acidity
         self.variants = []
         self.price_by_ml = {}
     
@@ -55,6 +61,9 @@ class Product:
         {self.organic},
         {self.is_active},
         {self.region},
-        {self.vintage}
+        {self.vintage},
+        {self.sweetness},
+        {self.body},
+        {self.acidity}
         )"""
         

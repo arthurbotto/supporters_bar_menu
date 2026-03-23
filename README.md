@@ -16,7 +16,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 
 - **Cocktails** — listed by subcategory ("From our menu" / "Classics"), ingredient accordion, live search (HTMX), detail modal
 - **Mocktails** — flat list with name and price
-- **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, multi-filter bar (country, type, producer, organic, vegan) with Apply/Clear, detail modal
+- **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, multi-filter bar (country, type, producer, organic, vegan, sweetness, body, acidity) with Apply/Clear, detail modal
 - **Spirits** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), price columns by serve size
 - **Beers** — flat list with price columns per serve size
 - **Soft Drinks** — grouped by subcategory (classic, juice, fever tree, san pellegrino, water)
@@ -96,6 +96,8 @@ python scripts/import_from_csv_v4.py
 ```
 
 The script upserts — existing records are updated, not duplicated. It auto-generates product codes from category + name + producer if none are provided in the CSV, and prints generated codes at the end for reference.
+
+Wine product codes are **year-free** (e.g. `wine_chablis_jean_marc_brocard`). Vintage lives in `wine_details.csv` only. Updating a vintage year re-imports cleanly without orphaned rows.
 
 To hide a product from all menus without deleting it, set `is_active` to `FALSE` in the CSV and re-run the importer.
 

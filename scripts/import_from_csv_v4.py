@@ -362,20 +362,23 @@ def upsert_wine_detail(cur, row):
 
     region = (row.get("region") or "").strip() or None
     vintage = to_int(row.get("vintage"))
+    sweetness = (row.get("sweetness") or "").strip() or None
+    body = (row.get("body") or "").strip() or None
+    acidity = (row.get("acidity") or "").strip() or None
 
     cur.execute("SELECT product_id FROM wine_details WHERE product_id=%s", [product_id])
     existing = fetch_one_or_none(cur)
 
     if existing is None:
         cur.execute(
-            "INSERT INTO wine_details (product_id, region, vintage) VALUES (%s,%s,%s)",
-            [product_id, region, vintage],
+            "INSERT INTO wine_details (product_id, region, vintage, sweetness, body, acidity) VALUES (%s,%s,%s, %s, %s, %s)",
+            [product_id, region, vintage, sweetness, body, acidity],
         )
         return
 
     cur.execute(
-        "UPDATE wine_details SET region=%s, vintage=%s WHERE product_id=%s",
-        [region, vintage, product_id],
+        "UPDATE wine_details SET region=%s, vintage=%s, sweetness=%s, body=%s, acidity=%s WHERE product_id=%s",
+        [region, vintage, sweetness, body, acidity, product_id],
     )
 
 

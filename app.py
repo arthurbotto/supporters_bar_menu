@@ -64,11 +64,20 @@ def get_wines():
     product_repo = ProductRepository(connection)
     countries = product_repo.wine_countries()
     producers = product_repo.wine_producer()
+    sweet_levels = ['dry', 'off_dry', 'sweet']
+    bodies = ['light', 'medium', 'full']
+    acid_levels = ['low', 'medium', 'high']
     subcategory_labels = {
         'red': 'Red', 'white': 'White', 'rose': 'Rosé', 
         'sparkling': 'Sparkling', 'dessert': 'Dessert'
         }
-    return render_template('wines.html', countries=countries, subcategory_labels=subcategory_labels, producers=producers) 
+    return render_template('wines.html', 
+                           countries=countries, 
+                           subcategory_labels=subcategory_labels, 
+                           producers=producers,
+                           sweet_levels=sweet_levels,
+                           bodies=bodies,
+                           acid_levels=acid_levels) 
     # wines = product_repo.all_wines()
 
     # grouped = {}
@@ -112,12 +121,24 @@ def search_wines():
     country = request.args.get('country', '').strip()
     subcategory = request.args.get('subcategory', '').strip()
     producer = request.args.get('producer', '').strip()
+    sweetness = request.args.get('sweetness', '').strip()
+    body = request.args.get('body', '').strip()
+    acidity = request.args.get('acidity', '').strip()
     organic = True if request.args.get('organic') == 'true' else None
     vegan = True if request.args.get('vegan') == 'true' else None
     connection = get_flask_database_connection(app)
     product_repo = ProductRepository(connection)
 
-    wines = product_repo.search_wine(query=q, country=country, subcategory=subcategory, producer=producer, organic=organic, vegan=vegan)
+    wines = product_repo.search_wine(
+        query=q, 
+        country=country, 
+        subcategory=subcategory, 
+        producer=producer,
+        sweetness=sweetness,
+        body=body,
+        acidity=acidity, 
+        organic=organic, 
+        vegan=vegan)
 
     
     grouped = {}
