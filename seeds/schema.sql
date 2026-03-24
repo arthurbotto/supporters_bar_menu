@@ -8,7 +8,6 @@ DROP TABLE IF EXISTS recipe_items;
 DROP TABLE IF EXISTS product_variants;
 DROP TABLE IF EXISTS wine_details;
 DROP TABLE IF EXISTS products;
-DROP TABLE IF EXISTS menu_sections;
 DROP TABLE IF EXISTS ingredients;
 DROP TABLE IF EXISTS cocktails;
 
@@ -59,19 +58,9 @@ ON recipe_items (cocktail_id, ingredient_id, sort_order);
 -- Base table + wine_details
 -- =========================================
 
-CREATE TABLE menu_sections (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    sort_order INTEGER NOT NULL DEFAULT 1
-);
-
-CREATE UNIQUE INDEX IF NOT EXISTS idx_menu_sections_name_unique ON menu_sections (name);
-CREATE INDEX IF NOT EXISTS idx_menu_sections_sort ON menu_sections (sort_order);
-
 -- Base product (shared fields only)
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
-    section_id INTEGER REFERENCES menu_sections(id) ON DELETE SET NULL,
 
     -- Stable unique identifier for imports + references
     -- (Importer auto-generates it if CSV doesn't provide one)
@@ -95,8 +84,6 @@ CREATE TABLE products (
 CREATE UNIQUE INDEX IF NOT EXISTS idx_products_code_unique ON products (code);
 CREATE INDEX IF NOT EXISTS idx_products_category ON products (category);
 CREATE INDEX IF NOT EXISTS idx_products_subcategory ON products (subcategory);
-CREATE INDEX IF NOT EXISTS idx_products_section ON products (section_id);
-
 -- Wine-only fields live here
 CREATE TABLE wine_details (
     product_id INTEGER PRIMARY KEY REFERENCES products(id) ON DELETE CASCADE,

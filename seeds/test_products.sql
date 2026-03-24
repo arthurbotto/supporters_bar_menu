@@ -1,34 +1,33 @@
 -- =========================================
 -- Test seed data for ProductRepository tests
 -- Run after schema.sql (which drops/recreates all tables)
--- section_id is nullable — all rows use NULL
 -- =========================================
 
 -- Products
-INSERT INTO products (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
-  (NULL, 'WINE-001',   'Malbec Reserva',          'wine',     'red',       'Plum and spice',    'Catena',      'Argentina',     13.5, TRUE, NULL, TRUE),
-  (NULL, 'WINE-002',   'Rioja Crianza',           'wine',     'red',       'Cherry and vanilla','Muga',        'Spain',         13.0, NULL, NULL, TRUE),
-  (NULL, 'WINE-003',   'Sauvignon Blanc',         'wine',     'white',     'Crisp and citrus',  'Featherdrop', 'New Zealand',   12.5, NULL, NULL, TRUE),
-  (NULL, 'WINE-004',   'Prosecco',                'wine',     'sparkling', 'Light and bubbly',  'Bisol',       'Italy',         11.0, TRUE, NULL, TRUE),
-  (NULL, 'SPIRIT-001', 'Hendricks Gin',           'spirit',   'gin',       NULL,                'Hendrick''s', 'Scotland',      41.4, NULL, NULL, TRUE),
-  (NULL, 'SPIRIT-002', 'Grey Goose',              'spirit',   'vodka',     NULL,                'Grey Goose',  'France',        40.0, NULL, NULL, TRUE),
-  (NULL, 'BEER-001',   'Camden Hells',            'beer',     NULL,        NULL,                'Camden Town', 'England',        4.6, NULL, NULL, TRUE),
-  (NULL, 'BEER-002',   'Guinness',                'beer',     NULL,        NULL,                'Guinness',    'Ireland',        4.1, NULL, NULL, TRUE),
-  (NULL, 'SOFT-001',   'Coca-Cola',               'soft',     'classic',   NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
-  (NULL, 'SOFT-002',   'Orange Juice',            'soft',    'juice',        NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
-  (NULL, 'HOT-001',    'Espresso',                'hot',      'coffee',    NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
-  (NULL, 'HOT-002',    'English Breakfast Tea',   'hot',      'tea',       NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
-  (NULL, 'MOCK-001',   'Virgin Mojito',           'mocktail', NULL,        'Mint and lime',     NULL,          NULL,               0, NULL, NULL, TRUE),
-  (NULL, 'MOCK-002',   'Shirley Temple',          'mocktail', NULL,        'Ginger and cherry', NULL,          NULL,               0, NULL, NULL, TRUE);
+INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
+  ('WINE-001',   'Malbec Reserva',          'wine',     'red',       'Plum and spice',    'Catena',      'Argentina',     13.5, TRUE, NULL, TRUE),
+  ('WINE-002',   'Rioja Crianza',           'wine',     'red',       'Cherry and vanilla','Muga',        'Spain',         13.0, NULL, NULL, TRUE),
+  ('WINE-003',   'Sauvignon Blanc',         'wine',     'white',     'Crisp and citrus',  'Featherdrop', 'New Zealand',   12.5, NULL, NULL, TRUE),
+  ('WINE-004',   'Prosecco',                'wine',     'sparkling', 'Light and bubbly',  'Bisol',       'Italy',         11.0, TRUE, NULL, TRUE),
+  ('SPIRIT-001', 'Hendricks Gin',           'spirit',   'gin',       NULL,                'Hendrick''s', 'Scotland',      41.4, NULL, NULL, TRUE),
+  ('SPIRIT-002', 'Grey Goose',              'spirit',   'vodka',     NULL,                'Grey Goose',  'France',        40.0, NULL, NULL, TRUE),
+  ('BEER-001',   'Camden Hells',            'beer',     NULL,        NULL,                'Camden Town', 'England',        4.6, NULL, NULL, TRUE),
+  ('BEER-002',   'Guinness',                'beer',     NULL,        NULL,                'Guinness',    'Ireland',        4.1, NULL, NULL, TRUE),
+  ('SOFT-001',   'Coca-Cola',               'soft',     'classic',   NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
+  ('SOFT-002',   'Orange Juice',            'soft',    'juice',       NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
+  ('HOT-001',    'Espresso',                'hot',      'coffee',    NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
+  ('HOT-002',    'English Breakfast Tea',   'hot',      'tea',       NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
+  ('MOCK-001',   'Virgin Mojito',           'mocktail', NULL,        'Mint and lime',     NULL,          NULL,               0, NULL, NULL, TRUE),
+  ('MOCK-002',   'Shirley Temple',          'mocktail', NULL,        'Ginger and cherry', NULL,          NULL,               0, NULL, NULL, TRUE);
 
 -- Inactive products (one per category — should be excluded from all_*() queries)
-INSERT INTO products (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
-  (NULL, 'WINE-OFF',   'Delisted Bordeaux',       'wine',     'red',       NULL,   NULL,    'France', 13.0,  NULL, NULL, FALSE),
-  (NULL, 'SPIRIT-OFF', 'Delisted Rum',            'spirit',   'rum',       NULL,   NULL,    'Jamaica', 40.0, NULL, NULL, FALSE),
-  (NULL, 'BEER-OFF',   'Delisted Lager',          'beer',     NULL,        NULL,   NULL,    'Germany', 4.8,  NULL, NULL, FALSE),
-  (NULL, 'SOFT-OFF',   'Delisted Lemonade',       'soft',     'classic',   NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
-  (NULL, 'HOT-OFF',    'Delisted Green Tea',      'hot',      'tea',       NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
-  (NULL, 'MOCK-OFF',   'Delisted Mocktail',       'mocktail', NULL,        NULL,   NULL,      NULL,     0,   NULL, NULL, FALSE);
+INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
+  ('WINE-OFF',   'Delisted Bordeaux',       'wine',     'red',       NULL,   NULL,    'France', 13.0,  NULL, NULL, FALSE),
+  ('SPIRIT-OFF', 'Delisted Rum',            'spirit',   'rum',       NULL,   NULL,    'Jamaica', 40.0, NULL, NULL, FALSE),
+  ('BEER-OFF',   'Delisted Lager',          'beer',     NULL,        NULL,   NULL,    'Germany', 4.8,  NULL, NULL, FALSE),
+  ('SOFT-OFF',   'Delisted Lemonade',       'soft',     'classic',   NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
+  ('HOT-OFF',    'Delisted Green Tea',      'hot',      'tea',       NULL,   NULL,      NULL,   NULL,  NULL, NULL, FALSE),
+  ('MOCK-OFF',   'Delisted Mocktail',       'mocktail', NULL,        NULL,   NULL,      NULL,     0,   NULL, NULL, FALSE);
 
 -- Wine details (wines only)
 INSERT INTO wine_details (product_id, region, vintage) VALUES

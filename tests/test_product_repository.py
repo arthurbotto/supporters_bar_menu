@@ -31,9 +31,9 @@ class TestAllWines:
         wines = repo.all_wines()
         malbec = next(w for w in wines if w.name == 'Malbec Reserva')
         assert malbec == Product(
-            malbec.id, None, 'WINE-001', 'Malbec Reserva', 'wine', 'red',
-            'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None,True,
-            'Mendoza', 2021
+            malbec.id, 'WINE-001', 'Malbec Reserva', 'wine', 'red',
+            'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None, True,
+            'Mendoza', 2021, None, None, None
         )
 
     def test_wine_with_null_vintage(self, seeded_db):
@@ -72,9 +72,9 @@ class TestAllSpirits:
         spirits = repo.all_spirits()
         hendricks = next(s for s in spirits if s.name == 'Hendricks Gin')
         assert hendricks == Product(
-            hendricks.id, None, 'SPIRIT-001', 'Hendricks Gin', 'spirit', 'gin',
+            hendricks.id, 'SPIRIT-001', 'Hendricks Gin', 'spirit', 'gin',
             None, "Hendrick's", 'Scotland', Decimal('41.4'), None, None, True,
-            None, None
+            None, None, None, None, None
         )
     
     def test_all_spirits_excludes_inactive(self, seeded_db):

@@ -1,10 +1,9 @@
 class Product:
 
     def __init__(
-            self, 
-            id, 
-            section_id, 
-            code, 
+            self,
+            id,
+            code,
             name, 
             category, 
             subcategory, 
@@ -22,7 +21,6 @@ class Product:
             acidity):
         
         self.id = id
-        self.section_id = section_id
         self.code = code
         self.name = name
         self.category = category
@@ -48,7 +46,6 @@ class Product:
     def __repr__(self):
         return f"""Product(
         {self.id},
-        {self.section_id},
         {self.code},
         {self.name},
         {self.category},

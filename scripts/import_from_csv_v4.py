@@ -240,45 +240,10 @@ def import_recipe_items(cur, rows):
         )
 
 
-def upsert_menu_section(cur, row):
-    """
-    menu_sections.csv columns:
-    name,sort_order
-    """
-    name = row["name"].strip()
-    sort_order = to_int(row.get("sort_order")) or 1
-
-    cur.execute("SELECT id FROM menu_sections WHERE name=%s LIMIT 1", [name])
-    existing = fetch_one_or_none(cur)
-
-    if existing is None:
-        cur.execute(
-            "INSERT INTO menu_sections (name, sort_order) VALUES (%s,%s) RETURNING id",
-            [name, sort_order],
-        )
-        return cur.fetchone()["id"]
-
-    section_id = existing["id"]
-    cur.execute("UPDATE menu_sections SET sort_order=%s WHERE id=%s", [sort_order, section_id])
-    return section_id
-
-
-def find_section_id(cur, section_name):
-    section_name = (section_name or "").strip()
-    if section_name == "":
-        return None
-
-    cur.execute("SELECT id FROM menu_sections WHERE name=%s LIMIT 1", [section_name])
-    row = fetch_one_or_none(cur)
-    if row is None:
-        raise ValueError(f"Missing menu_sections row for name: {section_name}")
-    return row["id"]
-
-
 def upsert_product_base(cur, row, generated_codes_out):
     """
     products_base.csv columns:
-    product_code (optional), name, category, subcategory, section_name, description, abv, vegan, organic, producer, country
+    product_code (optional), name, category, subcategory, description, abv, vegan, organic, producer, country
     """
     name = (row.get("name") or "").strip()
     category = (row.get("category") or "").strip().lower()
@@ -295,7 +260,6 @@ def upsert_product_base(cur, row, generated_codes_out):
         })
 
     subcategory = (row.get("subcategory") or "").strip().lower() or None
-    section_id = find_section_id(cur, row.get("section_name"))
     description = (row.get("description") or "").strip() or None
     country = (row.get("country") or "").strip() or None
 
@@ -311,12 +275,12 @@ def upsert_product_base(cur, row, generated_codes_out):
         cur.execute(
             """
             INSERT INTO products
-              (section_id, code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active)
+              (code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active)
             VALUES
-              (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s, %s)
+              (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
             RETURNING id
             """,
-            [section_id, code, name, category, subcategory, description,
+            [code, name, category, subcategory, description,
              producer, country, abv, vegan, organic, is_active],
         )
         return cur.fetchone()["id"]
@@ -325,11 +289,11 @@ def upsert_product_base(cur, row, generated_codes_out):
     cur.execute(
         """
         UPDATE products
-        SET section_id=%s, name=%s, category=%s, subcategory=%s, description=%s,
+        SET name=%s, category=%s, subcategory=%s, description=%s,
             producer=%s, country=%s, abv=%s, vegan=%s, organic=%s, is_active=%s
         WHERE id=%s
         """,
-        [section_id, name, category, subcategory, description,
+        [name, category, subcategory, description,
          producer, country, abv, vegan, organic, is_active, product_id],
     )
     return product_id
@@ -455,7 +419,6 @@ def main():
     ingredients = read_csv("ingredients.csv")
     recipe_items = read_csv("recipe_items.csv")
 
-    sections = read_csv("menu_sections.csv")
     products_base = read_csv("products_base.csv")
     wine_details = read_csv("wine_details.csv")
     variants = read_csv("product_variants.csv")
@@ -482,14 +445,7 @@ def main():
             print("Importing recipe items (refreshing recipes)...")
             import_recipe_items(cur, recipe_items)
 
-            # D) Menu sections
-            print("Importing menu sections...")
-            for row in sections:
-                if not row.get("name"):
-                    continue
-                upsert_menu_section(cur, row)
-
-            # E) Products base
+            # D) Products base
             print("Importing products (base)...")
             for row in products_base:
                 if not (row.get("name") and row.get("category")):

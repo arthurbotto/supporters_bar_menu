@@ -12,7 +12,6 @@ class ProductRepository:
     def _row_to_product(self, row):
         return Product(
             row["id"],
-            row["section_id"],
             row["code"],
             row["name"],
             row["category"],

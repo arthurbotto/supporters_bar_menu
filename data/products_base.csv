@@ -1,137 +1,137 @@
-product_code,name,category,subcategory,section_name,description,abv,vegan,organic,producer,country,is_active
-mocktail_mountain_spritz,Mountain Spritz,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Everleaf Mountain, Fever-Tree White Grape and Apricot Soda",,,,,,TRUE
-mocktail_ginger_cooler,Ginger Cooler,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Pentire Seaward, Lemon, Elderflower, Ginger Ale",,,,,,TRUE
-mocktail_sicilian_lemonade,Sicilian Lemonade,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Sicilian Lemon, Bergamot Essential Oil",,,,,,TRUE
-mocktail_non_alcoholic_espresso_martini,Non-alcoholic Espresso Martini,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Coffee, Sugar, Non-alcoholic Coffee Liquor, Cacao Nibs",,,,,,TRUE
-mocktail_fig_and_truffle_spritz,Fig and Truffle Spritz,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Figs, Honey, Truffle, Vichy Catalan",,,,,,FALSE
-mocktail_saffron_orange_spritz,Saffron & Orange Spritz,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Everleaf Forest, Blood Orange Soda",,,,,,TRUE
-mocktail_cherry_lini_zero,Cherry-lini Zero,mocktail,non_alcoholic_cocktail,Non-alcoholic cocktails,"Wild idol, cherry syrup, lemon juice, maraschino cherry",,,,,,TRUE
-item,,,,,,,,,,,
-wine_bottega_poeti_prosecco_brut_doc_bottega,Bottega Poeti Prosecco Brut DOC,wine,sparkling,Wines by the bottle,"Charmat-method Glera from Treviso. Ripe apple, white peach and citrus on the nose with delicate acacia and wisteria. Light and fresh on the palate with soft acidity and a clean finish. Ideal as an aperitif or with seafood and light appetisers",11,TRUE,FALSE,Bottega,Italy,TRUE
-wine_wild_idol_alcohol_free_sparkling_white,Wild Idol Alcohol Free Sparkling White,wine,sparkling,Wines by the bottle,"Naturally alcohol-free — Müller-Thurgau grape juice kept unfermented, not de-alcoholised. Produced in Germany for Wild Idol. Zesty green apple, jasmine and orange blossom with soft, fine bubbles. Bright, fresh and crisp with a clean finish. Vegan, gluten-free, Halal certified, 24 kcal per 100ml",0,TRUE,,Wild Idol,Germany,TRUE
-wine_searcys_classic_cuv_e_brut_searcys,Searcys Classic Cuvée Brut,wine,sparkling,Wines by the bottle,"Chardonnay, Pinot Noir and Pinot Meunier from Greyfriars Vineyard on the chalk slopes of the Hog's Back, Surrey. Traditional method, aged over three years in bottle. Peach and lime on the nose with green apple, brioche and citrus on the palate. Dry and soft with a crisp, mineral finish. Pair with fish, seafood or as an aperitif",12.5,TRUE,,Searcys,England,TRUE
-wine_chapel_down_ros_brut_chapel_down,Chapel Down Rosé Brut,wine,sparkling,Wines by the bottle,"Traditional method Chardonnay, Pinot Noir, Pinot Blanc and Pinot Meunier from Kent, Essex and Sussex vineyards on chalk soils. Pale peach with strawberry, redcurrant and toasty shortbread on the nose. Crisp and bright with fine mousse and a refreshing finish. Pair with light pasta, seafood or fruit desserts",12,TRUE,,Chapel Down,England,TRUE
-wine_searcys_selected_cuv_e_brut_searcys,Searcys Selected Cuvée Brut,wine,sparkling,Wines by the bottle,"Chardonnay, Pinot Noir and Pinot Meunier, exclusively crafted for Searcys by a fourth-generation Chef de Caves in Épernay. Extended ageing on lees in chalk cellars. White flowers, sweet biscuit and orchard fruits on the nose with brioche and lemon zest on the palate. Fresh, elegant and refined. Pair with seafood, poultry or as an aperitif",12.5,TRUE,,Searcys,France,TRUE
-wine_searcys_selected_cuv_e_ros_brut_searcys,Searcys Selected Cuvée Rosé Brut,wine,sparkling,Wines by the bottle,"Chardonnay, Pinot Noir and Pinot Meunier, exclusively crafted for Searcys by a fourth-generation Chef de Caves in Épernay. Aged on lees in chalk cellars. Strawberry, raspberry and redcurrant with hints of sweet pastry. Vibrant and fresh with a soft, creamy texture and a luxurious finish. Pair with salmon, soft cheeses or fresh strawberries",12.5,TRUE,,Searcys,France,TRUE
-wine_nyetimber_classic_cuv_e_nyetimber,Nyetimber Classic Cuvée,wine,sparkling,Wines by the bottle,"Chardonnay, Pinot Noir and Pinot Meunier from 100% estate-grown fruit on greensand and chalk soils. Traditional method, aged over three years on lees. Toasty brioche, honey, baked apple and almond on the palate with fine, persistent bubbles. Intense yet elegant with a long, mineral finish. Pair with seafood or soft cheeses",12,TRUE,,Nyetimber,England,TRUE
-wine_lanson_p_re_fils_brut_lanson,Lanson Père & Fils Brut,wine,sparkling,Wines by the bottle,"Pinot Noir 50%, Chardonnay 35%, Pinot Meunier 15% from 100 crus including grand and premier crus. No malolactic fermentation. Aged 5 years on lees with 32% reserve wines. Green apple, brioche and honey on the nose. Crisp and vibrant with citrus freshness, nutty depth and a chalky, elegant finish. Pair with seafood or risotto",12.5,TRUE,,Lanson,France,TRUE
-wine_lanson_ros_brut_lanson,Lanson Rosé Brut,wine,sparkling,Wines by the bottle,"Champagne, NV",12.5,TRUE,,Lanson,France,FALSE
-wine_charles_heidsieck_blanc_de_blancs_brut_charles_heidsieck,Charles Heidsieck Blanc de Blancs Brut,wine,sparkling,Wines by the bottle,"100% Chardonnay from the Côte des Blancs, blended with 30% reserve wines and matured in two-thousand-year-old chalk cellars. White peach, candied citrus, honeysuckle and fresh hazelnut on the nose. Medium-bodied with a silky mousse, chalky minerality and a long, vibrant finish. Pair with seafood or creamy cheeses",12.5,TRUE,,Charles Heidsieck,France,TRUE
-wine_laurent_perrier_ros_laurent_perrier,Laurent-Perrier Rosé Brut,wine,sparkling,Wines by the bottle,"100% Pinot Noir from Grand Cru villages including Ambonnay, Bouzy and Tours-sur-Marne. Saignée method with 48 to 72 hour maceration, aged five years on lees. Raspberry, dark cherry and candied citrus with hints of smoke and spice. Vinous and structured with vibrant acidity and an elegant, dry finish. Pair with duck, salmon or foie gras",12,TRUE,FALSE,Laurent-Perrier,France,TRUE
-item,,,,,,,,,,,
-wine_chichibio_pecorino_terre_di_chieti_citra_vini,ChiChiBio Pecorino Terre di Chieti,wine,white,Wines by the bottle,"Organic, vegan Pecorino aged on fine lees in stainless steel. Peach, apricot and pineapple on the nose with white flowers and a balsamic hint. Fresh and mineral on the palate with lively acidity and a well-balanced finish. Pair with seafood, white meat or light cheeses",12,TRUE,TRUE,Citra Vini,Italy,TRUE
-wine_montalto_organic_catarratto_montalto,Montalto Organic Catarratto,wine,white,Wines by the bottle,"Organic Catarratto from vineyards at 400m in western Sicily on clay soils. Fermented in stainless steel with eight weeks on lees. Apple, nuts and orange blossom on the nose. Crisp yet rounded with citrus peel and herbal notes on the palate. Pair with seafood, grilled fish or Mediterranean dishes",12.5,TRUE,TRUE,Montalto,Italy,TRUE
-wine_g_rard_bertrand_heritage_chardonnay_g_rard_bertrand,Gérard Bertrand Heritage Chardonnay,wine,white,Wines by the bottle,"Chardonnay from the Pays d'Oc, southern France. No malolactic fermentation, preserving freshness. Vanilla, fresh butter and toast on the nose with juicy peach and toasted almond on the palate. Velvety texture with a lingering, elegant finish. Pair with scallops, fish in sauce or risotto",13,TRUE,,Gérard Bertrand,France,TRUE
-wine_sauvignon_blanc_featherdrop_featherdrop,Sauvignon Blanc Featherdrop,wine,white,Wines by the bottle,"Sauvignon Blanc from selected Marlborough vineyards on the South Island. Intensely aromatic with passionfruit, lime zest, gooseberry and fresh-cut grass. Crisp and zesty on the palate with bright acidity, a twist of mint and a clean mineral finish. Pair with seafood, goat's cheese or Asian cuisine",12.5,,,Featherdrop,New Zealand,TRUE
-wine_castel_firmian_pinot_grigio_mezzacorona,Castel Firmian Pinot Grigio,wine,white,Wines by the bottle,"Pinot Grigio from estate vineyards along the Adige Valley at the foot of the Dolomites. Brief skin contact adds structure. Green apple, pear and camomile on the nose with a clean, elegant palate and a refreshing finish. Pair with antipasti, white meat or fish",12.5,TRUE,,Mezzacorona,Italy,TRUE
-wine_soellner_wogenrain_organic_gr_ner_veltliner_soellner,Soellner Wogenrain Organic Grüner Veltliner,wine,white,Wines by the bottle,"Biodynamic, hand-picked Grüner Veltliner from terraced vineyards on the Wagram. Fermented in stainless steel with brief oak maturation, kept on lees until spring. Acacia honey, green apple and white fruit with mineral depth. Light and elegant with a fresh, peppery finish. Pair with white meat, fish or English cheeses",11.5,,TRUE,Soellner,Austria,TRUE
-wine_vi_abal_albari_o_vi_abal,Viñabal Albariño,wine,white,Wines by the bottle,"100% Albariño from granite soils on the Atlantic coast of Galicia. Fermented in stainless steel. Citrus, white peach and honeysuckle on the nose with a characteristic hint of salinity. Crisp and aromatic with zippy acidity, mineral depth and a long, dry finish. Pair with seafood, shellfish or tapas",12.5,,,Viñabal,Spain,TRUE
-wine_lychgate_bacchus_bolney,Lychgate Bacchus,wine,white,Wines by the bottle,"Hand-picked Bacchus from sandstone soils, whole-bunch pressed and cool-fermented in stainless steel. Elderflower, gooseberry, melon and grapefruit on the nose with hedgerow and white pepper notes. Crisp and zesty with mineral depth and a long, aromatic finish. Pair with fish pie, spicy or Asian dishes",11,,,Bolney,England,TRUE
-wine_gavi_di_gavi_la_meirana_broglia,Gavi di Gavi La Meirana,wine,white,Wines by the bottle,"100% Cortese from 30-year-old vines on clay and marl soils. Fermented in stainless steel and aged six months on lees. Citrus, white peach and green apple on the nose with jasmine and almond. Medium-bodied with bright mineral acidity and a characteristic saline finish. Pair with fish, seafood or white meat",13,TRUE,,Broglia,Italy,TRUE
-wine_marcel_henri_cuv_e_daniel_chotard,Marcel Henri Cuvée,wine,white,Wines by the bottle,"Sauvignon Blanc from 50 to 60 year old vines on Kimmeridgian limestone and clay. Aged 18 months on lees in acacia foudre. Citrus, white flowers and mineral depth on the nose. Textured and fine-grained with laser-like acidity, a rounded palate and a long, saline finish. Pair with goat's cheese, shellfish or poultry",13.5,,,Daniel Chotard,France,TRUE
-wine_chablis_jean_marc_brocard,Chablis,wine,white,Wines by the bottle,"100% Chardonnay from organic vineyards on Kimmeridgian limestone in Chablis. Fermented in stainless steel. Lemon, green apple and oyster shell on the nose with a hint of white flowers. Crisp and mineral with lively acidity and a clean, saline finish. Pair with shellfish, grilled fish or goat's cheese",12.5,TRUE,,Domaine Jean-Marc Brocard,France,TRUE
-wine_bramito_chardonnay_antinori,Bramìto Chardonnay,wine,white,Wines by the bottle,"100% Chardonnay from fossil-rich clay soils surrounding the medieval Castello della Sala. Part fermented in oak with malolactic, part in stainless steel for freshness. Williams pear, lime, toasted hazelnut and fresh butter on the nose. Harmonious and well-structured with mineral elegance and a persistent almond finish. Pair with shellfish, poultry in butter sauce or foie gras",12.5,TRUE,,Antinori,Italy,TRUE
-wine_vespa_bianco_bastianich,Vespa Bianco,wine,white,Wines by the bottle,"Chardonnay 45%, Sauvignon Blanc 45%, Picolit 10% from the Colli Orientali del Friuli. Fermented and aged in French oak barriques, one year on lees. Pear, apricot and wildflower on the nose with vanilla, spice and toasted hazelnut. Rich and creamy with mineral depth and a long, complex finish. Pair with shellfish, roast poultry or mature cheeses",14,TRUE,,Bastianich,Italy,TRUE
-wine_cervaro_della_sala_antinori,Cervaro della Sala,wine,white,Wines by the bottle,"Chardonnay 95%, Grechetto 5% from fossil-rich Pliocene soils at Castello della Sala. Fermented and aged in French oak barriques with full malolactic. Acacia blossom, bergamot, flint and vanilla on the nose with toasted hazelnut and pastry cream. Rich and elegant with savoury depth, outstanding freshness and a long, mineral finish. One of Italy's defining white wines",13,TRUE,,Antinori,Italy,TRUE
-item,,,,,,,,,,,
-wine_c_tes_de_provence_mas_fleurey_ros_mas_fleurey,Côtes de Provence Mas Fleurey Rosé,wine,rose,Wines by the bottle,"Grenache, Cinsault and Syrah from the Côtes de Provence. Pale pink with raspberry, peach and gentle floral aromas. Light and crisp on the palate with a soft herbal character and a fresh summer berry finish. Pair with salads, grilled fish or Mediterranean cuisine",12.5,TRUE,,Mas Fleurey,France,TRUE
-wine_balfour_nannete_s_ros_balfour,Balfour Nannete's Rosé,wine,rose,Wines by the bottle,"Pinot Meunier, Pinot Noir and Chardonnay from Hush Heath Estate's clay vineyards. Provençal-style pale pink with strawberry, raspberry and hints of thyme. Crisp and light with a chalky mineral finish. Pair with green salads, fresh seafood or soft cheeses",12,TRUE,,Balfour,England,TRUE
-item,,,,,,,,,,,
-wine_vialetto_negroamaro_vialetto,Vialetto Negroamaro,wine,red,Wines by the bottle,"Negroamaro from clay soils in southern Puglia. Eight days' maceration, fermented in stainless steel. Ripe dark fruit, spice and liquorice on the nose. Succulent and juicy on the palate with elegant tannins and a smooth, rich finish. Pair with pasta in tomato sauce, slow-cooked meat or spicy dishes",12.5,TRUE,,Vialetto,Italy,TRUE
-wine_montalto_organic_nero_d_avola_montalto,Montalto Organic Nero d'Avola,wine,red,Wines by the bottle,"Organic, hand-harvested Nero d'Avola from western Sicily at 250 to 350m elevation. Ripe red fruits, sweet spices and liquorice on the nose. Round and generous on the palate with soft tannins and a smooth, fruity finish. Pair with barbecued meat, pizza or aged cheeses",13.5,TRUE,TRUE,Montalto,Italy,TRUE
-wine_c_tes_du_rh_ne_haut_de_brun_alain_jaume,Côtes du Rhône Haut de Brun,wine,red,Wines by the bottle,"Organic Grenache, Syrah, Cinsault and Mourvèdre from limestone terraces with red clay. Aged in vat only for 10 to 12 months. Wild raspberry, blackcurrant and spice on the nose. Medium-bodied with silky tannins and a peppery, liquorice finish. Pair with poultry, white meat or mild cheeses",13.5,,TRUE,Alain Jaume,France,TRUE
-wine_g_rard_bertrand_naturaly_s_pinot_noir_g_rard_bertrand,Gérard Bertrand Naturaly's Pinot Noir,wine,red,Wines by the bottle,"Organic Pinot Noir from the Languedoc, southern France. Ripe cherry, wild raspberry and spicy nuances on the nose. Light and elegant on the palate with fine, silky tannins and pure fruit flavours through to a smooth finish. Pair with veal, pasta or light red meat dishes",13.5,TRUE,TRUE,Gérard Bertrand,France,TRUE
-wine_catena_appellation_vista_flores_malbec_catena,Catena Appellation Vista Flores Malbec,wine,red,Wines by the bottle,"100% Malbec from 30-year-old vines at 1,100m in the Uco Valley. Aged 12 months in French and American oak. Dark violet with blackberry, plum, lavender and mocha on the nose. Rich and velvety with sweet spice, leather and polished tannins. Pair with grilled red meat or aged cheeses",13.5,TRUE,,Catena,Argentina,FALSE
-wine_cervera_colors_negre_cervera,Cervera Colors Negre,wine,red,Wines by the bottle,"Organic Grenache, Cabernet Sauvignon and Merlot from mountain vineyards at 700 to 800m in Les Garrigues. Briefly oak-aged. Ripe black fruit with balsamic and mineral notes, full-bodied with concentrated tannins and a fresh, spicy finish. Pair with grilled lamb or rich stews",15,TRUE,,Celler Cérvoles,Spain,TRUE
-wine_peppoli_antinori_chianti_classico_antinori,Peppoli Antinori Chianti Classico,wine,red,Wines by the bottle,"Sangiovese with Merlot and Syrah from the Pèppoli estate in the heart of Chianti Classico. Aged in large Slavonian oak barrels. Cherry, red currant and violet on the nose with hints of spice and cocoa. Medium-bodied with lively acidity, supple tannins and a fresh, savoury finish. Pair with pasta, grilled steak or aged Pecorino",13.5,,,Antinori,Italy,TRUE
-wine_luke_s_pinot_noir_balfour,Luke's Pinot Noir,wine,red,Wines by the bottle,"100% Pinot Noir from Burgundy clones on Wealden clay at Hush Heath Estate. Lightly oaked in French and American barrels. Cherry, raspberry and a touch of spice on the nose with savoury depth. Light and silky with soft tannins, vibrant acidity and a long, elegant finish. Serve slightly chilled with white meat or herby lamb",12.5,TRUE,,Balfour,England,TRUE
-wine_ch_teau_cissac_haut_m_doc_ch_teau_cissac,Château Cissac Haut-Médoc,wine,red,Wines by the bottle,"Cabernet Sauvignon, Merlot and Petit Verdot from gravel soils adjoining Saint-Estèphe and Pauillac. Cru Bourgeois Supérieur. Cassis, plum and cedar with hints of toast and dried tobacco from oak ageing. Medium-bodied with elegant tannins and a savoury, balanced finish. Pair with roast beef or lamb",13,,,Château Cissac,France,TRUE
-wine_st_joseph_poivre_et_sol_francois_villard,St Joseph Poivre et Sol,wine,red,Wines by the bottle,"100% Syrah from 20-year-old vines on decomposed granite and quartz. Aged 15 months in old oak barrels. Black cherry, crushed peppercorns and wild herbs on the nose. Medium-bodied with silky tannins, vibrant acidity and a smoky, spicy finish. Pair with game, stews or grilled red meat",12.5,TRUE,,Francois Villard,France,TRUE
-wine_zuccardi_serie_a_malbec_zuccardi,Zuccardi Serie A Malbec,wine,red,Wines by the bottle,"100% Malbec from estate vineyards in the Uco Valley at high altitude on stony soils. Partial French oak ageing. Prune, cherry, black pepper and tobacco on the nose with chocolate and spicy notes. Soft and velvety with firm tannins and a juicy, grippy finish. Pair with roast beef, lamb or chargrilled steak",14,TRUE,,Zuccardi,Argentina,TRUE
-wine_tignanello_antinori,Tignanello,wine,red,Wines by the bottle,"Sangiovese 78%, Cabernet Sauvignon 18%, Cabernet Franc 4% from the iconic Tignanello vineyard at 350 to 400m on limestone and schist. Aged 13 months in French oak barriques. Black cherry, violet, vanilla and balsamic hints on the nose. Full-bodied with velvety tannins, dense yet fresh, and a long, savoury finish. A pioneering Super Tuscan",14,TRUE,,Antinori,Italy,TRUE
-wine_barbaresco_rizzi_rizzi_2021,Barbaresco Rizzi,wine,red,Wines by the bottle,"100% Nebbiolo from the Rizzi cru in Treiso, planted 1967-2004 on clay-calcareous soils with sand. Aged 12 months in large oak barrels then 6 to 9 months in concrete. Cherry, raspberry, violet and cola on the nose with dried spice and leather. Elegant and precise with fine-grained tannins, bright acidity and a long, mineral finish. A classic, age-worthy Barbaresco",14,TRUE,,Rizzi,Italy,TRUE
-item,,,,,,,,,,,
-wine_dindarello_maculan,Dindarello,wine,dessert,Wines by the bottle,"100% Moscato from volcanic and tuffaceous hills in Breganze. Grapes dried for one month then gently pressed and fermented in stainless steel. Intensely aromatic with honey, orange blossom and tropical fruit. Sweet yet fresh and lively with bright acidity and a long, persistent finish. Pair with fruit tarts, pastries or creamy desserts",11.5,TRUE,,Maculan,Italy,TRUE
-wine_la_fleur_d_or_sauternes,La Fleur d'Or Sauternes,wine,dessert,Wines by the bottle,"Sémillon and Sauvignon Blanc from 35-year-old vines on iron-rich clay in Barsac. Hand-harvested botrytised grapes, aged one year in barrel then one year in steel. Candied apricot, peach, honey and toasty hints. Luscious yet lively with a fresh, balanced finish. Pair with blue cheese, fruit tarts or foie gras",13.5,TRUE,,Bill Blatch,France,TRUE
-wine_angelorum_recioto_della_valpolicella_masi,Angelorum Recioto della Valpolicella,wine,dessert,Wines by the bottle,"Corvina, Rondinella and Molinara dried on bamboo racks through traditional appassimento. Rich and complex with cooked cherry, dried fig and sweet spice. Full-bodied with a velvety finish, balanced by moderate acidity. Pair with chocolate, dry pastries or gorgonzola",14,TRUE,,Masi,Italy,FALSE
-item,,,,,,,,,,,
-spirit_searcys_london_dry_gin_searcys,Searcys London Dry Gin,spirit,gin,Spirits,TBD,40,,,Searcys,England,TRUE
-spirit_tanqueray_london_dry_gin_tanqueray,Tanqueray London Dry Gin,spirit,gin,Spirits,TBD,41.3,,,Tanqueray,England,TRUE
-spirit_hendrick_s_hendrick_s,Hendrick's,spirit,gin,Spirits,TBD,41.4,,,Hendrick's,Scotland,TRUE
-spirit_cygnet_dry_gin_cygnet,Cygnet Dry Gin,spirit,gin,Spirits,TBD,40,,,Cygnet,Wales,TRUE
-item,,,,,,,,,,,
-spirit_42_below_42_below,42 Below,spirit,vodka,Spirits,TBD,40,,,42 Below,New Zealand,TRUE
-spirit_sipsmith_sipping_vodka_sipsmith,Sipsmith Sipping Vodka,spirit,vodka,Spirits,TBD,40,,,Sipsmith,England,TRUE
-spirit_grey_goose_l_original_grey_goose,Grey Goose L'Original,spirit,vodka,Spirits,TBD,40,,,Grey Goose,France,TRUE
-item,,,,,,,,,,,
-spirit_bacardi_carta_blanca_bacardi,Bacardi Carta Blanca,spirit,rum,Spirits,TBD,37.5,,,Bacardi,Puerto Rico,TRUE
-spirit_cargo_cult_banana_spiced_rum_cargo_cult,Cargo Cult Banana Spiced Rum,spirit,rum,Spirits,TBD,38,,,Cargo Cult,Australia,TRUE
-spirit_xr_matusalem_15_gran_reserve_matusalem,XR Matusalem 15 Gran Reserve,spirit,rum,Spirits,TBD,40,,,Matusalem,Dominican Republic,TRUE
-item,,,,,,,,,,,
-spirit_olmeca_silver_olmeca,Olmeca Silver,spirit,tequila,Spirits,TBD,35,,,Olmeca,Mexico,TRUE
-spirit_quiquiriqu_mezcal_quiquiriqu,Quiquiriquí­ Mezcal,spirit,tequila,Spirits,TBD,45,,,Quiquiriquí­,Mexico,TRUE
-spirit_patron_reposado_patron,Patron Reposado,spirit,tequila,Spirits,TBD,40,,,Patron,Mexico,TRUE
-item,,,,,,,,,,,
-spirit_jack_daniel_s_old_no7_jack_daniel_s,Jack Daniel's Old No7,spirit,whisky,Spirits,TBD,40,,,Jack Daniel's,USA,TRUE
-spirit_chivas_regal_12yo_chivas_regal,Chivas Regal 12yo,spirit,whisky,Spirits,TBD,40,,,Chivas Regal,Scotland,TRUE
-spirit_johnnie_walker_black_label_johnnie_walker,Johnnie Walker Black Label,spirit,whisky,Spirits,TBD,40,,,Johnnie Walker,Scotland,TRUE
-spirit_ardbeg_10yo_ardbeg,Ardbeg 10yo,spirit,whisky,Spirits,TBD,46,,,Ardbeg,Scotland,TRUE
-item,,,,,,,,,,,
-spirit_mancino_rosso_amaranto_mancino,Mancino Rosso Amaranto,spirit,vermouth,Spirits,TBD,16,,,Mancino,,TRUE
-spirit_mancino_bianco_ambrato_mancino,Mancino Bianco Ambrato,spirit,vermouth,Spirits,TBD,16,,,Mancino,,TRUE
-spirit_antica_formula_vermouth_antica_formula,Antica Formula Vermouth,spirit,vermouth,Spirits,TBD,16.5,,,Antica Formula,Italy,TRUE
-spirit_campari_campari,Campari,spirit,liqueur,Spirits,TBD,28,,,Campari,Italy,TRUE
-item,,,,,,,,,,,
-spirit_limoncello_di_capri_limoncello_di_capri,Limoncello di Capri,spirit,liqueur,Spirits,TBD,30,,,Limoncello di Capri,Italy,TRUE
-spirit_disaronno_amaretto_disaronno,Disaronno Amaretto,spirit,liqueur,Spirits,TBD,28,,,Disaronno,Italy,TRUE
-spirit_nardini_bianco_grappa_nardini,Nardini Bianco Grappa,spirit,liqueur,Spirits,TBD,40,,,Nardini,Italy,TRUE
-spirit_grappa_amorosa_di_settembre_poli,Grappa Amorosa di Settembre,spirit,liqueur,Spirits,TBD,40,,,Poli,Italy,TRUE
-spirit_bepi_tosolini_express_premium_espresso_coffee_liqueur_bepi_tosolini,Bepi Tosolini Express Premium Espresso Coffee Liqueur,spirit,liqueur,Spirits,TBD,28,,,Bepi Tosolini,Italy,TRUE
-item,,,,,,,,,,,
-spirit_janneau_vsop_armagnac_janneau,Janneau VSOP Armagnac,spirit,brandy,Spirits,TBD,40,,,Janneau,France,TRUE
-spirit_courvoisier_vsop_fine_cognac_courvoisier,Courvoisier VSOP Fine Cognac,spirit,brandy,Spirits,TBD,40,,,Courvoisier,France,TRUE
-item,,,,,,,,,,,
-beer_peroni_nastro_azzurro_non_alcoholic_peroni,Peroni Nastro Azzurro (non-alcoholic),beer,lager,Beers,"Alcohol-free Italian lager with the same crisp, clean and refreshing character as the original",0,TRUE,FALSE,Birra Peroni,Italy,TRUE
-beer_the_small_beer_session_pale_ale_the_small_beer,Small Beer Session Pale Ale,beer,pale ale,Beers,"Low-alcohol session pale with toasted malt, lemon citrus and spicy hops, finishing dry and bitter",2.5,TRUE,FALSE,Small Beer Brew Co,England,TRUE
-beer_peroni_better_peroni_peroni,Peroni Nastro Azzuro,beer,lager,Beers,"Premium Italian lager with an intensely crisp, clean and refreshing character",5.1,TRUE,FALSE,Birra Peroni,Italy,TRUE
-beer_menabrea_menabrea,Menabrea Bionda,beer,lager,Beers,"Pale Italian lager, well balanced between citrus and bitter tones with floral, fruity undertones and a refined, crisp finish",4.8,TRUE,FALSE,Birra Menabrea,Italy,TRUE
-beer_birra_moretti_birra_moretti,Birra Moretti,beer,lager,Beers,"Classic Italian premium lager with a finely bitter, balanced taste, floral notes and aromas of barley malt",4.6,TRUE,FALSE,Birra Moretti,Italy,TRUE
-item,,,,,,,,,,,
-soft_indian_tonic_water_fever_tree,Indian Tonic Water,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_light_tonic_fever_tree,Light Tonic,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_lemon_tonic_fever_tree,Lemon Tonic,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_rhubarb_and_raspberry_tonic_fever_tree,Rhubarb and Raspberry Tonic,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_elderflower_tonic_fever_tree,Elderflower Tonic,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_premium_lemonade_fever_tree,Premium Lemonade,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_ginger_beer_fever_tree,Ginger Beer,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_italian_blood_orange_soda_fever_tree,Italian Blood Orange Soda,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_white_grape_and_apricot_soda_fever_tree,White Grape and Apricot Soda,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_pink_grapefruit_soda_fever_tree,Pink Grapefruit Soda,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-soft_cloudy_british_apple_with_a_hint_of_mint_fever_tree,Cloudy British Apple with a Hint of Mint,soft,fever_tree,Soft drinks,TBD,,,,Fever-Tree,,TRUE
-item,,,,,,,,,,,
-soft_limonata_san_pellegrino,Limonata,soft,san_pellegrino,Soft drinks,TBD,,,,San Pellegrino,,TRUE
-soft_aranciata_san_pellegrino,Aranciata,soft,san_pellegrino,Soft drinks,TBD,,,,San Pellegrino,,TRUE
-soft_aranciata_rossa_san_pellegrino,Aranciata Rossa,soft,san_pellegrino,Soft drinks,TBD,,,,San Pellegrino,,TRUE
-item,,,,,,,,,,,
-soft_coca_cola,Coca-cola,soft,classic,Soft drinks,TBD,,,,,,TRUE
-soft_diet_coke,Diet Coke,soft,classic,Soft drinks,TBD,,,,,,TRUE
-item,,,,,,,,,,,
-juice_apple,Apple,soft,juice,Fruit juice,TBD,,,,,,TRUE
-juice_cranberry,Cranberry,soft,juice,Fruit juice,TBD,,,,,,TRUE
-juice_grapefruit,Grapefruit,soft,juice,Fruit juice,TBD,,,,,,TRUE
-juice_tomato,Tomato,soft,juice,Fruit juice,TBD,,,,,,TRUE
-juice_orange,Orange,soft,juice,Fruit juice,TBD,,,,,,TRUE
-item,,,,,,,,,,,
-soft_harrogate_mineral_water_still,Harrogate Mineral Water Still,soft,water,Water,TBD,,,,,,TRUE
-soft_harrogate_mineral_water_sparkling,Harrogate Mineral Water Sparkling,soft,water,Water,TBD,,,,,,TRUE
-item,,,,,,,,,,,
-hot_espresso,Espresso,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_espresso_macchiato,Espresso macchiato,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_double_espresso,Double espresso,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_double_macchiato,Double macchiato,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_cappuccino,Cappuccino,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_latte,Latte,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_flat_white,Flat white,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_americano,Americano,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_bicerin,Bicerin,hot,coffee,Hot drinks,,,,,,,TRUE
-hot_tea_and_infusions,Tea and infusions,hot,tea,Hot drinks,"English Breakfast, Earl Grey Imperial, Rooibos African Nights, Green Tea, Peppermint Moroccan Secret, Fresh Mint",,,,,,TRUE
+product_code,name,category,subcategory,description,abv,vegan,organic,producer,country,is_active
+mocktail_mountain_spritz,Mountain Spritz,mocktail,non_alcoholic_cocktail,"Everleaf Mountain, Fever-Tree White Grape and Apricot Soda",,,,,,TRUE
+mocktail_ginger_cooler,Ginger Cooler,mocktail,non_alcoholic_cocktail,"Pentire Seaward, Lemon, Elderflower, Ginger Ale",,,,,,TRUE
+mocktail_sicilian_lemonade,Sicilian Lemonade,mocktail,non_alcoholic_cocktail,"Sicilian Lemon, Bergamot Essential Oil",,,,,,TRUE
+mocktail_non_alcoholic_espresso_martini,Non-alcoholic Espresso Martini,mocktail,non_alcoholic_cocktail,"Coffee, Sugar, Non-alcoholic Coffee Liquor, Cacao Nibs",,,,,,TRUE
+mocktail_fig_and_truffle_spritz,Fig and Truffle Spritz,mocktail,non_alcoholic_cocktail,"Figs, Honey, Truffle, Vichy Catalan",,,,,,FALSE
+mocktail_saffron_orange_spritz,Saffron & Orange Spritz,mocktail,non_alcoholic_cocktail,"Everleaf Forest, Blood Orange Soda",,,,,,TRUE
+mocktail_cherry_lini_zero,Cherry-lini Zero,mocktail,non_alcoholic_cocktail,"Wild idol, cherry syrup, lemon juice, maraschino cherry",,,,,,TRUE
+item,,,,,,,,,,
+wine_bottega_poeti_prosecco_brut_doc_bottega,Bottega Poeti Prosecco Brut DOC,wine,sparkling,"Charmat-method Glera from Treviso. Ripe apple, white peach and citrus on the nose with delicate acacia and wisteria. Light and fresh on the palate with soft acidity and a clean finish. Ideal as an aperitif or with seafood and light appetisers",11,TRUE,FALSE,Bottega,Italy,TRUE
+wine_wild_idol_alcohol_free_sparkling_white,Wild Idol Alcohol Free Sparkling White,wine,sparkling,"Naturally alcohol-free — Müller-Thurgau grape juice kept unfermented, not de-alcoholised. Produced in Germany for Wild Idol. Zesty green apple, jasmine and orange blossom with soft, fine bubbles. Bright, fresh and crisp with a clean finish. Vegan, gluten-free, Halal certified, 24 kcal per 100ml",0,TRUE,,Wild Idol,Germany,TRUE
+wine_searcys_classic_cuv_e_brut_searcys,Searcys Classic Cuvée Brut,wine,sparkling,"Chardonnay, Pinot Noir and Pinot Meunier from Greyfriars Vineyard on the chalk slopes of the Hog's Back, Surrey. Traditional method, aged over three years in bottle. Peach and lime on the nose with green apple, brioche and citrus on the palate. Dry and soft with a crisp, mineral finish. Pair with fish, seafood or as an aperitif",12.5,TRUE,,Searcys,England,TRUE
+wine_chapel_down_ros_brut_chapel_down,Chapel Down Rosé Brut,wine,sparkling,"Traditional method Chardonnay, Pinot Noir, Pinot Blanc and Pinot Meunier from Kent, Essex and Sussex vineyards on chalk soils. Pale peach with strawberry, redcurrant and toasty shortbread on the nose. Crisp and bright with fine mousse and a refreshing finish. Pair with light pasta, seafood or fruit desserts",12,TRUE,,Chapel Down,England,TRUE
+wine_searcys_selected_cuv_e_brut_searcys,Searcys Selected Cuvée Brut,wine,sparkling,"Chardonnay, Pinot Noir and Pinot Meunier, exclusively crafted for Searcys by a fourth-generation Chef de Caves in Épernay. Extended ageing on lees in chalk cellars. White flowers, sweet biscuit and orchard fruits on the nose with brioche and lemon zest on the palate. Fresh, elegant and refined. Pair with seafood, poultry or as an aperitif",12.5,TRUE,,Searcys,France,TRUE
+wine_searcys_selected_cuv_e_ros_brut_searcys,Searcys Selected Cuvée Rosé Brut,wine,sparkling,"Chardonnay, Pinot Noir and Pinot Meunier, exclusively crafted for Searcys by a fourth-generation Chef de Caves in Épernay. Aged on lees in chalk cellars. Strawberry, raspberry and redcurrant with hints of sweet pastry. Vibrant and fresh with a soft, creamy texture and a luxurious finish. Pair with salmon, soft cheeses or fresh strawberries",12.5,TRUE,,Searcys,France,TRUE
+wine_nyetimber_classic_cuv_e_nyetimber,Nyetimber Classic Cuvée,wine,sparkling,"Chardonnay, Pinot Noir and Pinot Meunier from 100% estate-grown fruit on greensand and chalk soils. Traditional method, aged over three years on lees. Toasty brioche, honey, baked apple and almond on the palate with fine, persistent bubbles. Intense yet elegant with a long, mineral finish. Pair with seafood or soft cheeses",12,TRUE,,Nyetimber,England,TRUE
+wine_lanson_p_re_fils_brut_lanson,Lanson Père & Fils Brut,wine,sparkling,"Pinot Noir 50%, Chardonnay 35%, Pinot Meunier 15% from 100 crus including grand and premier crus. No malolactic fermentation. Aged 5 years on lees with 32% reserve wines. Green apple, brioche and honey on the nose. Crisp and vibrant with citrus freshness, nutty depth and a chalky, elegant finish. Pair with seafood or risotto",12.5,TRUE,,Lanson,France,TRUE
+wine_lanson_ros_brut_lanson,Lanson Rosé Brut,wine,sparkling,"Champagne, NV",12.5,TRUE,,Lanson,France,FALSE
+wine_charles_heidsieck_blanc_de_blancs_brut_charles_heidsieck,Charles Heidsieck Blanc de Blancs Brut,wine,sparkling,"100% Chardonnay from the Côte des Blancs, blended with 30% reserve wines and matured in two-thousand-year-old chalk cellars. White peach, candied citrus, honeysuckle and fresh hazelnut on the nose. Medium-bodied with a silky mousse, chalky minerality and a long, vibrant finish. Pair with seafood or creamy cheeses",12.5,TRUE,,Charles Heidsieck,France,TRUE
+wine_laurent_perrier_ros_laurent_perrier,Laurent-Perrier Rosé Brut,wine,sparkling,"100% Pinot Noir from Grand Cru villages including Ambonnay, Bouzy and Tours-sur-Marne. Saignée method with 48 to 72 hour maceration, aged five years on lees. Raspberry, dark cherry and candied citrus with hints of smoke and spice. Vinous and structured with vibrant acidity and an elegant, dry finish. Pair with duck, salmon or foie gras",12,TRUE,FALSE,Laurent-Perrier,France,TRUE
+item,,,,,,,,,,
+wine_chichibio_pecorino_terre_di_chieti_citra_vini,ChiChiBio Pecorino Terre di Chieti,wine,white,"Organic, vegan Pecorino aged on fine lees in stainless steel. Peach, apricot and pineapple on the nose with white flowers and a balsamic hint. Fresh and mineral on the palate with lively acidity and a well-balanced finish. Pair with seafood, white meat or light cheeses",12,TRUE,TRUE,Citra Vini,Italy,TRUE
+wine_montalto_organic_catarratto_montalto,Montalto Organic Catarratto,wine,white,"Organic Catarratto from vineyards at 400m in western Sicily on clay soils. Fermented in stainless steel with eight weeks on lees. Apple, nuts and orange blossom on the nose. Crisp yet rounded with citrus peel and herbal notes on the palate. Pair with seafood, grilled fish or Mediterranean dishes",12.5,TRUE,TRUE,Montalto,Italy,TRUE
+wine_g_rard_bertrand_heritage_chardonnay_g_rard_bertrand,Gérard Bertrand Heritage Chardonnay,wine,white,"Chardonnay from the Pays d'Oc, southern France. No malolactic fermentation, preserving freshness. Vanilla, fresh butter and toast on the nose with juicy peach and toasted almond on the palate. Velvety texture with a lingering, elegant finish. Pair with scallops, fish in sauce or risotto",13,TRUE,,Gérard Bertrand,France,TRUE
+wine_sauvignon_blanc_featherdrop_featherdrop,Sauvignon Blanc Featherdrop,wine,white,"Sauvignon Blanc from selected Marlborough vineyards on the South Island. Intensely aromatic with passionfruit, lime zest, gooseberry and fresh-cut grass. Crisp and zesty on the palate with bright acidity, a twist of mint and a clean mineral finish. Pair with seafood, goat's cheese or Asian cuisine",12.5,,,Featherdrop,New Zealand,TRUE
+wine_castel_firmian_pinot_grigio_mezzacorona,Castel Firmian Pinot Grigio,wine,white,"Pinot Grigio from estate vineyards along the Adige Valley at the foot of the Dolomites. Brief skin contact adds structure. Green apple, pear and camomile on the nose with a clean, elegant palate and a refreshing finish. Pair with antipasti, white meat or fish",12.5,TRUE,,Mezzacorona,Italy,TRUE
+wine_soellner_wogenrain_organic_gr_ner_veltliner_soellner,Soellner Wogenrain Organic Grüner Veltliner,wine,white,"Biodynamic, hand-picked Grüner Veltliner from terraced vineyards on the Wagram. Fermented in stainless steel with brief oak maturation, kept on lees until spring. Acacia honey, green apple and white fruit with mineral depth. Light and elegant with a fresh, peppery finish. Pair with white meat, fish or English cheeses",11.5,,TRUE,Soellner,Austria,TRUE
+wine_vi_abal_albari_o_vi_abal,Viñabal Albariño,wine,white,"100% Albariño from granite soils on the Atlantic coast of Galicia. Fermented in stainless steel. Citrus, white peach and honeysuckle on the nose with a characteristic hint of salinity. Crisp and aromatic with zippy acidity, mineral depth and a long, dry finish. Pair with seafood, shellfish or tapas",12.5,,,Viñabal,Spain,TRUE
+wine_lychgate_bacchus_bolney,Lychgate Bacchus,wine,white,"Hand-picked Bacchus from sandstone soils, whole-bunch pressed and cool-fermented in stainless steel. Elderflower, gooseberry, melon and grapefruit on the nose with hedgerow and white pepper notes. Crisp and zesty with mineral depth and a long, aromatic finish. Pair with fish pie, spicy or Asian dishes",11,,,Bolney,England,TRUE
+wine_gavi_di_gavi_la_meirana_broglia,Gavi di Gavi La Meirana,wine,white,"100% Cortese from 30-year-old vines on clay and marl soils. Fermented in stainless steel and aged six months on lees. Citrus, white peach and green apple on the nose with jasmine and almond. Medium-bodied with bright mineral acidity and a characteristic saline finish. Pair with fish, seafood or white meat",13,TRUE,,Broglia,Italy,TRUE
+wine_marcel_henri_cuv_e_daniel_chotard,Marcel Henri Cuvée,wine,white,"Sauvignon Blanc from 50 to 60 year old vines on Kimmeridgian limestone and clay. Aged 18 months on lees in acacia foudre. Citrus, white flowers and mineral depth on the nose. Textured and fine-grained with laser-like acidity, a rounded palate and a long, saline finish. Pair with goat's cheese, shellfish or poultry",13.5,,,Daniel Chotard,France,TRUE
+wine_chablis_jean_marc_brocard,Chablis,wine,white,"100% Chardonnay from organic vineyards on Kimmeridgian limestone in Chablis. Fermented in stainless steel. Lemon, green apple and oyster shell on the nose with a hint of white flowers. Crisp and mineral with lively acidity and a clean, saline finish. Pair with shellfish, grilled fish or goat's cheese",12.5,TRUE,,Domaine Jean-Marc Brocard,France,TRUE
+wine_bramito_chardonnay_antinori,Bramìto Chardonnay,wine,white,"100% Chardonnay from fossil-rich clay soils surrounding the medieval Castello della Sala. Part fermented in oak with malolactic, part in stainless steel for freshness. Williams pear, lime, toasted hazelnut and fresh butter on the nose. Harmonious and well-structured with mineral elegance and a persistent almond finish. Pair with shellfish, poultry in butter sauce or foie gras",12.5,TRUE,,Antinori,Italy,TRUE
+wine_vespa_bianco_bastianich,Vespa Bianco,wine,white,"Chardonnay 45%, Sauvignon Blanc 45%, Picolit 10% from the Colli Orientali del Friuli. Fermented and aged in French oak barriques, one year on lees. Pear, apricot and wildflower on the nose with vanilla, spice and toasted hazelnut. Rich and creamy with mineral depth and a long, complex finish. Pair with shellfish, roast poultry or mature cheeses",14,TRUE,,Bastianich,Italy,TRUE
+wine_cervaro_della_sala_antinori,Cervaro della Sala,wine,white,"Chardonnay 95%, Grechetto 5% from fossil-rich Pliocene soils at Castello della Sala. Fermented and aged in French oak barriques with full malolactic. Acacia blossom, bergamot, flint and vanilla on the nose with toasted hazelnut and pastry cream. Rich and elegant with savoury depth, outstanding freshness and a long, mineral finish. One of Italy's defining white wines",13,TRUE,,Antinori,Italy,TRUE
+item,,,,,,,,,,
+wine_c_tes_de_provence_mas_fleurey_ros_mas_fleurey,Côtes de Provence Mas Fleurey Rosé,wine,rose,"Grenache, Cinsault and Syrah from the Côtes de Provence. Pale pink with raspberry, peach and gentle floral aromas. Light and crisp on the palate with a soft herbal character and a fresh summer berry finish. Pair with salads, grilled fish or Mediterranean cuisine",12.5,TRUE,,Mas Fleurey,France,TRUE
+wine_balfour_nannete_s_ros_balfour,Balfour Nannete's Rosé,wine,rose,"Pinot Meunier, Pinot Noir and Chardonnay from Hush Heath Estate's clay vineyards. Provençal-style pale pink with strawberry, raspberry and hints of thyme. Crisp and light with a chalky mineral finish. Pair with green salads, fresh seafood or soft cheeses",12,TRUE,,Balfour,England,TRUE
+item,,,,,,,,,,
+wine_vialetto_negroamaro_vialetto,Vialetto Negroamaro,wine,red,"Negroamaro from clay soils in southern Puglia. Eight days' maceration, fermented in stainless steel. Ripe dark fruit, spice and liquorice on the nose. Succulent and juicy on the palate with elegant tannins and a smooth, rich finish. Pair with pasta in tomato sauce, slow-cooked meat or spicy dishes",12.5,TRUE,,Vialetto,Italy,TRUE
+wine_montalto_organic_nero_d_avola_montalto,Montalto Organic Nero d'Avola,wine,red,"Organic, hand-harvested Nero d'Avola from western Sicily at 250 to 350m elevation. Ripe red fruits, sweet spices and liquorice on the nose. Round and generous on the palate with soft tannins and a smooth, fruity finish. Pair with barbecued meat, pizza or aged cheeses",13.5,TRUE,TRUE,Montalto,Italy,TRUE
+wine_c_tes_du_rh_ne_haut_de_brun_alain_jaume,Côtes du Rhône Haut de Brun,wine,red,"Organic Grenache, Syrah, Cinsault and Mourvèdre from limestone terraces with red clay. Aged in vat only for 10 to 12 months. Wild raspberry, blackcurrant and spice on the nose. Medium-bodied with silky tannins and a peppery, liquorice finish. Pair with poultry, white meat or mild cheeses",13.5,,TRUE,Alain Jaume,France,TRUE
+wine_g_rard_bertrand_naturaly_s_pinot_noir_g_rard_bertrand,Gérard Bertrand Naturaly's Pinot Noir,wine,red,"Organic Pinot Noir from the Languedoc, southern France. Ripe cherry, wild raspberry and spicy nuances on the nose. Light and elegant on the palate with fine, silky tannins and pure fruit flavours through to a smooth finish. Pair with veal, pasta or light red meat dishes",13.5,TRUE,TRUE,Gérard Bertrand,France,TRUE
+wine_catena_appellation_vista_flores_malbec_catena,Catena Appellation Vista Flores Malbec,wine,red,"100% Malbec from 30-year-old vines at 1,100m in the Uco Valley. Aged 12 months in French and American oak. Dark violet with blackberry, plum, lavender and mocha on the nose. Rich and velvety with sweet spice, leather and polished tannins. Pair with grilled red meat or aged cheeses",13.5,TRUE,,Catena,Argentina,FALSE
+wine_cervera_colors_negre_cervera,Cervera Colors Negre,wine,red,"Organic Grenache, Cabernet Sauvignon and Merlot from mountain vineyards at 700 to 800m in Les Garrigues. Briefly oak-aged. Ripe black fruit with balsamic and mineral notes, full-bodied with concentrated tannins and a fresh, spicy finish. Pair with grilled lamb or rich stews",15,TRUE,,Celler Cérvoles,Spain,TRUE
+wine_peppoli_antinori_chianti_classico_antinori,Peppoli Antinori Chianti Classico,wine,red,"Sangiovese with Merlot and Syrah from the Pèppoli estate in the heart of Chianti Classico. Aged in large Slavonian oak barrels. Cherry, red currant and violet on the nose with hints of spice and cocoa. Medium-bodied with lively acidity, supple tannins and a fresh, savoury finish. Pair with pasta, grilled steak or aged Pecorino",13.5,,,Antinori,Italy,TRUE
+wine_luke_s_pinot_noir_balfour,Luke's Pinot Noir,wine,red,"100% Pinot Noir from Burgundy clones on Wealden clay at Hush Heath Estate. Lightly oaked in French and American barrels. Cherry, raspberry and a touch of spice on the nose with savoury depth. Light and silky with soft tannins, vibrant acidity and a long, elegant finish. Serve slightly chilled with white meat or herby lamb",12.5,TRUE,,Balfour,England,TRUE
+wine_ch_teau_cissac_haut_m_doc_ch_teau_cissac,Château Cissac Haut-Médoc,wine,red,"Cabernet Sauvignon, Merlot and Petit Verdot from gravel soils adjoining Saint-Estèphe and Pauillac. Cru Bourgeois Supérieur. Cassis, plum and cedar with hints of toast and dried tobacco from oak ageing. Medium-bodied with elegant tannins and a savoury, balanced finish. Pair with roast beef or lamb",13,,,Château Cissac,France,TRUE
+wine_st_joseph_poivre_et_sol_francois_villard,St Joseph Poivre et Sol,wine,red,"100% Syrah from 20-year-old vines on decomposed granite and quartz. Aged 15 months in old oak barrels. Black cherry, crushed peppercorns and wild herbs on the nose. Medium-bodied with silky tannins, vibrant acidity and a smoky, spicy finish. Pair with game, stews or grilled red meat",12.5,TRUE,,Francois Villard,France,TRUE
+wine_zuccardi_serie_a_malbec_zuccardi,Zuccardi Serie A Malbec,wine,red,"100% Malbec from estate vineyards in the Uco Valley at high altitude on stony soils. Partial French oak ageing. Prune, cherry, black pepper and tobacco on the nose with chocolate and spicy notes. Soft and velvety with firm tannins and a juicy, grippy finish. Pair with roast beef, lamb or chargrilled steak",14,TRUE,,Zuccardi,Argentina,TRUE
+wine_tignanello_antinori,Tignanello,wine,red,"Sangiovese 78%, Cabernet Sauvignon 18%, Cabernet Franc 4% from the iconic Tignanello vineyard at 350 to 400m on limestone and schist. Aged 13 months in French oak barriques. Black cherry, violet, vanilla and balsamic hints on the nose. Full-bodied with velvety tannins, dense yet fresh, and a long, savoury finish. A pioneering Super Tuscan",14,TRUE,,Antinori,Italy,TRUE
+wine_barbaresco_rizzi_rizzi_2021,Barbaresco Rizzi,wine,red,"100% Nebbiolo from the Rizzi cru in Treiso, planted 1967-2004 on clay-calcareous soils with sand. Aged 12 months in large oak barrels then 6 to 9 months in concrete. Cherry, raspberry, violet and cola on the nose with dried spice and leather. Elegant and precise with fine-grained tannins, bright acidity and a long, mineral finish. A classic, age-worthy Barbaresco",14,TRUE,,Rizzi,Italy,TRUE
+item,,,,,,,,,,
+wine_dindarello_maculan,Dindarello,wine,dessert,"100% Moscato from volcanic and tuffaceous hills in Breganze. Grapes dried for one month then gently pressed and fermented in stainless steel. Intensely aromatic with honey, orange blossom and tropical fruit. Sweet yet fresh and lively with bright acidity and a long, persistent finish. Pair with fruit tarts, pastries or creamy desserts",11.5,TRUE,,Maculan,Italy,TRUE
+wine_la_fleur_d_or_sauternes,La Fleur d'Or Sauternes,wine,dessert,"Sémillon and Sauvignon Blanc from 35-year-old vines on iron-rich clay in Barsac. Hand-harvested botrytised grapes, aged one year in barrel then one year in steel. Candied apricot, peach, honey and toasty hints. Luscious yet lively with a fresh, balanced finish. Pair with blue cheese, fruit tarts or foie gras",13.5,TRUE,,Bill Blatch,France,TRUE
+wine_angelorum_recioto_della_valpolicella_masi,Angelorum Recioto della Valpolicella,wine,dessert,"Corvina, Rondinella and Molinara dried on bamboo racks through traditional appassimento. Rich and complex with cooked cherry, dried fig and sweet spice. Full-bodied with a velvety finish, balanced by moderate acidity. Pair with chocolate, dry pastries or gorgonzola",14,TRUE,,Masi,Italy,FALSE
+item,,,,,,,,,,
+spirit_searcys_london_dry_gin_searcys,Searcys London Dry Gin,spirit,gin,TBD,40,,,Searcys,England,TRUE
+spirit_tanqueray_london_dry_gin_tanqueray,Tanqueray London Dry Gin,spirit,gin,TBD,41.3,,,Tanqueray,England,TRUE
+spirit_hendrick_s_hendrick_s,Hendrick's,spirit,gin,TBD,41.4,,,Hendrick's,Scotland,TRUE
+spirit_cygnet_dry_gin_cygnet,Cygnet Dry Gin,spirit,gin,TBD,40,,,Cygnet,Wales,TRUE
+item,,,,,,,,,,
+spirit_42_below_42_below,42 Below,spirit,vodka,TBD,40,,,42 Below,New Zealand,TRUE
+spirit_sipsmith_sipping_vodka_sipsmith,Sipsmith Sipping Vodka,spirit,vodka,TBD,40,,,Sipsmith,England,TRUE
+spirit_grey_goose_l_original_grey_goose,Grey Goose L'Original,spirit,vodka,TBD,40,,,Grey Goose,France,TRUE
+item,,,,,,,,,,
+spirit_bacardi_carta_blanca_bacardi,Bacardi Carta Blanca,spirit,rum,TBD,37.5,,,Bacardi,Puerto Rico,TRUE
+spirit_cargo_cult_banana_spiced_rum_cargo_cult,Cargo Cult Banana Spiced Rum,spirit,rum,TBD,38,,,Cargo Cult,Australia,TRUE
+spirit_xr_matusalem_15_gran_reserve_matusalem,XR Matusalem 15 Gran Reserve,spirit,rum,TBD,40,,,Matusalem,Dominican Republic,TRUE
+item,,,,,,,,,,
+spirit_olmeca_silver_olmeca,Olmeca Silver,spirit,tequila,TBD,35,,,Olmeca,Mexico,TRUE
+spirit_quiquiriqu_mezcal_quiquiriqu,Quiquiriquí­ Mezcal,spirit,tequila,TBD,45,,,Quiquiriquí­,Mexico,TRUE
+spirit_patron_reposado_patron,Patron Reposado,spirit,tequila,TBD,40,,,Patron,Mexico,TRUE
+item,,,,,,,,,,
+spirit_jack_daniel_s_old_no7_jack_daniel_s,Jack Daniel's Old No7,spirit,whisky,TBD,40,,,Jack Daniel's,USA,TRUE
+spirit_chivas_regal_12yo_chivas_regal,Chivas Regal 12yo,spirit,whisky,TBD,40,,,Chivas Regal,Scotland,TRUE
+spirit_johnnie_walker_black_label_johnnie_walker,Johnnie Walker Black Label,spirit,whisky,TBD,40,,,Johnnie Walker,Scotland,TRUE
+spirit_ardbeg_10yo_ardbeg,Ardbeg 10yo,spirit,whisky,TBD,46,,,Ardbeg,Scotland,TRUE
+item,,,,,,,,,,
+spirit_mancino_rosso_amaranto_mancino,Mancino Rosso Amaranto,spirit,vermouth,TBD,16,,,Mancino,,TRUE
+spirit_mancino_bianco_ambrato_mancino,Mancino Bianco Ambrato,spirit,vermouth,TBD,16,,,Mancino,,TRUE
+spirit_antica_formula_vermouth_antica_formula,Antica Formula Vermouth,spirit,vermouth,TBD,16.5,,,Antica Formula,Italy,TRUE
+spirit_campari_campari,Campari,spirit,liqueur,TBD,28,,,Campari,Italy,TRUE
+item,,,,,,,,,,
+spirit_limoncello_di_capri_limoncello_di_capri,Limoncello di Capri,spirit,liqueur,TBD,30,,,Limoncello di Capri,Italy,TRUE
+spirit_disaronno_amaretto_disaronno,Disaronno Amaretto,spirit,liqueur,TBD,28,,,Disaronno,Italy,TRUE
+spirit_nardini_bianco_grappa_nardini,Nardini Bianco Grappa,spirit,liqueur,TBD,40,,,Nardini,Italy,TRUE
+spirit_grappa_amorosa_di_settembre_poli,Grappa Amorosa di Settembre,spirit,liqueur,TBD,40,,,Poli,Italy,TRUE
+spirit_bepi_tosolini_express_premium_espresso_coffee_liqueur_bepi_tosolini,Bepi Tosolini Express Premium Espresso Coffee Liqueur,spirit,liqueur,TBD,28,,,Bepi Tosolini,Italy,TRUE
+item,,,,,,,,,,
+spirit_janneau_vsop_armagnac_janneau,Janneau VSOP Armagnac,spirit,brandy,TBD,40,,,Janneau,France,TRUE
+spirit_courvoisier_vsop_fine_cognac_courvoisier,Courvoisier VSOP Fine Cognac,spirit,brandy,TBD,40,,,Courvoisier,France,TRUE
+item,,,,,,,,,,
+beer_peroni_nastro_azzurro_non_alcoholic_peroni,Peroni Nastro Azzurro (non-alcoholic),beer,lager,"Alcohol-free Italian lager with the same crisp, clean and refreshing character as the original",0,TRUE,FALSE,Birra Peroni,Italy,TRUE
+beer_the_small_beer_session_pale_ale_the_small_beer,Small Beer Session Pale Ale,beer,pale ale,"Low-alcohol session pale with toasted malt, lemon citrus and spicy hops, finishing dry and bitter",2.5,TRUE,FALSE,Small Beer Brew Co,England,TRUE
+beer_peroni_better_peroni_peroni,Peroni Nastro Azzuro,beer,lager,"Premium Italian lager with an intensely crisp, clean and refreshing character",5.1,TRUE,FALSE,Birra Peroni,Italy,TRUE
+beer_menabrea_menabrea,Menabrea Bionda,beer,lager,"Pale Italian lager, well balanced between citrus and bitter tones with floral, fruity undertones and a refined, crisp finish",4.8,TRUE,FALSE,Birra Menabrea,Italy,TRUE
+beer_birra_moretti_birra_moretti,Birra Moretti,beer,lager,"Classic Italian premium lager with a finely bitter, balanced taste, floral notes and aromas of barley malt",4.6,TRUE,FALSE,Birra Moretti,Italy,TRUE
+item,,,,,,,,,,
+soft_indian_tonic_water_fever_tree,Indian Tonic Water,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_light_tonic_fever_tree,Light Tonic,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_lemon_tonic_fever_tree,Lemon Tonic,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_rhubarb_and_raspberry_tonic_fever_tree,Rhubarb and Raspberry Tonic,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_elderflower_tonic_fever_tree,Elderflower Tonic,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_premium_lemonade_fever_tree,Premium Lemonade,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_ginger_beer_fever_tree,Ginger Beer,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_italian_blood_orange_soda_fever_tree,Italian Blood Orange Soda,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_white_grape_and_apricot_soda_fever_tree,White Grape and Apricot Soda,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_pink_grapefruit_soda_fever_tree,Pink Grapefruit Soda,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+soft_cloudy_british_apple_with_a_hint_of_mint_fever_tree,Cloudy British Apple with a Hint of Mint,soft,fever_tree,TBD,,,,Fever-Tree,,TRUE
+item,,,,,,,,,,
+soft_limonata_san_pellegrino,Limonata,soft,san_pellegrino,TBD,,,,San Pellegrino,,TRUE
+soft_aranciata_san_pellegrino,Aranciata,soft,san_pellegrino,TBD,,,,San Pellegrino,,TRUE
+soft_aranciata_rossa_san_pellegrino,Aranciata Rossa,soft,san_pellegrino,TBD,,,,San Pellegrino,,TRUE
+item,,,,,,,,,,
+soft_coca_cola,Coca-cola,soft,classic,TBD,,,,,,TRUE
+soft_diet_coke,Diet Coke,soft,classic,TBD,,,,,,TRUE
+item,,,,,,,,,,
+juice_apple,Apple,soft,juice,TBD,,,,,,TRUE
+juice_cranberry,Cranberry,soft,juice,TBD,,,,,,TRUE
+juice_grapefruit,Grapefruit,soft,juice,TBD,,,,,,TRUE
+juice_tomato,Tomato,soft,juice,TBD,,,,,,TRUE
+juice_orange,Orange,soft,juice,TBD,,,,,,TRUE
+item,,,,,,,,,,
+soft_harrogate_mineral_water_still,Harrogate Mineral Water Still,soft,water,TBD,,,,,,TRUE
+soft_harrogate_mineral_water_sparkling,Harrogate Mineral Water Sparkling,soft,water,TBD,,,,,,TRUE
+item,,,,,,,,,,
+hot_espresso,Espresso,hot,coffee,,,,,,,TRUE
+hot_espresso_macchiato,Espresso macchiato,hot,coffee,,,,,,,TRUE
+hot_double_espresso,Double espresso,hot,coffee,,,,,,,TRUE
+hot_double_macchiato,Double macchiato,hot,coffee,,,,,,,TRUE
+hot_cappuccino,Cappuccino,hot,coffee,,,,,,,TRUE
+hot_latte,Latte,hot,coffee,,,,,,,TRUE
+hot_flat_white,Flat white,hot,coffee,,,,,,,TRUE
+hot_americano,Americano,hot,coffee,,,,,,,TRUE
+hot_bicerin,Bicerin,hot,coffee,,,,,,,TRUE
+hot_tea_and_infusions,Tea and infusions,hot,tea,"English Breakfast, Earl Grey Imperial, Rooibos African Nights, Green Tea, Peppermint Moroccan Secret, Fresh Mint",,,,,,TRUE

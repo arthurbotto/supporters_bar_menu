@@ -301,6 +301,16 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## Changelog
 
+### 2026-03-24 — Remove `menu_sections` table (dead code cleanup)
+
+- Dropped `menu_sections` table, its two indexes, the `section_id` FK column from `products`, and the `idx_products_section` index from `seeds/schema.sql`
+- Removed `section_id` from `Product.__init__`, `self.section_id` assignment, and `__repr__`
+- Removed `row["section_id"]` from `ProductRepository._row_to_product()`
+- Removed `upsert_menu_section()` and `find_section_id()` functions from the importer; removed `section_id` from INSERT/UPDATE queries and the "Importing menu sections..." loop
+- Deleted `data/menu_sections.csv`; removed `section_name` column from `data/products_base.csv`
+- Fixed pre-existing bug in two `test_product_repository.py` assertions: `Product(...)` calls were missing `sweetness`, `body`, `acidity` positional args and would have raised `TypeError`
+- All 166 tests pass
+
 ### 2026-03-23 — Stable wine product codes + wine taste profile filters
 
 - Removed vintage year suffixes from all 29 wine product codes across `products_base.csv`, `wine_details.csv`, and `product_variants.csv` — codes are now stable (e.g. `wine_chablis_jean_marc_brocard` not `wine_chablis_jean_marc_brocard_2024`)
