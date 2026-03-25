@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Softs</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% extends "base.html" %}
+{% block title %}Soft Drinks{% endblock %}
+
+{% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/softs.css') }}">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <header class="header">
     <h1 class="title">Soft Drinks / Juices / Water</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
@@ -17,7 +15,7 @@
     {% for section in section_order %}
       {% if section in grouped %}
         {% set sizes = section_sizes[section] %}
-        <div class="product-cols-{{ sizes|length }}">
+        <div style="--price-cols: {{ sizes|length }}">
           <h2>{{ section|replace('_', ' ')|title }}</h2>
           {% if sizes|length > 1 %}
             <div class="product-price-header">
@@ -49,6 +47,4 @@
       {% endif %}
     {% endfor %}
   </main>
-  
-</body>
-</html>
+{% endblock %}

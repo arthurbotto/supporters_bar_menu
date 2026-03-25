@@ -1,0 +1,89 @@
+{% extends "admin/base.html" %}
+{% block title %}Variants — {{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="admin-toolbar">
+  <h1 class="admin-page-title" style="margin:0">Variants — {{ product.name }}</h1>
+  <a href="{{ url_for('admin_product_edit', product_id=product.id) }}" class="btn btn-secondary">← Back to product</a>
+</div>
+
+<table class="admin-table" style="margin-bottom:2rem">
+  <thead>
+    <tr>
+      <th>Serve label</th>
+      <th>ml</th>
+      <th>Price (£)</th>
+      <th>Sort order</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for v in variants %}
+    <tr>
+      <form method="post" action="{{ url_for('admin_variant_update', variant_id=v.id) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="product_id" value="{{ product.id }}">
+        <td><input type="text" name="serve_label" value="{{ v.serve_label }}" required 
+                   list="serve-label-options" style="width:100px"></td>
+        <td><input type="number" name="serve_ml" value="{{ v.serve_ml or '' }}" min="0" style="width:70px" placeholder="—"></td>
+        <td><input type="number" name="price" value="{{ v.price }}" step="0.01" min="0" required style="width:80px"></td>
+        <td><input type="number" name="sort_order" value="{{ v.sort_order }}" min="1" style="width:60px"></td>
+        <td class="actions">
+          <button type="submit" class="btn btn-secondary btn-sm">Save</button>
+      </form>
+          <form method="post" action="{{ url_for('admin_variant_delete', variant_id=v.id) }}"
+                onsubmit="return confirm('Delete this variant?')" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="5" style="text-align:center; color:#888; padding:1.5rem">No variants yet. Add one below.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<datalist id="serve-label-options">
+  <option value="Glass">
+  <option value="Bottle">
+  <option value="Carafe">
+  <option value="Cup">
+  <option value="Measure">
+  <option value="Serve">
+  <option value="Pint">
+  <option value="Half">
+  <option value="Can">
+</datalist>
+
+<!-- Add variant -->
+<div class="admin-form" style="max-width:600px">
+  <p class="form-section-title">Add variant</p>
+  <form method="post" action="{{ url_for('admin_variant_create', product_id=product.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Serve label *</label>
+        <input type="text" name="serve_label" placeholder="e.g. Glass, Bottle, Cup" 
+               list="serve-label-options" required>
+      </div>
+      <div class="form-group">
+        <label>ml</label>
+        <input type="number" name="serve_ml" placeholder="e.g. 125" min="0">
+      </div>
+      <div class="form-group">
+        <label>Price (£) *</label>
+        <input type="number" name="price" step="0.01" min="0" placeholder="e.g. 6.50" required>
+      </div>
+      <div class="form-group">
+        <label>Sort order</label>
+        <input type="number" name="sort_order" value="{{ variants | length + 1 }}" min="1">
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Add variant</button>
+  </form>
+</div>
+{% endblock %}

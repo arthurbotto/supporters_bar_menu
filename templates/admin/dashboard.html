@@ -1,0 +1,9 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h1 class="admin-page-title">Dashboard</h1>
+<div class="admin-tiles">
+  <a class="admin-tile" href="{{ url_for('admin_products') }}">Products</a>
+</div>
+{% endblock %}

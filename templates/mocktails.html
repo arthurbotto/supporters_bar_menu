@@ -1,20 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mocktails</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% extends "base.html" %}
+{% block title %}Mocktails{% endblock %}
+
+{% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/mocktails.css') }}">
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <header class="header">
     <h1 class="title">Mocktails</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
   </header>
 
   <main class="container">
-    <div class="product-cols-1">
+    <div style="--price-cols: {{ sizes|length }}">
       <ul class="product-list">
         {% for m in mocktails %}
           <li class="product-item">
@@ -34,6 +32,4 @@
       </ul>
     </div>
   </main>
-  
-</body>
-</html>
+{% endblock %}

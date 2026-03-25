@@ -295,11 +295,31 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 ## What Still Needs Doing
 
 - [ ] Rate-limit `/search_cocktails` and `/search_wines` with Flask-Limiter (already in `requirements.txt`)
-- [ ] Admin login + product management forms (deferred — future feature)
+- [ ] Admin cocktail CRUD (Phase 2 — deferred)
 
 ---
 
 ## Changelog
+
+### 2026-03-25 — Admin UX polish (input controls, variant flow, CSS grid)
+
+- **serve_label datalist** — `variants.html` serve_label inputs now use `<datalist>` with suggestions (Glass, Bottle, Carafe, Cup, Measure, Serve, Pint, Half, Can); still free-text for custom values. `serve_label` normalized to `.title()` in both `admin_variant_create` and `admin_variant_update` routes in `app.py`
+- **Subcategory controls** — wine category now shows a `<select>` with 7 fixed values (red, white, rose, orange, sparkling, dessert, fortified); other categories show a text input with a per-category `<datalist>` (spirit: gin/vodka/rum/…, beer: lager/ale/stout/…, soft: fever_tree/classic/juice/…, hot/mocktail: empty but free-text). Datalist options are replaced dynamically via JS on category change — a single `<datalist id="subcategory-options">` element in the HTML, populated by `SUBCATEGORY_SUGGESTIONS` map in JS
+- **JS extraction** — inline `<script>` removed from `product_form.html`; logic moved to `static/js/admin/product_form.js`; `toggleWineFields()` renamed `toggleCategoryFields()`; `{% block scripts %}{% endblock %}` added to `admin/base.html` so individual admin pages can load page-specific scripts
+- **Variant redirect after creation** — `POST /admin/products/new` now redirects to `/admin/products/<id>/variants` instead of the products list, so the admin lands directly on the variants page after saving. Flash message updated accordingly. Hint text added to the new product form near the submit button
+- **CSS custom property for price columns** — replaced all static `.product-cols-1` through `.product-cols-5` rules with a single rule using a CSS custom property: `.product-price-header, .product-price-row { grid-template-columns: 1fr repeat(var(--price-cols), 6rem); }`. Templates (`wines_list.html`, `spirits.html`, `softs.html`) updated from `class="product-cols-{{ sizes|length }}"` to `style="--price-cols: {{ sizes|length }}"`. Handles any number of serve sizes without CSS changes
+
+### 2026-03-24 — Admin panel (Phase 1 — product management)
+
+- Added password-protected admin area at `/admin/` — single user, credentials in `.env` (`ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`, `SECRET_KEY`)
+- Auth: Flask session + `@login_required` decorator; `werkzeug.security.check_password_hash` for password verification; `scripts/generate_admin_hash.py` generates the hash
+- CSRF protection wired via `Flask-WTF`'s `CSRFProtect` (was already in requirements, now active)
+- New write methods on `ProductRepository`: `all_products_for_admin`, `create_product`, `update_product`, `set_active`, `delete_product`, `upsert_wine_details`, `create_variant`, `update_variant`, `delete_variant`
+- Extracted `slugify` + `make_product_code` from importer into `lib/product_code.py`; importer now imports from there
+- New admin routes: login/logout, dashboard, products list (with activate/deactivate toggle), create product, edit product (with wine fields shown dynamically), delete product, manage variants (inline edit/add/delete)
+- New templates: `templates/admin/` directory with `base.html`, `login.html`, `dashboard.html`, `products.html`, `product_form.html`, `variants.html`
+- New `static/css/admin.css` — minimal admin styles, distinct from customer-facing app
+- Phase 2 (cocktail CRUD) deferred to a future task
 
 ### 2026-03-24 — Remove `menu_sections` table (dead code cleanup)
 
@@ -347,5 +367,6 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## Known Issues / Technical Debt
 
-- Unused dependencies in `requirements.txt`: Flask-Limiter, Flask-WTF, python-slugify. None are wired into `app.py` yet.
+- Unused dependency in `requirements.txt`: Flask-Limiter. Not yet wired into `app.py`.
+- Flask-WTF is now active (CSRF protection on all admin POST forms).
 - `_normalize_query()` in `lib/product_repository.py` is defined but never called — dead code.

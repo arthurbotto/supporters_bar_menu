@@ -4,7 +4,7 @@
 {% for section in section_order %}
       {% if section in grouped %}
         {% set sizes = section_sizes[section] %}
-        <div class="product-cols-{{ sizes|length }}">
+        <div style="--price-cols: {{ sizes|length }}">
           <h2>{{ section|capitalize }}</h2>
           <div class="product-price-header">
             <span></span>

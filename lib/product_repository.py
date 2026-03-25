@@ -198,6 +198,74 @@ class ProductRepository:
             FROM products p
             LEFT JOIN wine_details wd ON wd.product_id = p.id
             WHERE {" AND ".join(conditions)}
-            ORDER BY p.name            
+            ORDER BY p.name
             """, params)
         return [self._row_to_product(r) for r in rows]
+
+    # -------------------------
+    # Admin write methods
+    # -------------------------
+
+    def all_products_for_admin(self):
+        rows = self._connection.execute(
+            "SELECT * FROM products ORDER BY category, name"
+        )
+        return [self._row_to_product(r) for r in rows]
+
+    def create_product(self, code, name, category, subcategory, description, producer, country, abv, vegan, organic):
+        rows = self._connection.execute(
+            """INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+            [code, name, category, subcategory, description, producer, country, abv, vegan, organic]
+        )
+        return rows[0]["id"]
+
+    def update_product(self, product_id, name, category, subcategory, description, producer, country, abv, vegan, organic):
+        self._connection.execute(
+            """UPDATE products SET name=%s, category=%s, subcategory=%s, description=%s,
+               producer=%s, country=%s, abv=%s, vegan=%s, organic=%s WHERE id=%s""",
+            [name, category, subcategory, description, producer, country, abv, vegan, organic, product_id]
+        )
+
+    def set_active(self, product_id, is_active):
+        self._connection.execute(
+            "UPDATE products SET is_active=%s WHERE id=%s",
+            [is_active, product_id]
+        )
+
+    def delete_product(self, product_id):
+        self._connection.execute(
+            "DELETE FROM products WHERE id=%s",
+            [product_id]
+        )
+
+    def upsert_wine_details(self, product_id, region, vintage, sweetness, body, acidity):
+        self._connection.execute(
+            """INSERT INTO wine_details (product_id, region, vintage, sweetness, body, acidity)
+               VALUES (%s, %s, %s, %s, %s, %s)
+               ON CONFLICT (product_id) DO UPDATE
+               SET region=EXCLUDED.region, vintage=EXCLUDED.vintage,
+                   sweetness=EXCLUDED.sweetness, body=EXCLUDED.body, acidity=EXCLUDED.acidity""",
+            [product_id, region, vintage, sweetness, body, acidity]
+        )
+
+    def create_variant(self, product_id, serve_label, serve_ml, price, sort_order):
+        rows = self._connection.execute(
+            """INSERT INTO product_variants (product_id, serve_label, serve_ml, price, sort_order)
+               VALUES (%s, %s, %s, %s, %s) RETURNING id""",
+            [product_id, serve_label, serve_ml, price, sort_order]
+        )
+        return rows[0]["id"]
+
+    def update_variant(self, variant_id, serve_label, serve_ml, price, sort_order):
+        self._connection.execute(
+            """UPDATE product_variants SET serve_label=%s, serve_ml=%s, price=%s, sort_order=%s
+               WHERE id=%s""",
+            [serve_label, serve_ml, price, sort_order, variant_id]
+        )
+
+    def delete_variant(self, variant_id):
+        self._connection.execute(
+            "DELETE FROM product_variants WHERE id=%s",
+            [variant_id]
+        )

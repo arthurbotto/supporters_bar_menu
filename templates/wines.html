@@ -1,16 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Wines</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% extends "base.html" %}
+{% block title %}All Wines{% endblock %}
+
+{% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/wines.css') }}">
+{% endblock %}
+
+{% block extra_scripts %}
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
   <script defer src="{{ url_for('static', filename='js/wine_modal.js') }}"></script>
-</head>
-<body>
+{% endblock %}
+
+{% block content %}
   <header class="header">
     <h1 class="title">All Wines</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
@@ -74,7 +75,7 @@
 
       <label class="filter-checkbox-label">
         <input type="checkbox" name="organic" value="true">
-        Organic 
+        Organic
       </label>
 
       <label class="filter-checkbox-label">
@@ -90,7 +91,7 @@
         hx-swap="innerHTML"
         >Apply Filters
       </button>
-      <a href="/wines" class="filter-clear-btn">Clear</a> 
+      <a href="/wines" class="filter-clear-btn">Clear</a>
     </div>
 
   </div>
@@ -105,5 +106,4 @@
       <div id="modalBody"></div>
     </div>
   </div>
-</body>
-</html>
+{% endblock %}

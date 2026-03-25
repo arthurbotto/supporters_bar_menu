@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — {% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <nav class="admin-nav">
+    <a class="admin-brand" href="{{ url_for('admin_dashboard') }}">Supporters Admin</a>
+    <div class="admin-nav-links">
+      <a href="{{ url_for('get_home_page') }}">Menu</a>
+      <a href="{{ url_for('admin_products') }}">Products</a>
+      <form action="{{ url_for('admin_logout') }}" method="post" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="link-btn">Log out</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="admin-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -125,28 +125,27 @@ body {
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
-.product-cols-1 .product-price-header,
-.product-cols-1 .product-price-row {
-  grid-template-columns: 1fr 6rem;
-}
-
-.product-cols-2 .product-price-header,
-.product-cols-2 .product-price-row {
-  grid-template-columns: 1fr 6rem 6rem;
-}
-
-.product-cols-3 .product-price-header,
-.product-cols-3 .product-price-row {
-  grid-template-columns: 1fr 6rem 6rem 6rem;
-}
-
-.product-cols-4 .product-price-header,
-.product-cols-4 .product-price-row {
-  grid-template-columns: 1fr 6rem 6rem 6rem 6rem;
-}
+.product-price-header,                                                                                                                                            
+  .product-price-row {                                                                                                                                              
+    grid-template-columns: 1fr repeat(var(--price-cols), 6rem);
+  }
 
 .product-name-stack {
   display: flex;
   flex-direction: column;
   gap: 2px;
 }
+.admin-bar-btn {
+  position: fixed;
+  top: 0.6rem;
+  right: 0.75rem;
+  z-index: 100;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.65rem;
+  border: 1px solid rgba(255,255,255,0.45);
+  border-radius: 4px;
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  background: rgba(0,0,0,0.15);
+}
+.admin-bar-btn:hover { background: rgba(0,0,0,0.3); color: #fff; }

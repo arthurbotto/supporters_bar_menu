@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Supporters House Menu</title>
+{% extends "base.html" %}
+{% block title %}Supporters House Bar Menu{% endblock %}
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
-</head>
+{% endblock %}
 
-<body>
+{% block content %}
   <header class="header">
     <div class="title-row">
       <h1 class="title">Supporters House Bar Menu</h1>
@@ -55,5 +51,4 @@
       <p class="tile-title">Hot Drinks</p>
     </a>
   </div>
-</body>
-</html>
+{% endblock %}

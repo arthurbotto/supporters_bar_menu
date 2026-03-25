@@ -14,13 +14,16 @@
 # CSVs don't have enough fields to generate it reliably.
 
 import os
+import sys
 import csv
-import re
 from decimal import Decimal
 
 import psycopg
 from psycopg.rows import dict_row
 from dotenv import load_dotenv
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from lib.product_code import slugify, make_product_code
 
 load_dotenv()
 
@@ -96,33 +99,6 @@ def fetch_one_or_none(cur):
             return None
         raise
 
-
-
-def slugify(value):
-    """
-    Turn text into a safe ID like: "Chapel Down Rosé Brut" -> "chapel_down_rose_brut"
-    - lowercase
-    - replace non [a-z0-9] with underscores
-    - collapse multiple underscores
-    """
-    v = (value or "").strip().lower()
-    v = re.sub(r"[^a-z0-9]+", "_", v)
-    v = re.sub(r"_+", "_", v).strip("_")
-    return v or "item"
-
-
-def make_product_code(category, name, producer=None):
-    """
-    Auto-generate a product_code when it's missing in products_base.csv.
-
-    IMPORTANT: products_base.csv doesnt have vintage, so I cant include vintage here.
-    If I ever stock the same wine with multiple vintages, I should manually set
-    product_code to include the year (e.g. wine_cloudy_bay_2023 vs wine_cloudy_bay_2024).
-    """
-    parts = [category or "", name or ""]
-    if producer:
-        parts.append(producer)
-    return slugify("_".join(parts))
 
 
 # ---------------------------

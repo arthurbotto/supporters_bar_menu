@@ -1,19 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Beers</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Beers{% endblock %}
+
+{% block content %}
   <header class="header">
     <h1 class="title">Beers</h1>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
   </header>
 
   <main class="container">
-    <div class="product-cols-1">
+    <div style="--price-cols: {{ sizes|length }}">
       <div class="product-price-header">
         <span></span>
         {% for size in sizes %}
@@ -45,6 +40,4 @@
       </ul>
     </div>
   </main>
-  
-</body>
-</html>
+{% endblock %}

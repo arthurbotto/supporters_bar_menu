@@ -1,18 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cocktail Menu</title>
+{% extends "base.html" %}
+{% block title %}Cocktail Menu{% endblock %}
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+{% block extra_css %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/cocktails.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+{% endblock %}
+
+{% block extra_scripts %}
   <script src="https://unpkg.com/htmx.org@1.9.12"></script>
   <script defer src="{{ url_for('static', filename='js/menu.js') }}"></script>
-</head>
+{% endblock %}
 
-<body>
+{% block content %}
   <header class="header">
     <h1 class="title">Cocktails</h1>
     <p class="subtitle">Click a cocktail to see ingredients.</p>
@@ -37,13 +36,10 @@
     </ul>
   </main>
 
-  <!-- Modal overlay -->
   <div class="overlay" id="overlay" hidden aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
       <button class="close" id="closeModal" type="button" aria-label="Close">✕</button>
       <div id="modalBody"></div>
     </div>
   </div>
-</body>
-</html>
-
+{% endblock %}

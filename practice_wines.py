@@ -168,3 +168,10 @@ for section in section_order:
     for wine in wine_list:
         cheapest = min(wine.price_by_ml.values())
         print(f"    {wine.name:25} cheapest serve: £{cheapest:.2f}")
+
+
+for section, wines in grouped.items():
+    print(f"\nSECTION: {section}")
+    print(f"type(wines): {type(wines)}")
+    for wine in wines:
+        print(f"  {wine.name} -> {wine.price_by_ml}")

@@ -1,0 +1,298 @@
+/* Admin panel styles */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #222;
+  background: #f5f5f5;
+}
+
+/* ---- Nav ---- */
+.admin-nav {
+  background: #2c2c2c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  height: 48px;
+}
+.admin-brand {
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+}
+.admin-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.admin-nav-links a {
+  color: #ccc;
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+.admin-nav-links a:hover { color: #fff; }
+
+/* ---- Layout ---- */
+.admin-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+.admin-page-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+}
+
+/* ---- Flash messages ---- */
+.flash {
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+.flash-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+.flash-error   { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-block;
+  padding: 0.45rem 1rem;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.btn-primary   { background: #2c2c2c; color: #fff; border-color: #2c2c2c; }
+.btn-primary:hover { background: #444; border-color: #444; }
+.btn-secondary { background: #fff; color: #333; border-color: #ccc; }
+.btn-secondary:hover { background: #f0f0f0; }
+.btn-danger    { background: #dc3545; color: #fff; border-color: #dc3545; }
+.btn-danger:hover { background: #c82333; border-color: #c82333; }
+.btn-sm        { padding: 0.3rem 0.7rem; font-size: 0.8rem; }
+.link-btn {
+  background: none;
+  border: none;
+  color: #ccc;
+  font-size: 0.875rem;
+  cursor: pointer;
+  padding: 0;
+}
+.link-btn:hover { color: #fff; }
+
+/* ---- Table ---- */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.admin-table th {
+  background: #f0f0f0;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555;
+  white-space: nowrap;
+}
+.admin-table td {
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #eee;
+  vertical-align: middle;
+}
+.admin-table tr:hover td { background: #fafafa; }
+.admin-table .actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  white-space: nowrap;
+}
+.admin-table .code-cell {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* ---- Status badges ---- */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.badge-active   { background: #d4edda; color: #155724; }
+.badge-inactive { background: #f0f0f0; color: #777; }
+
+/* ---- Toolbar (above table) ---- */
+.admin-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+/* ---- Forms ---- */
+.admin-form {
+  background: #fff;
+  border-radius: 6px;
+  padding: 1.75rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  max-width: 700px;
+}
+.form-section {
+  margin-bottom: 1.5rem;
+}
+.form-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #777;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid #eee;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 0.85rem;
+}
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #444;
+}
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+  padding: 0.45rem 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #222;
+  background: #fff;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #2c2c2c;
+}
+.form-group input[readonly] {
+  background: #f5f5f5;
+  color: #888;
+}
+.form-group textarea { resize: vertical; min-height: 80px; }
+.form-group .hint { font-size: 0.75rem; color: #888; }
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.85rem;
+}
+.checkbox-group label { font-size: 0.875rem; color: #333; }
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+.form-actions-right { margin-left: auto; }
+
+/* ---- Danger zone ---- */
+.danger-zone {
+  margin-top: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid #f5c6cb;
+  border-radius: 6px;
+  background: #fff8f8;
+}
+.danger-zone-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #dc3545;
+  margin: 0 0 0.5rem;
+}
+.danger-zone p { font-size: 0.875rem; color: #555; margin: 0 0 0.75rem; }
+
+/* ---- Dashboard tiles ---- */
+.admin-tiles {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.admin-tile {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1.5rem 2rem;
+  text-decoration: none;
+  color: #222;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: box-shadow 0.15s;
+}
+.admin-tile:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #bbb;
+}
+
+/* ---- Login page ---- */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+.login-box {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 360px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.login-box h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 1.5rem;
+  text-align: center;
+}
+.login-error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
