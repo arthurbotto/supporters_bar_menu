@@ -193,6 +193,49 @@ body.modal-open {
     font-weight: 600;
   }                                                                                                                                                                                                                    
                                                         
-  .filter-checkbox-label input[type="checkbox"] {                                                                                                                                                                      
+  .filter-checkbox-label input[type="checkbox"] {
     accent-color: var(--accent);
   }
+
+.wine-detail {
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+@media (max-width: 600px) {
+  /* ---- Price rows: tighter columns, name stays left ---- */
+  .product-price-header,
+  .more-button-wines .product-price-row {
+    grid-template-columns: 1fr repeat(var(--price-cols), 3rem);
+  }
+
+  .product-price-header .product-price-cell,
+  .more-button-wines .product-price-cell {
+    font-size: 0.78rem;
+  }
+
+  .more-button-wines {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .more-button-wines .product-name {
+    font-size: 0.9rem;
+  }
+
+  /* ---- Filter bar: 2-per-row ---- */
+  .filter-select {
+    flex: 1 1 calc(50% - 4px);
+  }
+
+  .filter-apply-btn,
+  .filter-clear-btn {
+    flex: 1 1 calc(50% - 4px);
+    text-align: center;
+  }
+
+  .filter-checkbox-label {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+  }
+}

@@ -149,3 +149,23 @@ body {
   background: rgba(0,0,0,0.15);
 }
 .admin-bar-btn:hover { background: rgba(0,0,0,0.3); color: #fff; }
+
+@media (max-width: 600px) {
+  .title { font-size: 24px; }
+
+  .header { padding: 18px 18px 12px; }
+
+  .product-price-header,
+  .product-price-row {
+    grid-template-columns: 1fr repeat(var(--price-cols), 4rem);
+  }
+
+  .product-price-header .product-price-cell,
+  .product-price-row .product-price-cell {
+    font-size: 0.9rem;
+  }
+
+  .product-name { font-size: 1rem; }
+
+  .product-price-row { padding: 12px 10px; }
+}

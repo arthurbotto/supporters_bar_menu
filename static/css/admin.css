@@ -147,6 +147,31 @@ body {
   margin-bottom: 1rem;
 }
 
+/* ---- Admin search bar ---- */
+.admin-search {
+  position: relative;
+  max-width: 360px;
+  margin-bottom: 1rem;
+}
+.admin-search input {
+  width: 100%;
+  padding: 0.55rem 0.85rem 0.55rem 2.25rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #222;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 0.75rem center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.admin-search input:focus {
+  outline: none;
+  border-color: #2c2c2c;
+  box-shadow: 0 0 0 3px rgba(44,44,44,0.08);
+}
+.admin-search input::placeholder { color: #aaa; }
+
 /* ---- Forms ---- */
 .admin-form {
   background: #fff;
@@ -295,4 +320,44 @@ body {
   padding: 0.65rem 0.85rem;
   font-size: 0.875rem;
   margin-bottom: 1rem;
+}
+
+@media (max-width: 600px) {
+  .admin-container {
+    margin: 1rem auto;
+    padding: 0 0.75rem;
+  }
+
+  .admin-nav { padding: 0 0.75rem; }
+  .admin-nav-links { gap: 0.75rem; }
+
+  .admin-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .admin-page-title { font-size: 1.1rem; }
+
+  /* Tables: horizontal scroll so inline-width inputs don't break layout */
+  .admin-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 0.8rem;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 0.5rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  /* Forms: single-column rows, tighter padding */
+  .admin-form { padding: 1rem; }
+
+  .form-row { grid-template-columns: 1fr; }
+
+  .admin-search { max-width: 100%; }
 }

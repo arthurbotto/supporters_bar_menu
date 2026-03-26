@@ -74,3 +74,10 @@
   border-color: var(--accent);
   background: rgba(153, 54, 51, 0.06);
 }
+
+@media (max-width: 600px) {
+  .cocktail-toggle {
+    padding: 12px 10px;
+    font-size: 16px;
+  }
+}

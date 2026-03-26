@@ -159,6 +159,21 @@ class ProductRepository:
                 ORDER BY producer"""
         )
         return [row["producer"] for row in rows]
+
+    def search_product(self, query=''):
+        q = f"%{query.strip()}%"
+
+        rows = self._connection.execute(
+            """
+            SELECT p.*
+            FROM products p
+            WHERE p.name ILIKE %s
+            ORDER BY p.name
+        """, [q])
+
+        return [self._row_to_product(r) for r in rows]
+
+
     
     def search_wine(self, query='', country='', subcategory='', producer='', sweetness='', body='', acidity='', organic=None, vegan=None):
         conditions = ["p.category = 'wine'", "p.is_active = TRUE"]

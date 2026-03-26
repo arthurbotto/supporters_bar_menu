@@ -24,6 +24,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
 - **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
 - **Admin panel** — password-protected area at `/admin/`; create, edit, delete and toggle visibility of products; manage serve sizes and prices (variants); wine-specific fields (region, vintage, sweetness, body, acidity); CSRF protection on all forms
+- **Mobile responsive** — all menu and admin pages adapt to small screens; price columns tighten, form rows stack to single column, tables scroll horizontally
 - **Architecture** — repository pattern, psycopg v3 with `dict_row` results, per-request DB connection via Flask's `g` object
 
 ---

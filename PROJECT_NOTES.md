@@ -202,7 +202,7 @@ consistent with the existing `_row_to_product()` pattern.
 
 | File | What it covers |
 |---|---|
-| `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `.product-cols-*` grid rules, `.search` input |
+| `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `--price-cols` grid rule, `.search` input; `@media (max-width: 600px)` for all menu routes |
 | `home.css` | Home grid: `.grid` (3-col, max-width 860px), `.tile` (180px height, hover shadow) |
 | `cocktails.css` | `.cocktail-toggle` (accordion button), `.cocktail-panel`, `.chevron`, `.ingredients`, `.more-button` |
 | `wines.css` | `.more-button-wines`, `.wine-filters` container, `.filter-search`, `.filter-controls`, `.filter-select`, `.filter-apply-btn`, `.filter-clear-btn`, `.filter-checkbox-label` |
@@ -301,6 +301,13 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## Changelog
 
+### 2026-03-26 — Mobile responsive polish (all routes + admin)
+
+- **Wine rows** (`wines.css`) — price columns `3.5rem`→`3rem`; price cell font `0.82rem`→`0.78rem`; `.more-button-wines` side padding `14px`→`8px`; wine name font `1.125rem`→`0.9rem` on mobile. Long names (30+ chars) now fit in ~2 lines with 3 price cols on a 375px phone
+- **All menu routes** (`base.css`) — added `@media (max-width: 600px)`: title 30px→24px; header padding reduced; price columns `6rem`→`4rem`; price cell font `0.9rem`; product name `1rem`; row padding tightened. Wines page unaffected — `wines.css` overrides with higher-specificity selectors (`.more-button-wines .product-price-row`) to keep `3rem` columns
+- **Cocktails** (`cocktails.css`) — added `@media (max-width: 600px)`: toggle padding `16px 14px`→`12px 10px`; font 18px→16px
+- **Admin** (`admin.css`) — added `@media (max-width: 600px)`: container/nav padding reduced; `.admin-toolbar` stacks vertically (title above button); `.admin-table` → `display:block; overflow-x:auto` (handles 6-col products table and inline-width variant inputs without overflow); `.form-row` → `grid-template-columns: 1fr` (form inputs full-width, one per row); form padding reduced; search bar expands to full width
+
 ### 2026-03-25 — Admin UX polish (input controls, variant flow, CSS grid)
 
 - **serve_label datalist** — `variants.html` serve_label inputs now use `<datalist>` with suggestions (Glass, Bottle, Carafe, Cup, Measure, Serve, Pint, Half, Can); still free-text for custom values. `serve_label` normalized to `.title()` in both `admin_variant_create` and `admin_variant_update` routes in `app.py`
@@ -308,6 +315,7 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 - **JS extraction** — inline `<script>` removed from `product_form.html`; logic moved to `static/js/admin/product_form.js`; `toggleWineFields()` renamed `toggleCategoryFields()`; `{% block scripts %}{% endblock %}` added to `admin/base.html` so individual admin pages can load page-specific scripts
 - **Variant redirect after creation** — `POST /admin/products/new` now redirects to `/admin/products/<id>/variants` instead of the products list, so the admin lands directly on the variants page after saving. Flash message updated accordingly. Hint text added to the new product form near the submit button
 - **CSS custom property for price columns** — replaced all static `.product-cols-1` through `.product-cols-5` rules with a single rule using a CSS custom property: `.product-price-header, .product-price-row { grid-template-columns: 1fr repeat(var(--price-cols), 6rem); }`. Templates (`wines_list.html`, `spirits.html`, `softs.html`) updated from `class="product-cols-{{ sizes|length }}"` to `style="--price-cols: {{ sizes|length }}"`. Handles any number of serve sizes without CSS changes
+- **Admin products search** — `GET /admin/products` converted to HTMX shell (no DB call); new `GET /admin/search_products` returns `admin/products_list.html` partial; search input uses `hx-trigger="load, keyup changed delay:300ms"` so initial load and live search share the same endpoint — same pattern as cocktails/wines; `ProductRepository.search_product(query='')` added for name/category/subcategory `ILIKE` search across all products (active + inactive); `.admin-search` CSS class added to `admin.css` (styled input with embedded SVG magnifying glass icon, focus ring)
 
 ### 2026-03-24 — Admin panel (Phase 1 — product management)
 
