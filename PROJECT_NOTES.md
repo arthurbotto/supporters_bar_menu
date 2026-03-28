@@ -9,7 +9,7 @@ Update this file whenever something meaningful changes.
 
 A digital bar menu for Supporters House Bar. Customers browse all drink categories.
 
-- **Cocktails page** — full list grouped by subcategory ("From our menu" / "Classics"), ingredient accordion, search, modal with full details
+- **Cocktails page** — full list grouped by subcategory ("From our menu" / "Classics"), ingredient accordion, search, spirit type filter, modal with full details
 - **Mocktails page** — flat list with name and price
 - **Wines page** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), sorted by price; individual wine modal with full details
 - **Spirits page** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), sorted by cheapest serve
@@ -370,6 +370,41 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 - Enriched wine_details with regions and vintages (Wild Idol, Searcys Classic, Lanson Père & Fils)
 - CocktailRepository.all() now orders by ID ASC
 - Added .product-cols-4 grid rule to base.css
+
+### 2026-03-28 — Cocktail spirit filter, is_active on cocktails, admin cocktail list, test coverage
+
+**Cocktail spirit filter**
+- Added `subcategory` column to `ingredients` table (`seeds/schema.sql`, `lib/ingredient.py`)
+- Added `spirit_types()` method to `IngredientRepository` — returns distinct subcategories where `category='spirit'`, alphabetically ordered
+- Updated `search_cocktail()` in `CocktailRepository` to accept `spirit_type=''` param; builds dynamic WHERE clause (same pattern as `search_wine()`); uses PostgreSQL `\m...\M` word-boundary regex so searching "rum" matches "White Rum" but not partial strings; ranked CASE expression orders name matches above ingredient matches
+- Added `<div id="cocktail-filters">` container to `cocktails.html` with spirit type `<select>` populated from backend, Apply button (`hx-include="#cocktail-filters"`), Clear link — same HTMX pattern as wine filters
+- Added `.cocktail-filters` and related CSS classes to `cocktails.css`
+- Updated `get_cocktails_page()` route to fetch and pass `spirits` list to template
+- Fixed bug: `search_cocktails()` route was calling `cocktail_repo.all()` when `q=''`, ignoring `spirit_type`; now always calls `search_cocktail(query=q, spirit_type=spirit_type)`
+
+**cocktails.is_active and admin cocktail list**
+- Added `is_active BOOLEAN NOT NULL DEFAULT TRUE` to cocktails table
+- Updated `Cocktail` model (`lib/cocktail.py`) to include `is_active` field
+- `CocktailRepository.all()` and `search_cocktail()` filter by `is_active = TRUE`; new `all_cocktails_for_admin()` and `search_cocktail_admin()` methods skip that filter
+- Added admin read-only routes: `GET /admin/cocktails` (shell) and `GET /admin/search_cocktails` (HTMX partial, accepts `q`)
+- Updated `data/cocktails.csv` and importer (`scripts/import_from_csv_v4.py`) to handle `is_active` column
+
+**Test coverage — 213 tests total (77 E2E, 136 unit/integration)**
+
+E2E tests added (17 new):
+- `tests/e2e/test_cocktails.py`: spirit filter (Apply with gin/rum, empty search regression, combined with text, Clear resets, dropdown contents), accordion panel content (ingredients, description)
+- `tests/e2e/test_wines.py`: wine filters (country, subcategory, vegan, sweetness, body, combined, Clear resets all), modal fields (Organic: No, Sweetness/Body/Acidity), inactive wine excluded
+- `tests/e2e/test_hot_drinks.py`: description field renders
+
+Unit/integration tests added (28 new):
+- `test_ingredient_repository.py`: `TestSpiritTypes` — returns only spirit subcategories, alphabetical, excludes non-spirits, empty DB
+- `test_cocktail_repository.py`: `TestSearchWithSpiritFilter` — gin/rum/tequila filter, empty query regression, combined with text, no match, returns instances
+- `test_product_repository.py`: `TestSearchWine` extended with country/subcategory/vegan/sweetness/body/acidity/combined/no-match/inactive filters; `TestWineCountries`; `TestWineProducer`
+- `test_app.py`: wine route — country/subcategory/vegan filter params; cocktail route — spirit_type filter, spirit_type with empty q regression
+
+Seed data updates:
+- `seeds/test_products.sql`: wine_details INSERT now includes sweetness/body/acidity for all test wines (enables filter tests); Espresso description set to `'Strong and bold'`
+- Fixed existing `test_product_repository.py::TestAllWines::test_returns_correct_fields` to expect `'dry'/'full'/'medium'` for Malbec after seed update
 
 ---
 

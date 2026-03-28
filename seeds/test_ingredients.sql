@@ -1,9 +1,9 @@
-INSERT INTO ingredients (name, category) VALUES
-  ('Gin',            'spirit'),
-  ('Campari',        'liqueur'),
-  ('Sweet Vermouth', 'vermouth'),
-  ('White Rum',      'spirit'),
-  ('Lime Juice',     'juice'),
-  ('Sugar Syrup',    'syrup'),
-  ('Tequila',        'spirit'),
-  ('Triple Sec',     'liqueur');
+INSERT INTO ingredients (name, category, subcategory) VALUES
+  ('Gin',            'spirit', 'gin'),
+  ('Campari',        'liqueur', 'aperitivo'),
+  ('Sweet Vermouth', 'vermouth', 'sweet'),
+  ('White Rum',      'spirit', 'rum'),
+  ('Lime Juice',     'juice', NULL),
+  ('Sugar Syrup',    'syrup', NULL),
+  ('Tequila',        'spirit', 'tequila'),
+  ('Triple Sec',     'liqueur', 'orange_liqueur');

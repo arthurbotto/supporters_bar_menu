@@ -168,7 +168,7 @@ class ProductRepository:
             SELECT p.*
             FROM products p
             WHERE p.name ILIKE %s
-            ORDER BY p.name
+            ORDER BY p.category, p.name
         """, [q])
 
         return [self._row_to_product(r) for r in rows]

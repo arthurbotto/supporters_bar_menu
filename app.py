@@ -6,6 +6,7 @@ from flask_wtf.csrf import CSRFProtect
 from werkzeug.security import check_password_hash
 from lib.database_connection import get_flask_database_connection
 from lib.cocktail_repository import CocktailRepository
+from lib.ingredient_repository import IngredientRepository
 from lib.product import Product
 from lib.product_repository import ProductRepository
 from lib.product_code import make_product_code
@@ -211,16 +212,11 @@ def search_wines():
 
 @app.route('/cocktails')
 def get_cocktails_page():
-    # connection = get_flask_database_connection(app)
-    # cocktail_repo = CocktailRepository(connection)
-    # recipe_repo = RecipeItemRepository(connection)
-    # cocktails = cocktail_repo.all()
-    
+    connection = get_flask_database_connection(app)
+    ing_repo = IngredientRepository(connection)
+    spirits = ing_repo.spirit_types()
 
-    # for cocktail in cocktails:
-    #     cocktail.recipe_items = recipe_repo.for_cocktail(cocktail.id)
-
-    return render_template('cocktails.html')
+    return render_template('cocktails.html', spirits=spirits)
 
 
 
@@ -242,15 +238,14 @@ def cocktail_modal(cocktail_id):
 @app.route('/search_cocktails')
 def search_cocktails():
     q = request.args.get('q', '').strip()
+    spirit_type = request.args.get('spirit_type', '').strip()
 
     connection = get_flask_database_connection(app)
     cocktail_repo = CocktailRepository(connection)
     recipe_repo = RecipeItemRepository(connection)
 
-    if q == '':
-        cocktails = cocktail_repo.all()
-    else:
-        cocktails = cocktail_repo.search_cocktail(q)
+    
+    cocktails = cocktail_repo.search_cocktail(query=q, spirit_type=spirit_type)
     
     grouped = {}
     
@@ -404,6 +399,25 @@ def admin_search_products():
     
     return render_template('admin/products_list.html', products=products)
 
+@app.route('/admin/cocktails')
+@login_required
+def admin_cocktails():
+    return render_template('admin/cocktails.html')
+
+@app.route('/admin/search_cocktails')
+@login_required
+def admin_search_cocktails():
+    q = request.args.get('q', '').strip()
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+
+    if q == '':
+        cocktails = repo.all_cocktails_for_admin()
+    else:
+        cocktails = repo.search_cocktail_admin(q)
+    
+    return render_template('admin/cocktails_list.html', cocktails=cocktails)
+
 
 
 
@@ -419,7 +433,7 @@ def admin_toggle_active(product_id):
         repo.set_active(product_id, not product.is_active)
         status = 'active' if not product.is_active else 'inactive'
         flash(f'"{product.name}" set to {status}.', 'success')
-    return redirect(url_for('admin_search_products'))
+    return redirect(url_for('admin_products'))
 
 
 @app.route('/admin/products/new', methods=['GET', 'POST'])
@@ -502,7 +516,7 @@ def admin_product_edit(product_id):
             )
 
         flash(f'"{name}" updated.', 'success')
-        return redirect(url_for('admin_search_products'))
+        return redirect(url_for('admin_products'))
 
     # GET — load product and build form dict
     product = repo.find(product_id)
@@ -539,7 +553,7 @@ def admin_product_delete(product_id):
     if product:
         repo.delete_product(product_id)
         flash(f'"{product.name}" deleted.', 'success')
-    return redirect(url_for('admin_search_products'))
+    return redirect(url_for('admin_products'))
 
 
 @app.route('/admin/products/<int:product_id>/variants')

@@ -17,18 +17,41 @@
     <p class="subtitle">Click a cocktail to see ingredients.</p>
     <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
   </header>
-  <div class="search">
-    <input
-      type="text"
-      name="q"
-      placeholder="Search by name or ingredient..."
-      hx-get="/search_cocktails"
-      hx-trigger="load, keyup changed delay:300ms"
-      hx-target="#cocktailResults"
-      hx-swap="innerHTML"
-      autocomplete="off"
-    >
+  <div id="cocktail-filters" class="cocktail-filters">
+
+    <div class="filter-search">
+      <input
+        type="text" name="q" placeholder="Search by name or ingredient..."
+        hx-get="/search_cocktails"
+        hx-trigger="load, keyup changed delay:300ms"
+        hx-target="#cocktailResults"
+        hx-swap="innerHTML"
+        hx-include="#cocktail-filters"
+        autocomplete="off"
+      >
+    </div>
+
+    <div class="filter-controls">
+      <select name="spirit_type" class="filter-select">
+        <option value="">Spirit</option>
+        {% for s in spirits %}
+        <option value="{{ s }}">{{ s }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="button" class="filter-apply-btn"
+        hx-get="/search_cocktails"
+        hx-trigger="click"
+        hx-include="#cocktail-filters"
+        hx-target="#cocktailResults"
+        hx-swap="innerHTML"
+        >Apply Filters
+      </button>
+      <a href="/cocktails" class="filter-clear-btn">Clear</a>
+    </div>
   </div>
+
+
 
   <main class="container">
     <ul class="product-list" id="cocktailResults">

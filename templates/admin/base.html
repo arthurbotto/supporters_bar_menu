@@ -13,6 +13,7 @@
     <div class="admin-nav-links">
       <a href="{{ url_for('get_home_page') }}">Menu</a>
       <a href="{{ url_for('admin_products') }}">Products</a>
+      <a href="{{ url_for('admin_cocktails') }}">Cocktails</a>
       <form action="{{ url_for('admin_logout') }}" method="post" style="display:inline">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <button type="submit" class="link-btn">Log out</button>

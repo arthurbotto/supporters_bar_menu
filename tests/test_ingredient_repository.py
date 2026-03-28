@@ -37,7 +37,7 @@ class TestAllIngredients:
         gin = next(i for i in ingredients if i.name == 'Gin')
 
         assert gin == Ingredient(
-            gin.id, 'Gin', 'spirit'
+            gin.id, 'Gin', 'spirit', 'gin'
         )
     
     def test_returns_empty_list_when_no_ingredients(self, db_connection):
@@ -52,18 +52,43 @@ class TestFindIngredient:
         ingredient = repo.find_ingredient(2, 'id')
         assert ingredient.name == 'Campari'
         assert ingredient.category == 'liqueur'
-    
+
     def test_return_ingredient_by_name(self, seeded_db):
         repo = IngredientRepository(seeded_db)
         ingredient = repo.find_ingredient('Campari', 'name')
         assert ingredient.name == 'Campari'
         assert ingredient.category == 'liqueur'
-    
+
     def test_return_none_for_missing_id(self, seeded_db):
         repo = IngredientRepository(seeded_db)
         assert repo.find_ingredient(99999, 'id') is None
-    
+
     def test_return_none_for_missing_name(self, seeded_db):
         repo = IngredientRepository(seeded_db)
         assert repo.find_ingredient('car', 'name') is None
+
+
+class TestSpiritTypes:
+
+    def test_returns_only_spirit_subcategories(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        types = repo.spirit_types()
+        assert set(types) == {'gin', 'rum', 'tequila'}
+
+    def test_returns_alphabetically_sorted(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        types = repo.spirit_types()
+        assert types == sorted(types)
+
+    def test_excludes_non_spirit_subcategories(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        types = repo.spirit_types()
+        assert 'aperitivo' not in types
+        assert 'sweet' not in types
+        assert 'orange_liqueur' not in types
+
+    def test_returns_empty_list_when_no_spirits(self, db_connection):
+        db_connection.seed("seeds/schema.sql")
+        repo = IngredientRepository(db_connection)
+        assert repo.spirit_types() == []
 

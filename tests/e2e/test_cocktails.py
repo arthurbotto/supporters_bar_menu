@@ -111,3 +111,65 @@ def test_clicking_outside_modal_dismisses_it(page, seeded_db_cocktails):
     page.locator("[data-more-id='1']").click()
     page.locator("#overlay").click(position={"x": 10, "y": 10})
     expect(page.locator("#overlay")).to_be_hidden()
+
+
+# Spirit filter
+
+def test_spirit_filter_shows_matching_cocktails(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    page.locator("select[name='spirit_type']").select_option("gin")
+    page.get_by_role("button", name="Apply Filters").click()
+    expect(page.locator("text=Negroni")).to_be_visible()
+    expect(page.locator("text=Mojito")).to_be_hidden()
+    expect(page.locator("text=Margarita")).to_be_hidden()
+
+def test_spirit_filter_works_with_empty_search(page, seeded_db_cocktails):
+    # Regression: was calling all() when q='', ignoring spirit_type
+    page.goto("/cocktails")
+    page.locator("select[name='spirit_type']").select_option("rum")
+    page.get_by_role("button", name="Apply Filters").click()
+    expect(page.locator("text=Mojito")).to_be_visible()
+    expect(page.locator("text=Negroni")).to_be_hidden()
+
+def test_spirit_filter_combined_with_search(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    page.locator("input[name='q']").press_sequentially("neg")
+    page.locator("select[name='spirit_type']").select_option("gin")
+    page.get_by_role("button", name="Apply Filters").click()
+    expect(page.locator("text=Negroni")).to_be_visible()
+    expect(page.locator("text=Margarita")).to_be_hidden()
+
+def test_clear_resets_spirit_filter(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    page.locator("select[name='spirit_type']").select_option("gin")
+    page.get_by_role("button", name="Apply Filters").click()
+    expect(page.locator("text=Mojito")).to_be_hidden()
+    page.get_by_role("link", name="Clear").click()
+    expect(page.locator("text=Mojito")).to_be_visible()
+    expect(page.locator("text=Negroni")).to_be_visible()
+
+def test_spirit_dropdown_only_contains_spirits(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    options = page.locator("select[name='spirit_type'] option").all_text_contents()
+    assert "gin" in options
+    assert "rum" in options
+    assert "tequila" in options
+    assert "aperitivo" not in options
+    assert "sweet" not in options
+    assert "orange_liqueur" not in options
+
+
+# Accordion panel content
+
+def test_expanded_panel_shows_ingredients(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    page.get_by_role("button", name="Negroni").click()
+    panel = page.locator("#panel-1")
+    expect(panel).to_contain_text("Gin")
+    expect(panel).to_contain_text("Campari")
+    expect(panel).to_contain_text("Sweet Vermouth")
+
+def test_expanded_panel_shows_description(page, seeded_db_cocktails):
+    page.goto("/cocktails")
+    page.get_by_role("button", name="Negroni").click()
+    expect(page.locator("#panel-1")).to_contain_text("Bitter Italian classic")

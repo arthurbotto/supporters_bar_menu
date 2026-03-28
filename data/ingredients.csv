@@ -1,32 +1,32 @@
-name,category
-Gin Tanqueray 10,spirit
-Campari,liqueur
-Antica Formula,vermouth
-Searcys gin,spirit
+name,category,subcategory
+Gin Tanqueray 10,spirit, gin
+Campari,liqueur, aperitivo
+Antica Formula,vermouth, sweet
+Searcys gin,spirit, gin
 Elderflower cordial,syrup
 Lemon juice,juice
 Cucumber tonic,mixer
-Tails Passion,liqueur
-Searcys Champagne,sparkling_wine
-Creme de cassis,liqueur
-Gin Tanqueray,spirit
+Tails Passion,liqueur, fruit_liqueur
+Searcys Champagne,sparkling_wine, sparkling
+Creme de cassis,liqueur, fruit_liqueur
+Gin Tanqueray,spirit, gin
 Sugar syrup,syrup
-Olmeca silver tequila,spirit
+Olmeca silver tequila,spirit, tequila
 Lime juice,juice
 Cranberry juice, juice
 Grapefruit juice,juice
 Agave syrup,syrup
 Grapefruit soda,mixer
-Vodka 42 Below,spirit
-Chase Vodka, spirit
+Vodka 42 Below,spirit, vodka
+Chase Vodka, spirit, vodka
 Tomato juice,juice
 Worcester sauce,sauce
 Tabasco,sauce
 Salt,seasoning
 Black pepper,seasoning
-Coffee liqueur,liqueur
+Coffee liqueur,liqueur, coffee_liqueur
 Vanilla syrup,syrup
-Montenegro liqueur,liqueur
+Montenegro liqueur,liqueur, amaro
 Espresso,coffee
 Cucumber,garnish
 Orange slice,garnish
@@ -38,26 +38,26 @@ Olives,garnish
 Rosemary,garnish
 Lime wedge,garnish
 Coffee beans,garnish
-Cointreau, liqueur
-Bacardi Carta Blanca,spirit
+Cointreau, liqueur, orange_liqueur
+Bacardi Carta Blanca,spirit, rum
 Mint leaves,garnish
 Soda water,mixer
 Fresh mint,herb
-Jack Daniel's Rye,spirit
+Jack Daniel's Rye,spirit, whisky
 Angostura bitters,bitters
 Maraschino cherry,garnish
 Cola,mixer
 Lemon slice,garnish
-Courvoisier Cognac,spirit
+Courvoisier Cognac,spirit, cognac
 Sugar cube,sweetener
 Orange zest,garnish
-Aperol,liqueur
-Prosecco Bottega,sparkling_wine
-Noilly Prat White Vermouth,vermouth
-Jameson Irish Whiskey,spirit
+Aperol,liqueur, aperitivo
+Prosecco Bottega,sparkling_wine, sparkling
+Noilly Prat White Vermouth,vermouth, dry
+Jameson Irish Whiskey,spirit, whisky
 Hot coffee,coffee
 Fresh cream,dairy
-Bulleit Bourbon,spirit
+Bulleit Bourbon,spirit, whisky
 Egg white,other
 Dried orange,garnish
 Water,mixer

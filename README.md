@@ -14,7 +14,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 
 ## Features
 
-- **Cocktails** — listed by subcategory ("From our menu" / "Classics"), ingredient accordion, live search (HTMX), detail modal
+- **Cocktails** — listed by subcategory ("From our menu" / "Classics"), ingredient accordion, live search (HTMX), spirit type filter with Apply/Clear, detail modal
 - **Mocktails** — flat list with name and price
 - **Wines** — catalogue grouped by subcategory (red, white, rosé, sparkling, dessert), price columns by serve size, live search, multi-filter bar (country, type, producer, organic, vegan, sweetness, body, acidity) with Apply/Clear, detail modal
 - **Spirits** — grouped by subcategory (gin, vodka, rum, tequila, whisky, vermouth, liqueur, brandy), price columns by serve size
@@ -118,7 +118,7 @@ pytest tests/e2e/
 pytest
 ```
 
-Tests cover all repositories, all Flask routes (including error handlers), and full E2E browser behaviour for every page (search, accordion, modals, detail field rendering).
+213 tests total. Unit/integration tests cover all repositories and all Flask routes (including error handlers). E2E tests cover every page including search, filters, accordion, modals, detail field rendering, and is_active exclusion.
 
 ---
 
@@ -169,4 +169,3 @@ tests/
 ## What's coming next
 
 - Rate limiting on search endpoints — Flask-Limiter already in requirements
-- Admin cocktail CRUD (Phase 2 — deferred)

@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% block title %}Cocktails{% endblock %}
+
+{% block extra_scripts %}
+  <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+{% endblock %}
+{% block content %}
+<div class="admin-toolbar">
+  <h1 class="admin-page-title" style="margin:0">Cocktails</h1>
+</div>
+
+<div class="admin-search">
+  <input
+    type="text"
+    name="q"
+    placeholder="Search cocktail"
+    hx-get="/admin/search_cocktails"
+    hx-trigger="load, keyup changed delay:300ms"
+    hx-target="#cocktailResults"
+    hx-swap="innerHTML"
+    autocomplete="off"
+  >
+</div>
+
+<table class="admin-table" id="cocktailResults">
+  {% include "admin/cocktails_list.html" %}
+</table>
+{% endblock %}

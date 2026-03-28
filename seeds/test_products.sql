@@ -15,7 +15,7 @@ INSERT INTO products (code, name, category, subcategory, description, producer, 
   ('BEER-002',   'Guinness',                'beer',     NULL,        NULL,                'Guinness',    'Ireland',        4.1, NULL, NULL, TRUE),
   ('SOFT-001',   'Coca-Cola',               'soft',     'classic',   NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
   ('SOFT-002',   'Orange Juice',            'soft',    'juice',       NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
-  ('HOT-001',    'Espresso',                'hot',      'coffee',    NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
+  ('HOT-001',    'Espresso',                'hot',      'coffee',    'Strong and bold',   NULL,          NULL,            NULL, NULL, NULL, TRUE),
   ('HOT-002',    'English Breakfast Tea',   'hot',      'tea',       NULL,                NULL,          NULL,            NULL, NULL, NULL, TRUE),
   ('MOCK-001',   'Virgin Mojito',           'mocktail', NULL,        'Mint and lime',     NULL,          NULL,               0, NULL, NULL, TRUE),
   ('MOCK-002',   'Shirley Temple',          'mocktail', NULL,        'Ginger and cherry', NULL,          NULL,               0, NULL, NULL, TRUE);
@@ -30,12 +30,12 @@ INSERT INTO products (code, name, category, subcategory, description, producer, 
   ('MOCK-OFF',   'Delisted Mocktail',       'mocktail', NULL,        NULL,   NULL,      NULL,     0,   NULL, NULL, FALSE);
 
 -- Wine details (wines only)
-INSERT INTO wine_details (product_id, region, vintage) VALUES
-  ((SELECT id FROM products WHERE code = 'WINE-001'), 'Mendoza',     2021),
-  ((SELECT id FROM products WHERE code = 'WINE-002'), 'Rioja',       2020),
-  ((SELECT id FROM products WHERE code = 'WINE-003'), 'Marlborough', 2023),
-  ((SELECT id FROM products WHERE code = 'WINE-004'), 'Veneto',      NULL),
-  ((SELECT id FROM products WHERE code = 'WINE-OFF'), NULL,          NULL);
+INSERT INTO wine_details (product_id, region, vintage, sweetness, body, acidity) VALUES
+  ((SELECT id FROM products WHERE code = 'WINE-001'), 'Mendoza',     2021, 'dry',     'full',   'medium'),
+  ((SELECT id FROM products WHERE code = 'WINE-002'), 'Rioja',       2020, 'dry',     'medium', 'medium'),
+  ((SELECT id FROM products WHERE code = 'WINE-003'), 'Marlborough', 2023, 'dry',     'light',  'high'),
+  ((SELECT id FROM products WHERE code = 'WINE-004'), 'Veneto',      NULL, 'off-dry', 'light',  'medium'),
+  ((SELECT id FROM products WHERE code = 'WINE-OFF'), NULL,          NULL,  NULL,      NULL,     NULL);
 
 -- Product variants
 -- Wines: 125ml (sort 1) and 175ml (sort 2)

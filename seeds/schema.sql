@@ -22,7 +22,8 @@ CREATE TABLE cocktails (
     glass VARCHAR(50),
     garnish VARCHAR(255),
     abv NUMERIC(5,2),
-    price NUMERIC(8,2)
+    price NUMERIC(8,2),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_cocktails_name_unique ON cocktails (name);
@@ -30,7 +31,8 @@ CREATE UNIQUE INDEX IF NOT EXISTS idx_cocktails_name_unique ON cocktails (name);
 CREATE TABLE ingredients (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    category VARCHAR(50)
+    category VARCHAR(50),
+    subcategory VARCHAR(50)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_ingredients_name_unique ON ingredients (name);

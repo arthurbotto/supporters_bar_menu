@@ -43,6 +43,22 @@ class TestSearchWinesRoute:
         response = web_client.get("/search_wines?q=zzznomatch")
         assert b'No wines found' in response.data
 
+    def test_filters_wines_by_country(self, web_client, seeded_db_products):
+        response = web_client.get("/search_wines?country=Argentina")
+        assert b'Malbec Reserva' in response.data
+        assert b'Prosecco' not in response.data
+
+    def test_filters_wines_by_subcategory(self, web_client, seeded_db_products):
+        response = web_client.get("/search_wines?subcategory=sparkling")
+        assert b'Prosecco' in response.data
+        assert b'Malbec Reserva' not in response.data
+
+    def test_filters_wines_by_vegan(self, web_client, seeded_db_products):
+        response = web_client.get("/search_wines?vegan=true")
+        assert b'Malbec Reserva' in response.data
+        assert b'Prosecco' in response.data
+        assert b'Rioja Crianza' not in response.data
+
 class TestWineModalRoute:
 
     def test_returns_200(self, web_client, seeded_db_products):
@@ -111,6 +127,17 @@ class TestSearchCocktailsRoute:
     def test_returns_no_results_message_when_no_match(self, web_client, seeded_db_cocktails):
         response = web_client.get("/search_cocktails?q=zzzznomatch")
         assert b'No cocktails found' in response.data
+
+    def test_filters_cocktails_by_spirit_type(self, web_client, seeded_db_cocktails):
+        response = web_client.get("/search_cocktails?spirit_type=gin")
+        assert b'Negroni' in response.data
+        assert b'Mojito' not in response.data
+
+    def test_spirit_type_filter_with_empty_query(self, web_client, seeded_db_cocktails):
+        # Regression: spirit_type must work when q is absent/empty
+        response = web_client.get("/search_cocktails?spirit_type=rum")
+        assert b'Mojito' in response.data
+        assert b'Negroni' not in response.data
 
 class TestCocktailModalRoute:
 

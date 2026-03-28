@@ -124,15 +124,16 @@ def upsert_cocktail(cur, row):
     garnish = (row.get("garnish") or "").strip() or None
     abv = to_decimal(row.get("abv"))
     price = to_decimal(row.get("price"))
+    is_active = to_bool(row.get("is_active"))
 
     if existing is None:
         cur.execute(
             """
-            INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price)
-            VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s)
+            INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price, is_active)
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s, %s)
             RETURNING id
             """,
-            [name, subcategory, description, history, method, glass, garnish, abv, price],
+            [name, subcategory, description, history, method, glass, garnish, abv, price, is_active],
         )
         return cur.fetchone()["id"]
 
@@ -140,10 +141,10 @@ def upsert_cocktail(cur, row):
     cur.execute(
         """
         UPDATE cocktails
-        SET subcategory=%s, description=%s, history=%s, method=%s, glass=%s, garnish=%s, abv=%s, price=%s
+        SET subcategory=%s, description=%s, history=%s, method=%s, glass=%s, garnish=%s, abv=%s, price=%s, is_active=%s
         WHERE id=%s
         """,
-        [subcategory, description, history, method, glass, garnish, abv, price, cocktail_id],
+        [subcategory, description, history, method, glass, garnish, abv, price, is_active, cocktail_id],
     )
     return cocktail_id
 
@@ -151,7 +152,7 @@ def upsert_cocktail(cur, row):
 def upsert_ingredient(cur, row):
     """
     ingredients.csv columns:
-    name,category
+    name,category, subcategory
     """
     name = row["name"].strip()
 
@@ -159,16 +160,17 @@ def upsert_ingredient(cur, row):
     existing = fetch_one_or_none(cur)
 
     category = (row.get("category") or "").strip().lower() or None
+    subcategory  = (row.get("subcategory") or "").strip().lower() or None
 
     if existing is None:
         cur.execute(
-            "INSERT INTO ingredients (name, category) VALUES (%s,%s) RETURNING id",
-            [name, category],
+            "INSERT INTO ingredients (name, category, subcategory) VALUES (%s,%s, %s) RETURNING id",
+            [name, category, subcategory],
         )
         return cur.fetchone()["id"]
 
     ingredient_id = existing["id"]
-    cur.execute("UPDATE ingredients SET category=%s WHERE id=%s", [category, ingredient_id])
+    cur.execute("UPDATE ingredients SET category=%s, subcategory=%s WHERE id=%s", [category, subcategory, ingredient_id])
     return ingredient_id
 
 

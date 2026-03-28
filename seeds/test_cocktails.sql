@@ -1,20 +1,20 @@
 -- Test seed for cocktail repository tests.
 -- Requires seeds/schema.sql to have been run first to create tables.
 
-INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price) VALUES
-  ('Negroni', 'from_menu',   'Bitter Italian classic',      'Invented in Florence', 'Stirred', 'Rocks',    'Orange peel', 24,  9.50),
-  ('Mojito', 'classic',    'Refreshing Cuban highball',   'Cuban origin',         'Muddled', 'Highball', 'Mint sprig',  12,  8.50),
-  ('Margarita', 'classic', 'Tart and tangy tequila sour', 'Mexican origin',       'Shaken',  'Coupe',    'Salt rim',    20,  9.00);
+INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price, is_active) VALUES
+  ('Negroni', 'from_menu',   'Bitter Italian classic',      'Invented in Florence', 'Stirred', 'Rocks',    'Orange peel', 24,  9.50, TRUE),
+  ('Mojito', 'classic',    'Refreshing Cuban highball',   'Cuban origin',         'Muddled', 'Highball', 'Mint sprig',  12,  8.50, TRUE),
+  ('Margarita', 'classic', 'Tart and tangy tequila sour', 'Mexican origin',       'Shaken',  'Coupe',    'Salt rim',    20,  9.00, TRUE);
 
-INSERT INTO ingredients (name, category) VALUES
-  ('Gin',            'spirit'),
-  ('Campari',        'liqueur'),
-  ('Sweet Vermouth', 'vermouth'),
-  ('White Rum',      'spirit'),
-  ('Lime Juice',     'juice'),
-  ('Sugar Syrup',    'syrup'),
-  ('Tequila',        'spirit'),
-  ('Triple Sec',     'liqueur');
+INSERT INTO ingredients (name, category, subcategory) VALUES
+  ('Gin',            'spirit', 'gin'),
+  ('Campari',        'liqueur', 'aperitivo'),
+  ('Sweet Vermouth', 'vermouth', 'sweet'),
+  ('White Rum',      'spirit', 'rum'),
+  ('Lime Juice',     'juice', NULL),
+  ('Sugar Syrup',    'syrup', NULL),
+  ('Tequila',        'spirit', 'tequila'),
+  ('Triple Sec',     'liqueur', 'orange_liqueur');
 
 -- Negroni: Gin, Campari, Sweet Vermouth
 -- Mojito: White Rum, Lime Juice, Sugar Syrup

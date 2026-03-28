@@ -5,47 +5,102 @@ class CocktailRepository:
 
     def __init__(self, connection):
         self._connection = connection
+    
+    # -------------------------
+    # Private helpers
+    # -------------------------
+
+    def _row_to_cocktail(self, row):
+        return Cocktail(
+            row["id"],
+            row["name"],
+            row["subcategory"],
+            row["description"],
+            row["history"],
+            row["method"],
+            row["glass"],
+            row["garnish"],
+            row["abv"],
+            row["price"],
+            row["is_active"]
+        )
 
     def all(self):
-        rows = self._connection.execute('SELECT * FROM cocktails ORDER BY ID ASC')
-        cocktails = []
-        for row in rows:
-            item = Cocktail(row["id"], row["name"], row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
-            cocktails.append(item)
-        return cocktails
+        rows = self._connection.execute('SELECT * FROM cocktails WHERE is_active = TRUE ORDER BY ID ASC')
+        return [self._row_to_cocktail(r) for r in rows]
     
     def find_cocktail(self, parameter, column):
         rows = self._connection.execute(f'SELECT * FROM cocktails WHERE {column} = %s', [parameter])
         if not rows:
             return None
-        row = rows[0]
-        return Cocktail(row["id"], row["name"], row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
+        return self._row_to_cocktail(rows[0])
     
-    def search_cocktail(self, query):
+    def search_cocktail(self, query='', spirit_type=''):
         query = query.strip()
+        spirit_type = spirit_type.strip()
+
+        conditions = ["c.is_active = TRUE"]
+        where_params = []
+
         pattern_name = f"%{query}%"
-        pattern_ing = rf"(^|\s){re.escape(query)}"
+        # \m = word start boundary, \M = word end boundary (PostgreSQL regex)
+        # This ensures "gin" matches "Gin Tanqueray" but not "Ginger Beer"
+        # re.escape() makes special characters like + or . safe to use in regex
+        pattern_ing = rf"\m{re.escape(query)}\M" if query else ""
+
+        if query:
+            conditions.append("(c.name ILIKE %s OR i.name ~* %s OR i.subcategory ILIKE %s)")
+            where_params.extend([pattern_name, pattern_ing, pattern_name])
+
+        if spirit_type:
+            conditions.append("i.subcategory = %s")
+            where_params.append(spirit_type)
+
+        where = "WHERE " + " AND ".join(conditions)
+
+        if query:
+            rank_sql = "CASE WHEN c.name ILIKE %s THEN 0 WHEN i.name ~* %s THEN 1 ELSE 2 END AS rank"
+            rank_params = [pattern_name, pattern_ing]
+        else:
+            rank_sql = "0 AS rank"
+            rank_params = []
+
         rows = self._connection.execute(
-        """
-        SELECT DISTINCT c.*,
-          CASE
-            WHEN c.name ILIKE %s THEN 0
-            WHEN i.name ~* %s THEN 1
-            ELSE 2
-          END AS rank
-        FROM cocktails c 
-        LEFT JOIN recipe_items r ON r.cocktail_id = c.id
-        LEFT JOIN ingredients i ON i.id = r.ingredient_id
-        WHERE c.name ILIKE %s OR i.name ~* %s
-        ORDER BY rank, c.name
-        """,
-        [pattern_name, pattern_ing, pattern_name, pattern_ing]
-    )
-        cocktails = []
-        for row in rows:
-            item = Cocktail(row["id"], row["name"],row["subcategory"], row["description"], row["history"], row["method"], row["glass"], row["garnish"], row["abv"], row["price"])
-            cocktails.append(item)
-        return cocktails
+            f"""
+            SELECT DISTINCT c.*, {rank_sql}
+            FROM cocktails c
+            LEFT JOIN recipe_items r ON r.cocktail_id = c.id
+            LEFT JOIN ingredients i ON i.id = r.ingredient_id
+            {where}
+            ORDER BY rank, c.name
+            """,
+            rank_params + where_params
+        )
+        return [self._row_to_cocktail(r) for r in rows]
+
     
+    # -------------------------
+    # Admin write methods
+    # -------------------------
+
+
+    def all_cocktails_for_admin(self):
+        rows = self._connection.execute(
+            "SELECT * FROM cocktails ORDER BY subcategory, name"
+        )
+        return [self._row_to_cocktail(r) for r in rows]
+    
+    def search_cocktail_admin(self, query=''):
+        q = f"%{query.strip()}%"
+
+        rows = self._connection.execute(
+            """
+            SELECT *
+            FROM cocktails
+            WHERE name ILIKE %s
+            ORDER BY subcategory, name
+        """, [q])
+
+        return [self._row_to_cocktail(r) for r in rows]
 
     

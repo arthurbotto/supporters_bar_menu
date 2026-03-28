@@ -33,7 +33,7 @@ class TestAllWines:
         assert malbec == Product(
             malbec.id, 'WINE-001', 'Malbec Reserva', 'wine', 'red',
             'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None, True,
-            'Mendoza', 2021, None, None, None
+            'Mendoza', 2021, 'dry', 'full', 'medium'
         )
 
     def test_wine_with_null_vintage(self, seeded_db):
@@ -265,3 +265,87 @@ class TestSearchWine:
         results = repo.search_wine('blanc')
         assert len(results) == 1
         assert results[0].name == 'Sauvignon Blanc'
+
+    def test_filter_by_country(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(country='Argentina')
+        assert len(results) == 1
+        assert results[0].name == 'Malbec Reserva'
+
+    def test_filter_by_subcategory(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(subcategory='sparkling')
+        assert len(results) == 1
+        assert results[0].name == 'Prosecco'
+
+    def test_filter_by_vegan(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(vegan=True)
+        assert {w.name for w in results} == {'Malbec Reserva', 'Prosecco'}
+
+    def test_filter_by_sweetness(self, seeded_db):
+        # Prosecco is off-dry; the three reds/white are dry
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(sweetness='off-dry')
+        assert len(results) == 1
+        assert results[0].name == 'Prosecco'
+
+    def test_filter_by_body(self, seeded_db):
+        # Malbec is full-bodied
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(body='full')
+        assert len(results) == 1
+        assert results[0].name == 'Malbec Reserva'
+
+    def test_filter_by_acidity(self, seeded_db):
+        # Sauvignon Blanc has high acidity; others are medium
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(acidity='high')
+        assert len(results) == 1
+        assert results[0].name == 'Sauvignon Blanc'
+
+    def test_combined_query_and_country_filter(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine(query='malbec', country='Argentina')
+        assert len(results) == 1
+        assert results[0].name == 'Malbec Reserva'
+
+    def test_combined_filters_no_match(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        assert repo.search_wine(country='Argentina', subcategory='white') == []
+
+    def test_excludes_inactive_wines(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_wine()
+        assert not any(w.name == 'Delisted Bordeaux' for w in results)
+
+
+class TestWineCountries:
+
+    def test_returns_distinct_active_countries(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        countries = repo.wine_countries()
+        assert set(countries) == {'Argentina', 'Italy', 'New Zealand', 'Spain'}
+
+    def test_returns_alphabetically_sorted(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        countries = repo.wine_countries()
+        assert countries == sorted(countries)
+
+    def test_excludes_inactive_wine_country(self, seeded_db):
+        # Delisted Bordeaux is France (inactive) — must not appear
+        repo = ProductRepository(seeded_db)
+        assert 'France' not in repo.wine_countries()
+
+
+class TestWineProducer:
+
+    def test_returns_distinct_active_producers(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        producers = repo.wine_producer()
+        assert set(producers) == {'Bisol', 'Catena', 'Featherdrop', 'Muga'}
+
+    def test_returns_alphabetically_sorted(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        producers = repo.wine_producer()
+        assert producers == sorted(producers)

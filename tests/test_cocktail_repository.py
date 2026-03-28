@@ -35,7 +35,7 @@ class TestAll:
         negroni = next(c for c in cocktails if c.name == "Negroni")
         assert negroni == Cocktail(
             1, "Negroni", "from_menu", "Bitter Italian classic", "Invented in Florence",
-            "Stirred", "Rocks", "Orange peel", Decimal("24"), Decimal("9.50"),
+            "Stirred", "Rocks", "Orange peel", Decimal("24"), Decimal("9.50"), True
         )
 
     def test_returns_empty_list_when_no_cocktails(self, db_connection):
@@ -161,3 +161,40 @@ class TestSearch:
         results = repo.search_cocktail("gin")
         assert results[0].name == "Gin Fizz"
         assert results[1].name == "Negroni"
+
+
+class TestSearchWithSpiritFilter:
+
+    def test_spirit_filter_returns_matching_cocktails(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail(spirit_type='gin')
+        assert len(results) == 1
+        assert results[0].name == 'Negroni'
+
+    def test_spirit_filter_rum_returns_mojito(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail(spirit_type='rum')
+        assert len(results) == 1
+        assert results[0].name == 'Mojito'
+
+    def test_spirit_filter_with_empty_query(self, seeded_db):
+        # Regression: spirit_type must work when q='' (no search term)
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail(query='', spirit_type='tequila')
+        assert len(results) == 1
+        assert results[0].name == 'Margarita'
+
+    def test_spirit_filter_combined_with_query(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail(query='neg', spirit_type='gin')
+        assert len(results) == 1
+        assert results[0].name == 'Negroni'
+
+    def test_spirit_filter_no_match_returns_empty(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        assert repo.search_cocktail(spirit_type='cognac') == []
+
+    def test_spirit_filter_returns_cocktail_instances(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail(spirit_type='gin')
+        assert all(isinstance(c, Cocktail) for c in results)

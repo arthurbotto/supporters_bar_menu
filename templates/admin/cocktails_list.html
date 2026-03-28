@@ -1,0 +1,20 @@
+<thead>
+    <tr>
+      <th>Name</th>
+      <th>Subcategory</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for c in cocktails %}
+    <tr>
+      <td>{{ c.name }}</td>
+      <td>{{ c.subcategory or '—' }}</td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="6" style="text-align:center; color:#888; padding:2rem">No cocktails yet.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
