@@ -1,9 +1,15 @@
 import os
+import uuid
 from decimal import Decimal, InvalidOperation
 from functools import wraps
 from flask import Flask, redirect, request, render_template, url_for, session, flash
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask_wtf.csrf import CSRFProtect
+from psycopg.errors import UniqueViolation
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
+from PIL import Image as PilImage
 from lib.database_connection import get_flask_database_connection
 from lib.cocktail_repository import CocktailRepository
 from lib.ingredient_repository import IngredientRepository
@@ -15,8 +21,45 @@ from lib.recipe_item_repository import RecipeItemRepository
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-fallback-change-me')
 app.config['WTF_CSRF_ENABLED'] = True
+app.config['RATELIMIT_ENABLED'] = os.getenv('APP_ENV') != 'test'
+app.config['UPLOAD_FOLDER'] = os.path.join('static', 'images')
 csrf = CSRFProtect(app)
+limiter = Limiter(get_remote_address, app=app)
 
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp'}
+_WINE_MAX_DIM = 1200
+_IMG_MAX_DIM = 1200
+
+def _save_image(file, subfolder: str = '') -> str | None:
+    """Normalise and save uploaded image to static/images/{subfolder}/. Returns relative path or None."""
+    if not file or file.filename == '':
+        return None
+    ext = file.filename.rsplit('.', 1)[-1].lower()
+    if ext not in ALLOWED_EXTENSIONS:
+        return None
+    folder = os.path.join(app.config['UPLOAD_FOLDER'], subfolder) if subfolder else app.config['UPLOAD_FOLDER']
+    os.makedirs(folder, exist_ok=True)
+    stem = secure_filename(file.filename).rsplit('.', 1)[0]
+    filename = f"{uuid.uuid4().hex[:12]}_{stem}.jpg"
+    save_path = os.path.join(folder, filename)
+    max_dim = _WINE_MAX_DIM if subfolder == 'wine' else _IMG_MAX_DIM
+    img = PilImage.open(file.stream).convert('RGB')
+    if subfolder == 'wine':
+        w, h = img.size
+        if h > w * 1.8:
+            target_w = int(h / 1.5)
+            canvas = PilImage.new('RGB', (target_w, h), (248, 248, 248))
+            canvas.paste(img, ((target_w - w) // 2, 0))
+            img = canvas
+    elif subfolder == 'cocktails':
+        w, h = img.size
+        if h > w * 1.3:  # portrait — pad sides to square
+            canvas = PilImage.new('RGB', (h, h), (243, 244, 246))
+            canvas.paste(img, ((h - w) // 2, 0))
+            img = canvas
+    img.thumbnail((max_dim, max_dim), PilImage.Resampling.LANCZOS)
+    img.save(save_path, format='JPEG', quality=88, optimize=True)
+    return f"images/{subfolder}/{filename}" if subfolder else f"images/{filename}"
 
 def _parse_decimal(value):
     s = (value or '').strip()
@@ -36,6 +79,16 @@ def _parse_int(value):
         return int(s)
     except ValueError:
         return None
+
+def _parse_bool(value):
+    v = (value or "").strip().lower()
+    if v == "":
+        return None
+    if v in ("true", "t", "1", "yes", "y"):
+        return True
+    if v in ("false", "f", "0", "no", "n"):
+        return False
+    return None
 
 
 def login_required(f):
@@ -227,7 +280,7 @@ def cocktail_modal(cocktail_id):
     cocktail_repo = CocktailRepository(connection)
     recipe_repo = RecipeItemRepository(connection)
 
-    cocktail = cocktail_repo.find_cocktail(cocktail_id, "id")
+    cocktail = cocktail_repo.find_cocktail(cocktail_id)
     if cocktail is None:
         return render_template('404.html'), 404
 
@@ -352,6 +405,7 @@ def get_hot_drinks_page():
 # ===========================
 
 @app.route('/admin/login', methods=['GET', 'POST'])
+@limiter.limit("10 per minute")
 def admin_login():
     if session.get('admin_logged_in'):
         return redirect(url_for('admin_dashboard'))
@@ -379,6 +433,9 @@ def admin_logout():
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
+# --------------------
+# ADMIN PRODUCT ROUTES
+# --------------------
 
 @app.route('/admin/products')
 @login_required
@@ -398,27 +455,6 @@ def admin_search_products():
         products = repo.search_product(q)
     
     return render_template('admin/products_list.html', products=products)
-
-@app.route('/admin/cocktails')
-@login_required
-def admin_cocktails():
-    return render_template('admin/cocktails.html')
-
-@app.route('/admin/search_cocktails')
-@login_required
-def admin_search_cocktails():
-    q = request.args.get('q', '').strip()
-    connection = get_flask_database_connection(app)
-    repo = CocktailRepository(connection)
-
-    if q == '':
-        cocktails = repo.all_cocktails_for_admin()
-    else:
-        cocktails = repo.search_cocktail_admin(q)
-    
-    return render_template('admin/cocktails_list.html', cocktails=cocktails)
-
-
 
 
 @app.route('/admin/products/<int:product_id>/toggle', methods=['POST'])
@@ -456,11 +492,12 @@ def admin_product_new():
         abv = _parse_decimal(request.form.get('abv'))
         vegan = True if request.form.get('vegan') else None
         organic = True if request.form.get('organic') else None
+        image_url = _save_image(request.files.get('image'), category)
 
         connection = get_flask_database_connection(app)
         repo = ProductRepository(connection)
         product_id = repo.create_product(
-            code, name, category, subcategory, description, producer, country, abv, vegan, organic
+            code, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url
         )
 
         if category == 'wine':
@@ -500,9 +537,13 @@ def admin_product_edit(product_id):
         abv = _parse_decimal(request.form.get('abv'))
         vegan = True if request.form.get('vegan') else None
         organic = True if request.form.get('organic') else None
+        image_url = _save_image(request.files.get('image'), category)
+        if image_url is None:
+            existing = repo.find(product_id)
+            image_url = existing.image_url if existing else None
 
         repo.update_product(
-            product_id, name, category, subcategory, description, producer, country, abv, vegan, organic
+            product_id, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url
         )
 
         if category == 'wine':
@@ -614,6 +655,222 @@ def admin_variant_delete(variant_id):
     repo.delete_variant(variant_id)
     flash('Variant deleted.', 'success')
     return redirect(url_for('admin_product_variants', product_id=product_id))
+
+
+# ---------------------
+# ADMIN COCKTAIL ROUTES
+# ---------------------
+
+@app.route('/admin/cocktails')
+@login_required
+def admin_cocktails():
+    return render_template('admin/cocktails.html')
+
+@app.route('/admin/search_cocktails')
+@login_required
+def admin_search_cocktails():
+    q = request.args.get('q', '').strip()
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+
+    if q == '':
+        cocktails = repo.all_cocktails_for_admin()
+    else:
+        cocktails = repo.search_cocktail_admin(q)
+    
+    return render_template('admin/cocktails_list.html', cocktails=cocktails)
+
+@app.route('/admin/cocktails/<int:cocktail_id>/toggle', methods=['POST'])
+@login_required
+def admin_toggle_active_cocktail(cocktail_id):
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+    cocktail = repo.find_cocktail(cocktail_id)
+    if cocktail is None:
+        flash('Cocktail no found.', 'error')
+    else:
+        repo.set_active(cocktail_id, not cocktail.is_active)
+        status = 'active' if not cocktail.is_active else 'inactive'
+        flash(f'"{cocktail.name}" set to {status}.', 'success')
+    return redirect(url_for('admin_cocktails'))
+
+@app.route('/admin/cocktails/new', methods=['GET', 'POST'])
+@login_required
+def admin_cocktail_new():
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        subcategory = request.form.get('subcategory', '').strip()
+        if not name or not subcategory:
+            flash('Name and subcategory are required.', 'error')
+            return render_template('admin/cocktail_form.html', cocktail=None, form=request.form)
+        description = request.form.get('description', '').strip() or None
+        history = request.form.get('history', '').strip() or None
+        method = request.form.get('method', '').strip() or None
+        glass = request.form.get('glass', '').strip() or None
+        garnish = request.form.get('garnish', '').strip() or None
+        abv = _parse_decimal(request.form.get('abv', ''))
+        price = _parse_decimal(request.form.get('price', ''))
+        image_url = _save_image(request.files.get('image'), 'cocktails')
+
+        connection = get_flask_database_connection(app)
+        repo = CocktailRepository(connection)
+        try:
+            cocktail_id = repo.create_cocktail(
+                name, subcategory, description, history, method, glass, garnish, abv, price, image_url
+            )
+        except UniqueViolation:
+            flash(f'A cocktail named "{name}" already exists.', 'error')
+            return render_template('admin/cocktail_form.html', cocktail=None, form=request.form)
+
+        flash(f'"{name}" created.', 'success')
+        return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
+
+    return render_template('admin/cocktail_form.html', cocktail=None, form={})
+
+@app.route('/admin/cocktails/<int:cocktail_id>/edit', methods=['GET', 'POST'])
+@login_required
+def admin_cocktail_edit(cocktail_id):
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+
+    if request.method == 'POST':
+        name = request.form.get('name', '').strip()
+        subcategory = request.form.get('subcategory', '').strip()
+        if not name or not subcategory:
+            flash('Name and subcategory are required.', 'error')
+            cocktail = repo.find_cocktail(cocktail_id)
+            return render_template('admin/cocktail_form.html', cocktail=cocktail, form=request.form)
+        description = request.form.get('description', '').strip() or None
+        history = request.form.get('history', '').strip() or None
+        method = request.form.get('method', '').strip() or None
+        glass = request.form.get('glass', '').strip() or None
+        garnish = request.form.get('garnish', '').strip() or None
+        abv = _parse_decimal(request.form.get('abv', ''))
+        price = _parse_decimal(request.form.get('price', ''))
+        image_url = _save_image(request.files.get('image'), 'cocktails')
+        if image_url is None:
+            existing = repo.find_cocktail(cocktail_id)
+            image_url = existing.image_url if existing else None
+
+        try:
+            repo.update_cocktail(
+                cocktail_id, name, subcategory, description, history, method, glass, garnish, abv, price, image_url
+            )
+        except UniqueViolation:
+            flash(f'A cocktail named "{name}" already exists.', 'error')
+            cocktail = repo.find_cocktail(cocktail_id)
+            return render_template('admin/cocktail_form.html', cocktail=cocktail, form=request.form)
+
+        flash(f'"{name}" updated.', 'success')
+        return redirect(url_for('admin_cocktails'))
+    
+    # GET - load cocktail and build form dict
+    cocktail = repo.find_cocktail(cocktail_id)
+    if cocktail is None:
+        return render_template('404.html'), 404
+    
+    form_data = {
+        'name': cocktail.name or '',
+        'subcategory': cocktail.subcategory or '',
+        'description': cocktail.description or '',
+        'history': cocktail.history or '',
+        'method': cocktail.method or '',
+        'glass': cocktail.glass or '',
+        'garnish': cocktail.garnish or '',
+        'abv': str(cocktail.abv) if cocktail.abv is not None else '',
+        'price': str(cocktail.price) if cocktail.price is not None else '', 
+    }
+    return render_template('admin/cocktail_form.html', cocktail=cocktail, form=form_data)
+
+@app.route('/admin/cocktails/<int:cocktail_id>/delete', methods=['POST'])
+@login_required
+def admin_cocktail_delete(cocktail_id):
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+    cocktail = repo.find_cocktail(cocktail_id)
+    if cocktail:
+        repo.delete_cocktail(cocktail_id)
+        flash(f'"{cocktail.name}" deleted.', 'success')
+    return redirect(url_for('admin_cocktails'))
+
+@app.route('/admin/cocktails/<int:cocktail_id>/recipe')
+@login_required
+def admin_cocktail_recipe(cocktail_id):
+    connection = get_flask_database_connection(app)
+    repo = CocktailRepository(connection)
+    recipe_repo = RecipeItemRepository(connection)
+    i_repo = IngredientRepository(connection)
+    cocktail = repo.find_cocktail(cocktail_id)
+    if cocktail is None:
+        return render_template('404.html'), 404
+    recipe = recipe_repo.for_cocktail(cocktail_id)
+    return render_template('admin/recipe.html', cocktail=cocktail, recipe=recipe)
+
+@app.route('/admin/cocktails/<int:cocktail_id>/recipe/new', methods=['POST'])
+@login_required
+def admin_recipe_create(cocktail_id):
+    ingredient_name = request.form.get('ingredient_name', '').strip().title()
+    ingredient_category = request.form.get('ingredient_category', '').strip() or None
+    ingredient_subcategory = request.form.get('ingredient_subcategory', '').strip() or None
+    amount = _parse_decimal(request.form.get('amount'))
+    unit = request.form.get('unit', '').strip()
+    sort_order = _parse_int(request.form.get('sort_order')) or 1
+    optional = _parse_bool(request.form.get('optional')) or False
+
+    connection = get_flask_database_connection(app)
+    i_repo = IngredientRepository(connection)
+    r_repo = RecipeItemRepository(connection)
+
+    ingredient = i_repo.find_ingredient_by_name(ingredient_name)
+    if ingredient is None:
+        ingredient_id = i_repo.create_ingredient(ingredient_name, ingredient_category, ingredient_subcategory)
+    else:
+        ingredient_id = ingredient.id
+
+    r_repo.create_recipe(cocktail_id, ingredient_id, amount, unit, sort_order, optional)
+    flash('Recipe item added.', 'success')
+    return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
+
+
+@app.route('/admin/recipe/<int:recipe_id>/edit', methods=['POST'])
+@login_required
+def admin_recipe_update(recipe_id):
+    cocktail_id = _parse_int(request.form.get('cocktail_id'))
+    new_name = request.form.get('ingredient_name', '').strip().title()
+    amount = _parse_decimal(request.form.get('amount'))
+    unit = request.form.get('unit', '').strip()
+    sort_order = _parse_int(request.form.get('sort_order')) or 1
+    optional = _parse_bool(request.form.get('optional')) or False
+
+    connection = get_flask_database_connection(app)
+    i_repo = IngredientRepository(connection)
+    r_repo = RecipeItemRepository(connection)
+
+    ingredient = i_repo.find_ingredient_by_name(new_name)
+    if ingredient is None:
+        ingredient_id = i_repo.create_ingredient(new_name, None, None)
+    else:
+        ingredient_id = ingredient.id
+
+    r_repo.update_recipe(recipe_id, ingredient_id, amount, unit, sort_order, optional)
+    flash('Recipe updated.', 'success')
+    return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
+
+
+@app.route('/admin/recipe/<int:recipe_id>/delete', methods=['POST'])
+@login_required
+def admin_recipe_delete(recipe_id):
+    cocktail_id = _parse_int(request.form.get('cocktail_id'))
+    connection = get_flask_database_connection(app)
+    r_repo = RecipeItemRepository(connection)
+    r_repo.delete_recipe(recipe_id)
+    flash('Ingredient removed from recipe.', 'success')
+    return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
+
+    
+
+
+
 
 
 @app.errorhandler(404)

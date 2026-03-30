@@ -290,6 +290,20 @@ body {
   border-color: #bbb;
 }
 
+/* ---- Recipe table ---- */
+.recipe-table th:nth-child(1) { width: 35%; }
+.recipe-table th:nth-child(2) { width: 10%; }
+.recipe-table th:nth-child(3) { width: 13%; }
+.recipe-table th:nth-child(4) { width: 9%;  }
+.recipe-table th:nth-child(5) { width: 10%; }
+
+.recipe-table td input,
+.recipe-table td select {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
 /* ---- Login page ---- */
 .login-page {
   display: flex;
@@ -360,4 +374,13 @@ body {
   .form-row { grid-template-columns: 1fr; }
 
   .admin-search { max-width: 100%; }
+
+  /* Form action buttons: wrap and stretch on mobile */
+  .form-actions {
+    flex-wrap: wrap;
+  }
+  .form-actions .btn {
+    flex: 1 1 auto;
+    text-align: center;
+  }
 }

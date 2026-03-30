@@ -23,7 +23,8 @@ CREATE TABLE cocktails (
     garnish VARCHAR(255),
     abv NUMERIC(5,2),
     price NUMERIC(8,2),
-    is_active BOOLEAN NOT NULL DEFAULT TRUE
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    image_url VARCHAR(500)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_cocktails_name_unique ON cocktails (name);
@@ -80,7 +81,8 @@ CREATE TABLE products (
 
     vegan BOOLEAN,
     organic BOOLEAN,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    image_url VARCHAR(500)
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_products_code_unique ON products (code);

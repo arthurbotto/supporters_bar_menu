@@ -49,23 +49,13 @@ class TestFindIngredient:
 
     def test_return_ingredient_by_id(self, seeded_db):
         repo = IngredientRepository(seeded_db)
-        ingredient = repo.find_ingredient(2, 'id')
-        assert ingredient.name == 'Campari'
-        assert ingredient.category == 'liqueur'
-
-    def test_return_ingredient_by_name(self, seeded_db):
-        repo = IngredientRepository(seeded_db)
-        ingredient = repo.find_ingredient('Campari', 'name')
+        ingredient = repo.find_ingredient(2)
         assert ingredient.name == 'Campari'
         assert ingredient.category == 'liqueur'
 
     def test_return_none_for_missing_id(self, seeded_db):
         repo = IngredientRepository(seeded_db)
-        assert repo.find_ingredient(99999, 'id') is None
-
-    def test_return_none_for_missing_name(self, seeded_db):
-        repo = IngredientRepository(seeded_db)
-        assert repo.find_ingredient('car', 'name') is None
+        assert repo.find_ingredient(99999) is None
 
 
 class TestSpiritTypes:

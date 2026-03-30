@@ -1,0 +1,122 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Edit' if cocktail else 'New' }} Cocktail{% endblock %}
+
+{% block content %}
+<div class="admin-toolbar">
+  <h1 class="admin-page-title" style="margin:0">{{ 'Edit cocktail' if cocktail else 'New cocktail' }}</h1>
+  <a href="{{ url_for('admin_cocktails') }}" class="btn btn-secondary">← Back to cocktails</a>
+</div>
+
+<form method="post" class="admin-form" enctype="multipart/form-data"
+      action="{{ url_for('admin_cocktail_edit', cocktail_id=cocktail.id) if cocktail else url_for('admin_cocktail_new') }}">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <div class="form-section">
+    <p class="form-section-title">Basic info</p>
+
+    <div class="form-group">
+      <label for="name">Name *</label>
+      <input type="text" id="name" name="name" value="{{ form.get('name', '') }}" required>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="subcategory">Subcategory *</label>
+          <select id="subcategory" name="subcategory" required>
+            <option value="">- select -</option>
+              {% for subcat in ['from_menu', 'classic'] %}
+                <option value="{{subcat}}" {{'selected' if form.get('subcategory') == subcat }}>{{ subcat }}</option>
+              {% endfor %}
+          </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description">{{ form.get('description', '') }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="history">History</label>
+      <textarea id="history" name="history">{{ form.get('history', '') }}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="method">Method</label>
+      <input type="text" id="method" name="method" value="{{ form.get('method', '') }}"
+             list="method-options" placeholder="e.g. Stirred, Shaken">
+      <datalist id="method-options">
+        {% for opt in ['Stirred', 'Shaken', 'Built', 'Blended', 'Layered', 'Thrown'] %}
+          <option value="{{ opt }}">
+        {% endfor %}
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label for="glass">Glass</label>
+      <input type="text" id="glass" name="glass" value="{{ form.get('glass', '') }}"
+             list="glass-options" placeholder="e.g. Rocks, Highball, Coupe">
+      <datalist id="glass-options">
+        {% for opt in ['Rock Glass', 'Highball', 'Coupe', 'Martini', 'Collins',
+                       'Champagne Flute', 'Wine Glass', 'Shot', 'Copper Mug', 'Hurricane'] %}
+          <option value="{{ opt }}">
+        {% endfor %}
+      </datalist>
+    </div>
+    <div class="form-group">
+      <label for="garnish">Garnish</label>
+      <input type="text" id="garnish" name="garnish" value="{{ form.get('garnish', '') }}"
+             list="garnish-options" placeholder="e.g. Orange peel, Lime wedge">
+      <datalist id="garnish-options">
+        {% for opt in ['Orange peel', 'Lemon twist', 'Lime wedge', 'Lime wheel',
+                       'Mint sprig', 'Cherry', 'Olive', 'Dehydrated lime', 'None'] %}
+          <option value="{{ opt }}">
+        {% endfor %}
+      </datalist>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="abv">ABV (%)</label>
+        <input type="number" id="abv" name="abv" value="{{ form.get('abv', '') }}"
+               step="0.1" min="0" max="100" placeholder="e.g. 13.5">
+      </div>
+      <div class="form-group">
+        <label for="price">Price (£) *</label>
+        <input type="number" id="price" name="price" value="{{ form.get('price', '') }}"
+               step="0.01" min="0" placeholder="e.g. 6.50" required>
+      </div>
+    </div>
+    <div class="form-group">
+    <label>Image</label>
+    {% if cocktail and cocktail.image_url %}
+      <img src="{{ url_for('static', filename=cocktail.image_url) }}"
+            alt="Current image" style="max-height:120px; display:block; margin-bottom:0.5rem; border-radius:4px">
+      <span class="hint">Upload a new image to replace the current one.</span>
+    {% endif %}
+    <input type="file" name="image" accept="image/jpeg,image/png,image/webp">
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">{{ 'Save changes' if cocktail else 'Create cocktail' }}</button>
+    <a href="{{ url_for('admin_cocktails') }}" class="btn btn-secondary">Cancel</a>
+    {% if cocktail %}
+    <div class="form-actions-right">
+      <a href="{{ url_for('admin_cocktail_recipe', cocktail_id=cocktail.id) }}" class="btn btn-secondary">
+        Manage recipe
+      </a>
+    </div>
+    {% endif %}
+  </div>
+</form>
+
+{% if cocktail %}
+<div class="danger-zone" style="max-width:700px">
+  <p class="danger-zone-title">Danger zone</p>
+  <p>Permanently delete this cocktail This cannot be undone.</p>
+  <form method="post" action="{{ url_for('admin_cocktail_delete', cocktail_id=cocktail.id) }}"
+        onsubmit="return confirm('Delete {{ cocktail.name | e }}? This cannot be undone.')">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <button type="submit" class="btn btn-danger btn-sm">Delete cocktail</button>
+  </form>
+</div>
+{% endif %}
+{% endblock %}
+
+

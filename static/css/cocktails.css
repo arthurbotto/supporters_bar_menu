@@ -182,6 +182,17 @@
     accent-color: var(--accent);
   }
 
+/* Cocktail filter: search capped, spirit select stays compact */
+.cocktail-filters .filter-search input {
+  max-width: 480px;
+}
+
+.cocktail-filters .filter-select {
+  flex: 0 0 auto;
+  min-width: 130px;
+  max-width: 180px;
+}
+
 @media (max-width: 600px) {
   .cocktail-toggle {
     padding: 12px 10px;

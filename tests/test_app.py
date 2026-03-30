@@ -218,3 +218,206 @@ class TestErrorHandlers:
             html, status_code = server_error(Exception('test'))
         assert status_code == 500
         assert 'Something went wrong' in html
+
+
+# ===========================================================================
+# Admin routes
+# ===========================================================================
+
+class TestAdminAuth:
+
+    def test_login_page_returns_200(self, web_client):
+        response = web_client.get('/admin/login')
+        assert response.status_code == 200
+
+    def test_admin_dashboard_redirects_when_not_logged_in(self, web_client):
+        response = web_client.get('/admin')
+        assert response.status_code == 302
+
+    def test_admin_products_redirects_when_not_logged_in(self, web_client):
+        response = web_client.get('/admin/products')
+        assert response.status_code == 302
+
+    def test_admin_search_products_redirects_when_not_logged_in(self, web_client):
+        response = web_client.get('/admin/search_products')
+        assert response.status_code == 302
+
+
+class TestAdminDashboard:
+
+    def test_returns_200(self, admin_client):
+        response = admin_client.get('/admin')
+        assert response.status_code == 200
+
+
+class TestAdminProductsRoute:
+
+    def test_returns_200(self, admin_client):
+        response = admin_client.get('/admin/products')
+        assert response.status_code == 200
+
+    def test_search_returns_all_products_with_no_query(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products')
+        assert b'Camden Hells' in response.data
+        assert b'Delisted Lager' in response.data
+
+    def test_search_includes_inactive_products(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products?q=delisted')
+        assert b'Delisted' in response.data
+
+    def test_search_filters_by_name(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products?q=camden')
+        assert b'Camden Hells' in response.data
+        assert b'Guinness' not in response.data
+
+
+class TestAdminCocktailsRoute:
+
+    def test_returns_200(self, admin_client):
+        response = admin_client.get('/admin/cocktails')
+        assert response.status_code == 200
+
+    def test_search_returns_all_cocktails_with_no_query(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/search_cocktails')
+        assert b'Negroni' in response.data
+        assert b'Mojito' in response.data
+        assert b'Margarita' in response.data
+
+    def test_search_filters_by_name(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/search_cocktails?q=neg')
+        assert b'Negroni' in response.data
+        assert b'Mojito' not in response.data
+
+
+class TestAdminToggleActive:
+
+    def test_toggle_redirects_to_products(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/1/toggle')
+        assert response.status_code == 302
+
+    def test_toggle_deactivates_active_product(self, admin_client, seeded_db_products):
+        admin_client.post('/admin/products/1/toggle')
+        response = admin_client.get('/search_wines')
+        assert b'Malbec Reserva' not in response.data
+
+
+class TestAdminCreateProduct:
+
+    def test_creates_product_and_redirects_to_variants(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/new', data={
+            'name': 'Test Lager',
+            'category': 'beer',
+        })
+        assert response.status_code == 302
+        assert '/admin/products/' in response.headers['Location']
+        assert 'variants' in response.headers['Location']
+
+    def test_new_product_appears_in_admin_search(self, admin_client, seeded_db_products):
+        admin_client.post('/admin/products/new', data={
+            'name': 'Test Lager',
+            'category': 'beer',
+        })
+        response = admin_client.get('/admin/search_products?q=Test+Lager')
+        assert b'Test Lager' in response.data
+
+    def test_creates_wine_with_details(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/new', data={
+            'name': 'Test Burgundy',
+            'category': 'wine',
+            'subcategory': 'red',
+            'region': 'Burgundy',
+            'vintage': '2019',
+            'sweetness': 'dry',
+            'body': 'medium',
+            'acidity': 'high',
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        assert b'Test Burgundy' in response.data
+
+
+class TestAdminEditProduct:
+
+    def test_edit_form_returns_200(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/products/1/edit')
+        assert response.status_code == 200
+
+    def test_edit_form_prepopulates_product_name(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/products/1/edit')
+        assert b'Malbec Reserva' in response.data
+
+    def test_update_redirects_to_products(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/1/edit', data={
+            'name': 'Renamed Malbec',
+            'category': 'wine',
+            'subcategory': 'red',
+        })
+        assert response.status_code == 302
+        assert '/admin/products' in response.headers['Location']
+
+    def test_updated_name_appears_in_search(self, admin_client, seeded_db_products):
+        admin_client.post('/admin/products/1/edit', data={
+            'name': 'Renamed Malbec',
+            'category': 'wine',
+            'subcategory': 'red',
+        })
+        response = admin_client.get('/admin/search_products?q=Renamed+Malbec')
+        assert b'Renamed Malbec' in response.data
+
+
+class TestAdminDeleteProduct:
+
+    def test_delete_redirects_to_products(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/1/delete')
+        assert response.status_code == 302
+
+    def test_deleted_product_not_in_search(self, admin_client, seeded_db_products):
+        admin_client.post('/admin/products/1/delete')
+        response = admin_client.get('/admin/search_products?q=Malbec')
+        assert b'Malbec Reserva' not in response.data
+
+
+class TestAdminVariants:
+
+    def test_variants_page_returns_200(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/products/1/variants')
+        assert response.status_code == 200
+
+    def test_create_variant_redirects(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/products/1/variants/new', data={
+            'serve_label': 'Bottle',
+            'price': '39.00',
+            'sort_order': '3',
+        })
+        assert response.status_code == 302
+
+    def test_created_variant_appears_on_variants_page(self, admin_client, seeded_db_products):
+        admin_client.post('/admin/products/1/variants/new', data={
+            'serve_label': 'Bottle',
+            'price': '39.00',
+            'sort_order': '3',
+        })
+        response = admin_client.get('/admin/products/1/variants')
+        assert b'Bottle' in response.data
+
+    def test_update_variant_redirects(self, admin_client, seeded_db_products):
+        # Variant id=1 belongs to Malbec (first INSERT in test_products.sql)
+        response = admin_client.post('/admin/variants/1/edit', data={
+            'product_id': '1',
+            'serve_label': '125ml',
+            'price': '7.00',
+            'sort_order': '1',
+        })
+        assert response.status_code == 302
+
+    def test_delete_variant_redirects(self, admin_client, seeded_db_products):
+        response = admin_client.post('/admin/variants/1/delete', data={
+            'product_id': '1',
+        })
+        assert response.status_code == 302
+
+    def test_deleted_variant_not_on_variants_page(self, admin_client, seeded_db_products):
+        # Malbec has 2 variants (125ml and 175ml). Delete the first.
+        admin_client.post('/admin/variants/1/delete', data={'product_id': '1'})
+        response = admin_client.get('/admin/products/1/variants')
+        # After deletion, only 175ml remains — 125ml label should be absent
+        assert response.data.count(b'125ml') == 0

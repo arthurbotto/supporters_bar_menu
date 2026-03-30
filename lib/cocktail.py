@@ -1,6 +1,6 @@
 class Cocktail:
 
-    def __init__(self, id, name, subcategory, description, history, method, glass, garnish, abv, price, is_active):
+    def __init__(self, id, name, subcategory, description, history, method, glass, garnish, abv, price, is_active, image_url):
         self.id = id
         self.name = name
         self.subcategory = subcategory
@@ -12,6 +12,7 @@ class Cocktail:
         self.abv = abv
         self.price = price
         self.is_active = is_active
+        self.image_url = image_url
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -27,4 +28,5 @@ class Cocktail:
     {self.garnish},
     {self.abv},
     {self.price},
-    {self.is_active})"""
+    {self.is_active},
+    {self.image_url})"""

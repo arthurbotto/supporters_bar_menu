@@ -197,6 +197,11 @@ body.modal-open {
     accent-color: var(--accent);
   }
 
+/* Desktop: cap Acidity from growing wider than the other selects */
+.wine-filters .filter-select {
+  max-width: 140px;
+}
+
 .wine-detail {
   font-size: 0.78rem;
   color: var(--muted);
@@ -228,6 +233,12 @@ body.modal-open {
     flex: 1 1 calc(50% - 4px);
   }
 
+  /* Override desktop max-width so wine selects fill their 50% column equally */
+  .wine-filters .filter-select {
+    flex: 1 1 calc(50% - 4px);
+    max-width: calc(50% - 4px);
+  }
+
   .filter-apply-btn,
   .filter-clear-btn {
     flex: 1 1 calc(50% - 4px);
@@ -238,4 +249,19 @@ body.modal-open {
     flex: 1 1 calc(50% - 4px);
     justify-content: center;
   }
+}
+.wine-modal-image-frame {
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto 1rem;
+  padding: 16px;
+  border-radius: 14px;
+  background: #f8f8f8;
+  border: 1px solid var(--border);
+}
+
+.wine-modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
 }

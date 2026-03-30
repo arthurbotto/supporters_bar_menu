@@ -22,15 +22,19 @@ class CocktailRepository:
             row["garnish"],
             row["abv"],
             row["price"],
-            row["is_active"]
+            row["is_active"],
+            row["image_url"]
         )
 
     def all(self):
         rows = self._connection.execute('SELECT * FROM cocktails WHERE is_active = TRUE ORDER BY ID ASC')
         return [self._row_to_cocktail(r) for r in rows]
     
-    def find_cocktail(self, parameter, column):
-        rows = self._connection.execute(f'SELECT * FROM cocktails WHERE {column} = %s', [parameter])
+    def find_cocktail(self, cocktail_id):
+        rows = self._connection.execute(
+            'SELECT * FROM cocktails WHERE id = %s',
+            [cocktail_id]
+        )
         if not rows:
             return None
         return self._row_to_cocktail(rows[0])
@@ -102,5 +106,34 @@ class CocktailRepository:
         """, [q])
 
         return [self._row_to_cocktail(r) for r in rows]
+    
+    def create_cocktail(self, name, subcategory, description, history, method, glass, garnish, abv, price, image_url):
+        rows = self._connection.execute(
+            """INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price, image_url)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+            [name, subcategory, description, history, method, glass, garnish, abv, price, image_url]
+        )
+        return rows[0]["id"]
+    
+    def update_cocktail(self, cocktail_id, name, subcategory, description, history, method, glass, garnish, abv, price, image_url):
+        self._connection.execute(
+            """UPDATE cocktails SET name=%s, subcategory=%s, description=%s, history=%s,
+                 method=%s, glass=%s, garnish=%s, abv=%s, price=%s, image_url=%s WHERE id=%s""",
+                   [name, subcategory, description, history, method, glass, garnish, abv, price, image_url, cocktail_id]
+        )
+
+    def set_active(self, cocktail_id, is_active):
+        self._connection.execute(
+            "UPDATE cocktails SET is_active=%s WHERE id=%s",
+            [is_active, cocktail_id]
+        )
+
+    def delete_cocktail(self, cocktail_id):
+        self._connection.execute(
+            "DELETE FROM cocktails WHERE id=%s",
+            [cocktail_id]
+        )
+    
+
 
     

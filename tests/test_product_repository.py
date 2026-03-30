@@ -349,3 +349,252 @@ class TestWineProducer:
         repo = ProductRepository(seeded_db)
         producers = repo.wine_producer()
         assert producers == sorted(producers)
+
+
+# ===========================================================================
+# Admin read methods
+# ===========================================================================
+
+class TestAllProductsForAdmin:
+
+    def test_returns_all_products_including_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        products = repo.all_products_for_admin()
+        names = [p.name for p in products]
+        assert 'Delisted Bordeaux' in names
+        assert 'Malbec Reserva' in names
+
+    def test_returns_product_instances(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        products = repo.all_products_for_admin()
+        assert all(isinstance(p, Product) for p in products)
+
+    def test_ordered_by_category_then_name(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        products = repo.all_products_for_admin()
+        # Within the beer category, Camden Hells should come before Guinness
+        beer_names = [p.name for p in products if p.category == 'beer' and p.is_active]
+        assert beer_names == sorted(beer_names)
+
+
+class TestSearchProduct:
+
+    def test_finds_by_partial_name(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('camden')
+        assert len(results) == 1
+        assert results[0].name == 'Camden Hells'
+
+    def test_case_insensitive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('GUINNESS')
+        assert len(results) == 1
+        assert results[0].name == 'Guinness'
+
+    def test_includes_inactive_products(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('delisted')
+        assert len(results) > 0
+        assert all('Delisted' in p.name for p in results)
+
+    def test_returns_empty_for_no_match(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        assert repo.search_product('zzznomatch') == []
+
+    def test_empty_query_returns_all(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        all_admin = repo.all_products_for_admin()
+        search_all = repo.search_product('')
+        assert len(search_all) == len(all_admin)
+
+
+# ===========================================================================
+# Admin write methods
+# ===========================================================================
+
+class TestCreateProduct:
+
+    def test_returns_new_id(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None)
+        assert isinstance(new_id, int)
+
+    def test_product_is_findable_after_creation(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None)
+        found = repo.find(new_id)
+        assert found is not None
+        assert found.name == 'Test Beer'
+
+    def test_created_product_has_correct_fields(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        new_id = repo.create_product('TEST-002', 'Test Gin', 'spirit', 'gin', 'A test gin', 'Test Co', 'Scotland', 41.0, None, None)
+        found = repo.find(new_id)
+        assert found.code == 'TEST-002'
+        assert found.category == 'spirit'
+        assert found.subcategory == 'gin'
+        assert found.producer == 'Test Co'
+
+    def test_new_product_is_active_by_default(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        new_id = repo.create_product('TEST-003', 'Active Product', 'beer', None, None, None, None, None, None, None)
+        found = repo.find(new_id)
+        assert found.is_active is True
+
+
+class TestUpdateProduct:
+
+    def test_name_is_updated(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        beer = repo.find_by_code('BEER-001')
+        repo.update_product(beer.id, 'Updated Hells', 'beer', None, None, 'Camden Town', 'England', 4.6, None, None)
+        updated = repo.find(beer.id)
+        assert updated.name == 'Updated Hells'
+
+    def test_category_is_updated(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        beer = repo.find_by_code('BEER-001')
+        repo.update_product(beer.id, beer.name, 'soft', None, None, None, None, None, None, None)
+        updated = repo.find(beer.id)
+        assert updated.category == 'soft'
+
+    def test_null_fields_accepted(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        spirit = repo.find_by_code('SPIRIT-001')
+        repo.update_product(spirit.id, spirit.name, spirit.category, spirit.subcategory, None, None, None, None, None, None)
+        updated = repo.find(spirit.id)
+        assert updated.description is None
+        assert updated.producer is None
+
+
+class TestSetActive:
+
+    def test_deactivates_active_product(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        repo.set_active(malbec.id, False)
+        wines = repo.all_wines()
+        assert not any(w.name == 'Malbec Reserva' for w in wines)
+
+    def test_reactivates_inactive_product(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        delisted = repo.find_by_code('WINE-OFF')
+        repo.set_active(delisted.id, True)
+        wines = repo.all_wines()
+        assert any(w.name == 'Delisted Bordeaux' for w in wines)
+
+
+class TestDeleteProduct:
+
+    def test_product_not_findable_after_deletion(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        beer = repo.find_by_code('BEER-001')
+        repo.delete_product(beer.id)
+        assert repo.find(beer.id) is None
+
+    def test_variants_cascade_deleted(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        assert len(repo.product_variants(malbec.id)) == 2
+        repo.delete_product(malbec.id)
+        assert repo.product_variants(malbec.id) == []
+
+    def test_wine_details_cascade_deleted(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        repo.delete_product(malbec.id)
+        assert repo.find_wine(malbec.id) is None
+
+
+class TestUpsertWineDetails:
+
+    def test_inserts_wine_details(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        new_id = repo.create_product('WINE-NEW', 'Chablis', 'wine', 'white', None, 'Brocard', 'France', 12.5, None, None)
+        repo.upsert_wine_details(new_id, 'Chablis AOC', 2022, 'dry', 'light', 'high')
+        found = repo.find_wine(new_id)
+        assert found.region == 'Chablis AOC'
+        assert found.vintage == 2022
+        assert found.sweetness == 'dry'
+        assert found.body == 'light'
+        assert found.acidity == 'high'
+
+    def test_updates_existing_wine_details(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        repo.upsert_wine_details(malbec.id, 'Luján de Cuyo', 2022, 'off-dry', 'full', 'low')
+        updated = repo.find_wine(malbec.id)
+        assert updated.region == 'Luján de Cuyo'
+        assert updated.vintage == 2022
+        assert updated.sweetness == 'off-dry'
+
+
+class TestCreateVariant:
+
+    def test_returns_new_id(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        spirit = repo.find_by_code('SPIRIT-001')
+        new_id = repo.create_variant(spirit.id, 'Bottle', None, 39.00, 2)
+        assert isinstance(new_id, int)
+
+    def test_variant_appears_in_product_variants(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        spirit = repo.find_by_code('SPIRIT-001')
+        repo.create_variant(spirit.id, 'Bottle', None, 39.00, 2)
+        variants = repo.product_variants(spirit.id)
+        assert len(variants) == 2
+        labels = [v.serve_label for v in variants]
+        assert 'Bottle' in labels
+
+    def test_correct_fields(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        beer = repo.find_by_code('BEER-001')
+        new_id = repo.create_variant(beer.id, 'Half', 284, 3.00, 2)
+        variants = repo.product_variants(beer.id)
+        half = next(v for v in variants if v.id == new_id)
+        assert half.serve_label == 'Half'
+        assert half.serve_ml == 284
+        assert half.price == Decimal('3.00')
+        assert half.sort_order == 2
+
+
+class TestUpdateVariant:
+
+    def test_price_is_updated(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        variant = repo.product_variants(malbec.id)[0]
+        repo.update_variant(variant.id, variant.serve_label, variant.serve_ml, Decimal('7.50'), variant.sort_order)
+        updated = repo.product_variants(malbec.id)
+        changed = next(v for v in updated if v.id == variant.id)
+        assert changed.price == Decimal('7.50')
+
+    def test_serve_label_is_updated(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        variant = repo.product_variants(malbec.id)[0]
+        repo.update_variant(variant.id, 'Small Glass', variant.serve_ml, variant.price, variant.sort_order)
+        updated = repo.product_variants(malbec.id)
+        changed = next(v for v in updated if v.id == variant.id)
+        assert changed.serve_label == 'Small Glass'
+
+
+class TestDeleteVariant:
+
+    def test_variant_not_in_list_after_deletion(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        variant = repo.product_variants(malbec.id)[0]
+        repo.delete_variant(variant.id)
+        remaining = repo.product_variants(malbec.id)
+        assert not any(v.id == variant.id for v in remaining)
+
+    def test_other_variants_unaffected(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        malbec = repo.find_by_code('WINE-001')
+        variants = repo.product_variants(malbec.id)
+        assert len(variants) == 2
+        repo.delete_variant(variants[0].id)
+        remaining = repo.product_variants(malbec.id)
+        assert len(remaining) == 1
+        assert remaining[0].id == variants[1].id

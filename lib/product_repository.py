@@ -27,7 +27,8 @@ class ProductRepository:
             row.get("vintage"),
             row.get("sweetness"),
             row.get("body"),
-            row.get("acidity")
+            row.get("acidity"),
+            row["image_url"]
         )
     
     def _row_to_variants(self, row):
@@ -39,9 +40,6 @@ class ProductRepository:
             row["price"],
             row["sort_order"]
         )
-
-    def _normalize_query(self, q):
-        return (q or "").strip()
     
     # -------------------------------
 
@@ -227,19 +225,19 @@ class ProductRepository:
         )
         return [self._row_to_product(r) for r in rows]
 
-    def create_product(self, code, name, category, subcategory, description, producer, country, abv, vegan, organic):
+    def create_product(self, code, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url):
         rows = self._connection.execute(
-            """INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic)
-               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
-            [code, name, category, subcategory, description, producer, country, abv, vegan, organic]
+            """INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+            [code, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url]
         )
         return rows[0]["id"]
 
-    def update_product(self, product_id, name, category, subcategory, description, producer, country, abv, vegan, organic):
+    def update_product(self, product_id, name, category, subcategory, description, producer, country, abv, vegan, organic, image_url):
         self._connection.execute(
             """UPDATE products SET name=%s, category=%s, subcategory=%s, description=%s,
-               producer=%s, country=%s, abv=%s, vegan=%s, organic=%s WHERE id=%s""",
-            [name, category, subcategory, description, producer, country, abv, vegan, organic, product_id]
+               producer=%s, country=%s, abv=%s, vegan=%s, organic=%s, image_url=%s WHERE id=%s""",
+            [name, category, subcategory, description, producer, country, abv, vegan, organic, image_url, product_id]
         )
 
     def set_active(self, product_id, is_active):

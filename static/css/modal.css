@@ -1,6 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
+  z-index: 200;
   background: rgba(31, 41, 55, 0.45);
   display: grid;
   place-items: center;
@@ -77,4 +78,20 @@
 
 body.modal-open {
   overflow: hidden;
+}
+
+.modal-image-frame {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto 1rem;
+  border-radius: 14px;
+  background: #f3f4f6;
+  padding: 12px;
+}
+
+.modal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
 }

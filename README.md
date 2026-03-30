@@ -23,7 +23,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Hot Drinks** — flat list with name and price
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
 - **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
-- **Admin panel** — password-protected area at `/admin/`; create, edit, delete and toggle visibility of products; manage serve sizes and prices (variants); wine-specific fields (region, vintage, sweetness, body, acidity); CSRF protection on all forms
+- **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited
 - **Mobile responsive** — all menu and admin pages adapt to small screens; price columns tighten, form rows stack to single column, tables scroll horizontally
 - **Architecture** — repository pattern, psycopg v3 with `dict_row` results, per-request DB connection via Flask's `g` object
 
@@ -118,7 +118,7 @@ pytest tests/e2e/
 pytest
 ```
 
-213 tests total. Unit/integration tests cover all repositories and all Flask routes (including error handlers). E2E tests cover every page including search, filters, accordion, modals, detail field rendering, and is_active exclusion.
+251 tests total. Unit/integration tests cover all repositories, all Flask routes, and all admin CRUD routes (auth protection, product/variant management, toggle active). E2E tests cover every customer-facing page plus admin login, HTMX admin search, and JS-driven product form behaviour (category toggle, subcategory input swap, wine field visibility).
 
 ---
 
@@ -168,4 +168,4 @@ tests/
 
 ## What's coming next
 
-- Rate limiting on search endpoints — Flask-Limiter already in requirements
+- Deployment (evaluating AWS EC2 vs Render)

@@ -13,8 +13,15 @@ class IngredientRepository:
             ingredients.append(item)
         return ingredients
     
-    def find_ingredient(self, parameter, column):
-        rows = self._connection.execute(f'SELECT * FROM ingredients WHERE {column} = %s', [parameter])
+    def find_ingredient(self, ingredient_id):
+        rows = self._connection.execute("SELECT * FROM ingredients WHERE id=%s", [ingredient_id])
+        if not rows:
+            return None
+        row = rows[0]
+        return Ingredient(row["id"], row["name"], row["category"], row["subcategory"])
+    
+    def find_ingredient_by_name(self, ingredient_name):
+        rows = self._connection.execute("SELECT * FROM ingredients WHERE name ILIKE %s", [ingredient_name])
         if not rows:
             return None
         row = rows[0]
@@ -27,3 +34,17 @@ class IngredientRepository:
                  ORDER BY subcategory"""
         )
         return [row["subcategory"] for row in rows]
+    
+    def create_ingredient(self, name, category, subcategory):
+        rows = self._connection.execute(
+            """INSERT INTO ingredients (name, category, subcategory)
+                VALUES (%s, %s, %s) RETURNING id""",
+                [name, category, subcategory]
+        )
+        return rows[0]["id"]
+
+    def update_ingredient(self, ingredient_id, name, category, subcategory):
+        self._connection.execute(
+            """UPDATE ingredients SET name=%s, category=%s, subcategory=%s WHERE id=%s""",
+                [name, category, subcategory, ingredient_id]
+        ) 

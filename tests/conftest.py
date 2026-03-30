@@ -63,3 +63,12 @@ def web_client():
     app.config['TESTING'] = True # This gets us better errors
     with app.test_client() as client:
         yield client
+
+
+@pytest.fixture
+def admin_client(web_client):
+    app.config['WTF_CSRF_ENABLED'] = False
+    with web_client.session_transaction() as sess:
+        sess['admin_logged_in'] = True
+    yield web_client
+    app.config['WTF_CSRF_ENABLED'] = True

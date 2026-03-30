@@ -16,7 +16,8 @@ class RecipeItemRepository:
                 r.sort_order,
                 r.optional,
                 i.name AS ingredient_name,
-                i.category AS ingredient_category
+                i.category AS ingredient_category,
+                i.subcategory AS ingredient_subcategory
             FROM recipe_items r
             JOIN ingredients i ON r.ingredient_id = i.id
             WHERE r.cocktail_id = %s
@@ -36,6 +37,27 @@ class RecipeItemRepository:
                 row["optional"],
                 row["ingredient_name"],
                 row["ingredient_category"],
+                row["ingredient_subcategory"],
             )
             items.append(item)
         return items
+    
+    def create_recipe(self, cocktail_id, ingredient_id, amount, unit, sort_order, optional):
+        rows = self._connection.execute(
+            """INSERT INTO recipe_items (cocktail_id, ingredient_id, amount, unit, sort_order, optional)
+                VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
+                [cocktail_id, ingredient_id, amount, unit, sort_order, optional]
+        )
+        return rows[0]["id"]
+    
+    def update_recipe(self, recipe_id, ingredient_id, amount, unit, sort_order, optional):
+        self._connection.execute(
+            """UPDATE recipe_items SET ingredient_id=%s, amount=%s, unit=%s, sort_order=%s, optional=%s
+                WHERE id=%s""",
+                [ingredient_id, amount, unit, sort_order, optional, recipe_id]
+        )
+    
+    def delete_recipe(self, recipe_id):
+        self._connection.execute(
+            "DELETE FROM recipe_items WHERE id=%s", [recipe_id]
+        )

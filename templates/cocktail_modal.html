@@ -1,8 +1,16 @@
 <h2 class="modal-title">{{ cocktail.name|e }}</h2>
 
-<div class="modal-image-placeholder">
-  <span>Image coming soon</span>
-</div>
+{% if cocktail.image_url %}
+  <div class="modal-image-frame">
+    <img src="{{ url_for('static', filename=cocktail.image_url) }}"
+         alt="{{ cocktail.name|e }}"
+         class="modal-image">
+  </div>
+{% else %}
+  <div class="modal-image-placeholder">
+    <span>Image coming soon</span>
+  </div>
+{% endif %}
 
 {% if cocktail.history %}
   <p class="modal-description">{{ cocktail.history|e }}</p>

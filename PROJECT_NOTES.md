@@ -294,12 +294,51 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## What Still Needs Doing
 
-- [ ] Rate-limit `/search_cocktails` and `/search_wines` with Flask-Limiter (already in `requirements.txt`)
-- [ ] Admin cocktail CRUD (Phase 2 — deferred)
+- [ ] Deploy (evaluating AWS EC2 vs Render)
 
 ---
 
 ## Changelog
+
+### 2026-03-30 — Admin cocktail CRUD, image upload, rate limiting, UX polish
+
+**Admin cocktail CRUD**
+- Full create/edit/delete and toggle-active for cocktails via admin panel
+- `GET/POST /admin/cocktails/new`, `GET/POST /admin/cocktails/<id>/edit`, `POST /admin/cocktails/<id>/delete`, `POST /admin/cocktails/<id>/toggle`
+- Recipe management: `GET /admin/cocktails/<id>/recipe`, `POST .../recipe/new`, `POST /admin/recipe/<id>/edit`, `POST /admin/recipe/<id>/delete`
+- `admin_cocktail_new` redirects to recipe page after creation so ingredients are added immediately
+- `UniqueViolation` caught on create/edit — flash error instead of 500
+
+**Image upload with Pillow normalisation**
+- `image_url VARCHAR(500)` column added to both `cocktails` and `products` tables (schema.sql updated)
+- `_save_image(file, subfolder)` helper in `app.py`: validates extension, generates UUID-prefixed filename, always saves as optimised JPEG (quality 88), max 1200px
+- Pillow portrait normalisation: wine images with height > 1.8× width padded to 1.5:1 ratio (bg `#f8f8f8`); cocktail images with height > 1.3× width padded to square (bg `#f3f4f6`)
+- Files stored in `static/images/cocktails/` and `static/images/wine/`; `os.makedirs(..., exist_ok=True)` creates folders on first upload
+- Admin forms for both cocktails and products include file input + existing image preview
+- Customer modals display image in a styled frame above description; placeholder shown when no image set
+- Importer unchanged — INSERT/UPDATE don't touch `image_url`, so admin-uploaded images survive re-imports
+- `Pillow` added to `requirements.txt`
+
+**Flask-Limiter (now active)**
+- Admin login rate-limited: `@limiter.limit("10 per minute")` — brute force protection
+- `RATELIMIT_ENABLED = False` when `APP_ENV=test` — tests unaffected
+- No limits on search/menu routes (bar patrons share pub WiFi; IP-based limits would hit all customers)
+
+**Admin form UX polish**
+- Cocktail form: `method`, `glass`, `garnish` changed from `<textarea>` to `<input type="text">` with `<datalist>` suggestions; price `step` → `0.01`; ABV + price combined in one row
+- Recipe form: ingredient name full-width; category + subcategory in 2-col row; amount + unit in row; order + optional in row; unit and ingredient-category `<datalist>` added; optional field changed from checkbox to `<select>` (No/Yes); confirm dialogs use `{{ name | e }}` (HTML escape, not `tojson`)
+- Admin action buttons (`form-actions`) now `flex-wrap: wrap` on mobile — no longer squish
+
+**CSS fixes**
+- Overlay (`modal.css`): added `z-index: 200` — admin fixed bar no longer overlaps modal close button
+- Cocktail filter (`cocktails.css`): spirit `<select>` capped at `max-width: 180px` so it doesn't dominate the bar
+- Wine filter (`wines.css`): desktop `.wine-filters .filter-select` capped at `max-width: 140px`; mobile override adds `max-width: calc(50% - 4px)` so all selects fill 50% equally
+
+### 2026-03-28 — Admin integration tests + E2E tests
+
+- **Admin route integration tests** (`tests/test_app.py`) — 35 new tests covering all admin routes: auth protection (unauthenticated redirects), dashboard, products/cocktails HTMX search (includes inactive), toggle active, create/edit/delete product, variant CRUD. Uses new `admin_client` fixture in `tests/conftest.py` (session injection + CSRF disabled).
+- **Admin E2E tests** (`tests/e2e/test_admin.py`) — 13 new Playwright tests covering: login form, invalid credentials error, valid login grants access, HTMX-driven products/cocktails search (including inactive products), `product_form.js` category toggle (wine fields show/hide), subcategory input swap (select vs text+datalist), edit form pre-populates wine fields. Test credentials injected into xprocess env; `logged_in_page` fixture added to `tests/e2e/conftest.py`.
+- **Total tests: 251** (90 E2E, 161 unit/integration — up from 213 before this session).
 
 ### 2026-03-26 — Mobile responsive polish (all routes + admin)
 
@@ -410,6 +449,6 @@ Seed data updates:
 
 ## Known Issues / Technical Debt
 
-- Unused dependency in `requirements.txt`: Flask-Limiter. Not yet wired into `app.py`.
-- Flask-WTF is now active (CSRF protection on all admin POST forms).
+- Flask-WTF is active (CSRF protection on all admin POST forms).
 - `_normalize_query()` in `lib/product_repository.py` is defined but never called — dead code.
+- Uploaded images in `static/images/` are not tracked by git (gitignored or ephemeral on Render free tier) — will need cloud storage (S3 / Cloudinary) before deploying to an ephemeral host.

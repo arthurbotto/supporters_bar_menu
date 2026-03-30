@@ -52,28 +52,18 @@ class TestFindCocktail:
 
     def test_find_by_id(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        cocktail = repo.find_cocktail(1, "id")
+        cocktail = repo.find_cocktail(1)
         assert cocktail.name == "Negroni"
         assert cocktail.method == "Stirred"
         assert cocktail.glass == "Rocks"
 
-    def test_find_by_name(self, seeded_db):
-        repo = CocktailRepository(seeded_db)
-        cocktail = repo.find_cocktail("Mojito", "name")
-        assert cocktail.id == 2
-        assert cocktail.name == "Mojito"
-
     def test_returns_cocktail_instance(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        assert isinstance(repo.find_cocktail(1, "id"), Cocktail)
+        assert isinstance(repo.find_cocktail(1), Cocktail)
 
     def test_returns_none_when_id_not_found(self, seeded_db):
         repo = CocktailRepository(seeded_db)
-        assert repo.find_cocktail(999, "id") is None
-
-    def test_returns_none_when_name_not_found(self, seeded_db):
-        repo = CocktailRepository(seeded_db)
-        assert repo.find_cocktail("Nonexistent", "name") is None
+        assert repo.find_cocktail(999) is None
 
 
 # ===========================================================================
@@ -198,3 +188,71 @@ class TestSearchWithSpiritFilter:
         repo = CocktailRepository(seeded_db)
         results = repo.search_cocktail(spirit_type='gin')
         assert all(isinstance(c, Cocktail) for c in results)
+
+
+# ===========================================================================
+# Admin methods
+# ===========================================================================
+
+class TestAdminMethods:
+
+    def test_all_cocktails_for_admin_returns_all(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        cocktails = repo.all_cocktails_for_admin()
+        assert len(cocktails) == 3
+        assert {c.name for c in cocktails} == {'Negroni', 'Mojito', 'Margarita'}
+
+    def test_all_cocktails_for_admin_returns_cocktail_instances(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        cocktails = repo.all_cocktails_for_admin()
+        assert all(isinstance(c, Cocktail) for c in cocktails)
+
+    def test_all_cocktails_for_admin_includes_inactive(self, seeded_db):
+        seeded_db.execute(
+            "INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price, is_active) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            ['Hidden Sour', 'classic', 'Desc', 'Hist', 'Shaken', 'Coupe', 'None', 15, 8.00, False]
+        )
+        repo = CocktailRepository(seeded_db)
+        cocktails = repo.all_cocktails_for_admin()
+        assert len(cocktails) == 4
+        assert any(c.name == 'Hidden Sour' for c in cocktails)
+
+    def test_all_cocktails_for_admin_ordered_by_subcategory_then_name(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        cocktails = repo.all_cocktails_for_admin()
+        # classic subcategory: Margarita, Mojito (alphabetical)
+        classics = [c.name for c in cocktails if c.subcategory == 'classic']
+        assert classics == sorted(classics)
+
+    def test_search_cocktail_admin_finds_by_name(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail_admin('neg')
+        assert len(results) == 1
+        assert results[0].name == 'Negroni'
+
+    def test_search_cocktail_admin_case_insensitive(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail_admin('MARGARITA')
+        assert len(results) == 1
+        assert results[0].name == 'Margarita'
+
+    def test_search_cocktail_admin_includes_inactive(self, seeded_db):
+        seeded_db.execute(
+            "INSERT INTO cocktails (name, subcategory, description, history, method, glass, garnish, abv, price, is_active) "
+            "VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            ['Hidden Sour', 'classic', 'Desc', 'Hist', 'Shaken', 'Coupe', 'None', 15, 8.00, False]
+        )
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail_admin('hidden')
+        assert len(results) == 1
+        assert results[0].name == 'Hidden Sour'
+
+    def test_search_cocktail_admin_empty_query_returns_all(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        results = repo.search_cocktail_admin('')
+        assert len(results) == 3
+
+    def test_search_cocktail_admin_no_match_returns_empty(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        assert repo.search_cocktail_admin('zzznomatch') == []

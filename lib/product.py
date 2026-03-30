@@ -18,7 +18,8 @@ class Product:
             vintage,
             sweetness,
             body,
-            acidity):
+            acidity,
+            image_url):
         
         self.id = id
         self.code = code
@@ -39,6 +40,7 @@ class Product:
         self.acidity = acidity
         self.variants = []
         self.price_by_ml = {}
+        self.image_url = image_url
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -61,6 +63,7 @@ class Product:
         {self.vintage},
         {self.sweetness},
         {self.body},
-        {self.acidity}
+        {self.acidity},
+        {self.image_url}
         )"""
         

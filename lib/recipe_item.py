@@ -10,7 +10,8 @@ class RecipeItem:
             sort_order,
             optional,
             ingredient_name=None,
-            ingredient_category=None
+            ingredient_category=None,
+            ingredient_subcategory=None
     ):
         self.id = id
         self.cocktail_id = cocktail_id
@@ -21,6 +22,7 @@ class RecipeItem:
         self.optional = optional
         self.ingredient_name = ingredient_name
         self.ingredient_category = ingredient_category
+        self.ingredient_subcategory = ingredient_subcategory
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -36,4 +38,5 @@ class RecipeItem:
         {self.optional}
         {self.ingredient_name}
         {self.ingredient_category}
+        {self.ingredient_subcategory}
         )'''

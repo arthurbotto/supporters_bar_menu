@@ -1,0 +1,128 @@
+{% extends "admin/base.html" %}
+{% block title %}Recipe — {{ cocktail.name }}{% endblock %}
+
+{% block content %}
+<datalist id="unit-options">
+  {% for u in ['ml', 'cl', 'oz', 'dash', 'dashes', 'splash', 'top up',
+               'barspoon', 'tsp', 'pinch', 'drop', 'slice', 'wedge',
+               'sprig', 'leaf', 'whole', 'shot'] %}
+    <option value="{{ u }}">
+  {% endfor %}
+</datalist>
+<datalist id="ingredient-category-options">
+  {% for c in ['spirit', 'liqueur', 'juice', 'syrup', 'mixer', 'bitter', 'garnish', 'fresh', 'other'] %}
+    <option value="{{ c }}">
+  {% endfor %}
+</datalist>
+
+<div class="admin-toolbar">
+  <h1 class="admin-page-title" style="margin:0">Recipe — {{ cocktail.name }}</h1>
+  <a href="{{ url_for('admin_cocktail_edit', cocktail_id=cocktail.id) }}" class="btn btn-secondary">← Back to cocktail</a>
+</div>
+
+<table class="admin-table recipe-table" style="margin-bottom:2rem">
+  <thead>
+    <tr>
+      <th>Ingredient</th>
+      <th>Amount</th>
+      <th>Unit</th>
+      <th>Order</th>
+      <th>Optional</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for r in recipe %}
+    <tr>
+        <form method="post" action="{{ url_for('admin_recipe_update', recipe_id=r.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="cocktail_id" value="{{ cocktail.id }}">
+            <td><input type="text" name="ingredient_name" value="{{ r.ingredient_name or '' }}"></td>
+            <td><input type="number" name="amount" value="{{ r.amount }}" step="any" min="0"></td>
+            <td><input type="text" name="unit" value="{{ r.unit or '' }}" list="unit-options"></td>
+            <td><input type="number" name="sort_order" value="{{ r.sort_order }}" min="1"></td>
+            <td>
+              <select name="optional">
+                <option value="false" {{ 'selected' if not r.optional }}>No</option>
+                <option value="true" {{ 'selected' if r.optional }}>Yes</option>
+              </select>
+            </td>
+            <td class="actions">
+                <button type="submit" class="btn btn-secondary btn-sm">Save</button>
+            </td>
+        </form>
+        <td>
+            <form method="post" action="{{ url_for('admin_recipe_delete', recipe_id=r.id) }}"
+                  onsubmit="return confirm('Remove {{ r.ingredient_name | e }} from this recipe?')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="cocktail_id" value="{{ cocktail.id }}">
+                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+            </form>
+        </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="7" style="text-align:center; color:#888; padding:1.5rem">No recipe yet. Add one below.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="admin-form" style="max-width:700px">
+  <p class="form-section-title">Add ingredient</p>
+  <form method="post" action="{{ url_for('admin_recipe_create', cocktail_id=cocktail.id) }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="form-group">
+      <label>Ingredient Name</label>
+      <input type="text" name="ingredient_name"
+             placeholder="e.g. Chase Vodka, Lemon Juice, Tanqueray Gin">
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Category</label>
+        <input type="text" name="ingredient_category"
+               placeholder="e.g. spirit, juice, syrup"
+               list="ingredient-category-options">
+      </div>
+      <div class="form-group">
+        <label>Subcategory</label>
+        <input type="text" name="ingredient_subcategory"
+               placeholder="e.g. gin, vodka, sparkling">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount</label>
+        <input type="number" name="amount" min="0" step="any">
+      </div>
+      <div class="form-group">
+        <label>Unit</label>
+        <input type="text" name="unit"
+               placeholder="ml, dash, top up…" list="unit-options">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Order</label>
+        <input type="number" name="sort_order"
+               value="{{ recipe | length + 1 }}" min="1">
+      </div>
+      <div class="form-group">
+        <label>Optional</label>
+        <select name="optional">
+          <option value="">— unset —</option>
+          <option value="true">Yes</option>
+          <option value="false">No</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add to recipe</button>
+  </form>
+</div>
+{% endblock %}

@@ -11,6 +11,23 @@
     <tr>
       <td>{{ c.name }}</td>
       <td>{{ c.subcategory or '—' }}</td>
+      <td>
+        {% if c.is_active %}
+          <span class="badge badge-active">Active</span>
+        {% else %}
+          <span class="badge badge-inactive">Inactive</span>
+        {% endif %}
+      </td>
+      <td class="actions">
+        <a href="{{ url_for('admin_cocktail_edit', cocktail_id=c.id) }}" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="{{ url_for('admin_cocktail_recipe', cocktail_id=c.id) }}" class="btn btn-secondary btn-sm">Recipe</a>
+        <form method="post" action="{{ url_for('admin_toggle_active_cocktail', cocktail_id=c.id) }}" style="display:inline">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit" class="btn btn-secondary btn-sm">
+            {{ 'Deactivate' if c.is_active else 'Activate' }}
+          </button>
+        </form>
+      </td>
     </tr>
     {% else %}
     <tr>

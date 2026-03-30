@@ -1,8 +1,16 @@
 <h2 class="modal-title">{{ wine.name|e }}</h2>
 
-<div class="modal-image-placeholder">
-  <span>Image coming soon</span>
-</div>
+{% if wine.image_url %}
+  <div class="wine-modal-image-frame">
+    <img src="{{ url_for('static', filename=wine.image_url) }}"
+         alt="{{ wine.name|e }}"
+         class="wine-modal-image">
+  </div>
+{% else %}
+  <div class="modal-image-placeholder">
+    <span>Image coming soon</span>
+  </div>
+{% endif %}
 
 <p class="modal-description">{{wine.description|e}}</p>
 
