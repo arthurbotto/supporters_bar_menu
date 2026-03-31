@@ -1,0 +1,9 @@
+.bar_menu_venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.coverage
+.pytest_cache/
+tests/
+data/

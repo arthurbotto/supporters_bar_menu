@@ -1,0 +1,44 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: postgres
+          POSTGRES_DB: supporters_bar_menu_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run schema on test DB
+        run: psql postgresql://postgres@localhost/supporters_bar_menu_test < seeds/schema.sql
+
+      - name: Run tests
+        env:
+          APP_ENV: test
+          DATABASE_URL: postgresql://postgres@localhost:5432
+          SECRET_KEY: ci-test-secret-key
+          ADMIN_USERNAME: testadmin
+          ADMIN_PASSWORD_HASH: scrypt:32768:8:1$XWWIhSi3kxVMtbIk$06c86ab13bf5ae284eaba28a979fee28484bcf1b061df51d1ef9ef20827a69f3c2d6f402b8d958cb6edffdfc64e76210dce8a24042158d6dbdeb58ea5bf7fa05
+        run: pytest tests/ --ignore=tests/e2e
