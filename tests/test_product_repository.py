@@ -33,7 +33,7 @@ class TestAllWines:
         assert malbec == Product(
             malbec.id, 'WINE-001', 'Malbec Reserva', 'wine', 'red',
             'Plum and spice', 'Catena', 'Argentina', Decimal('13.5'), True, None, True,
-            'Mendoza', 2021, 'dry', 'full', 'medium'
+            'Mendoza', 2021, 'dry', 'full', 'medium', None
         )
 
     def test_wine_with_null_vintage(self, seeded_db):
@@ -74,7 +74,7 @@ class TestAllSpirits:
         assert hendricks == Product(
             hendricks.id, 'SPIRIT-001', 'Hendricks Gin', 'spirit', 'gin',
             None, "Hendrick's", 'Scotland', Decimal('41.4'), None, None, True,
-            None, None, None, None, None
+            None, None, None, None, None, None
         )
     
     def test_all_spirits_excludes_inactive(self, seeded_db):
@@ -129,7 +129,7 @@ class TestAllHotDrinks:
         repo = ProductRepository(seeded_db)
         hot = repo.all_hot_drinks()
         assert len(hot) == 2
-        assert [h.name for h in hot] == ['Espresso', 'English Breakfast Tea']
+        assert [h.name for h in hot] == ['English Breakfast Tea', 'Espresso']
 
     def test_returns_hot_drink_instances(self, seeded_db):
         repo = ProductRepository(seeded_db)
@@ -407,6 +407,55 @@ class TestSearchProduct:
         search_all = repo.search_product('')
         assert len(search_all) == len(all_admin)
 
+    def test_filter_by_category(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('', 'wine')
+        assert all(p.category == 'wine' for p in results)
+        assert any(p.name == 'Malbec Reserva' for p in results)
+        assert not any(p.category == 'beer' for p in results)
+
+    def test_combined_query_and_category(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('camden', 'beer')
+        assert len(results) == 1
+        assert results[0].name == 'Camden Hells'
+
+    def test_category_filter_no_match(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        results = repo.search_product('camden', 'wine')
+        assert results == []
+
+
+class TestAllSnacks:
+
+    def test_returns_all_snacks(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        snacks = repo.all_snacks()
+        assert len(snacks) == 2
+
+    def test_returns_snack_instances(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        snacks = repo.all_snacks()
+        assert all(isinstance(s, Product) for s in snacks)
+
+    def test_all_snacks_excludes_inactive(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        snacks = repo.all_snacks()
+        assert all(s.is_active for s in snacks)
+        assert not any(s.name == 'Nuts' for s in snacks)
+
+    def test_vegan_snack_flagged(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        snacks = repo.all_snacks()
+        crisps = next(s for s in snacks if s.name == 'Crisps')
+        assert crisps.vegan is True
+
+    def test_snack_with_description(self, seeded_db):
+        repo = ProductRepository(seeded_db)
+        snacks = repo.all_snacks()
+        crisps = next(s for s in snacks if s.name == 'Crisps')
+        assert crisps.description == 'Salted crisps'
+
 
 # ===========================================================================
 # Admin write methods
@@ -416,19 +465,19 @@ class TestCreateProduct:
 
     def test_returns_new_id(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None)
+        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None, None)
         assert isinstance(new_id, int)
 
     def test_product_is_findable_after_creation(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None)
+        new_id = repo.create_product('TEST-001', 'Test Beer', 'beer', None, None, None, 'England', 4.5, None, None, None)
         found = repo.find(new_id)
         assert found is not None
         assert found.name == 'Test Beer'
 
     def test_created_product_has_correct_fields(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        new_id = repo.create_product('TEST-002', 'Test Gin', 'spirit', 'gin', 'A test gin', 'Test Co', 'Scotland', 41.0, None, None)
+        new_id = repo.create_product('TEST-002', 'Test Gin', 'spirit', 'gin', 'A test gin', 'Test Co', 'Scotland', 41.0, None, None, None)
         found = repo.find(new_id)
         assert found.code == 'TEST-002'
         assert found.category == 'spirit'
@@ -437,7 +486,7 @@ class TestCreateProduct:
 
     def test_new_product_is_active_by_default(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        new_id = repo.create_product('TEST-003', 'Active Product', 'beer', None, None, None, None, None, None, None)
+        new_id = repo.create_product('TEST-003', 'Active Product', 'beer', None, None, None, None, None, None, None, None)
         found = repo.find(new_id)
         assert found.is_active is True
 
@@ -447,21 +496,21 @@ class TestUpdateProduct:
     def test_name_is_updated(self, seeded_db):
         repo = ProductRepository(seeded_db)
         beer = repo.find_by_code('BEER-001')
-        repo.update_product(beer.id, 'Updated Hells', 'beer', None, None, 'Camden Town', 'England', 4.6, None, None)
+        repo.update_product(beer.id, 'Updated Hells', 'beer', None, None, 'Camden Town', 'England', 4.6, None, None, None)
         updated = repo.find(beer.id)
         assert updated.name == 'Updated Hells'
 
     def test_category_is_updated(self, seeded_db):
         repo = ProductRepository(seeded_db)
         beer = repo.find_by_code('BEER-001')
-        repo.update_product(beer.id, beer.name, 'soft', None, None, None, None, None, None, None)
+        repo.update_product(beer.id, beer.name, 'soft', None, None, None, None, None, None, None, None)
         updated = repo.find(beer.id)
         assert updated.category == 'soft'
 
     def test_null_fields_accepted(self, seeded_db):
         repo = ProductRepository(seeded_db)
         spirit = repo.find_by_code('SPIRIT-001')
-        repo.update_product(spirit.id, spirit.name, spirit.category, spirit.subcategory, None, None, None, None, None, None)
+        repo.update_product(spirit.id, spirit.name, spirit.category, spirit.subcategory, None, None, None, None, None, None, None)
         updated = repo.find(spirit.id)
         assert updated.description is None
         assert updated.producer is None
@@ -510,7 +559,7 @@ class TestUpsertWineDetails:
 
     def test_inserts_wine_details(self, seeded_db):
         repo = ProductRepository(seeded_db)
-        new_id = repo.create_product('WINE-NEW', 'Chablis', 'wine', 'white', None, 'Brocard', 'France', 12.5, None, None)
+        new_id = repo.create_product('WINE-NEW', 'Chablis', 'wine', 'white', None, 'Brocard', 'France', 12.5, None, None, None)
         repo.upsert_wine_details(new_id, 'Chablis AOC', 2022, 'dry', 'light', 'high')
         found = repo.find_wine(new_id)
         assert found.region == 'Chablis AOC'

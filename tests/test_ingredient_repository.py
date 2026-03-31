@@ -82,3 +82,56 @@ class TestSpiritTypes:
         repo = IngredientRepository(db_connection)
         assert repo.spirit_types() == []
 
+
+class TestFindIngredientByName:
+
+    def test_finds_by_name(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        ingredient = repo.find_ingredient_by_name('Gin')
+        assert ingredient is not None
+        assert ingredient.name == 'Gin'
+
+    def test_case_insensitive(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        ingredient = repo.find_ingredient_by_name('GIN')
+        assert ingredient is not None
+        assert ingredient.name == 'Gin'
+
+    def test_returns_none_for_missing(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        assert repo.find_ingredient_by_name('Absinthe') is None
+
+
+class TestCreateIngredient:
+
+    def test_returns_new_id(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        new_id = repo.create_ingredient('Elderflower Cordial', 'cordial', None)
+        assert isinstance(new_id, int)
+
+    def test_ingredient_findable_after_create(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        new_id = repo.create_ingredient('Elderflower Cordial', 'cordial', None)
+        found = repo.find_ingredient(new_id)
+        assert found is not None
+        assert found.name == 'Elderflower Cordial'
+        assert found.category == 'cordial'
+
+
+class TestUpdateIngredient:
+
+    def test_name_updated(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        gin = repo.find_ingredient_by_name('Gin')
+        repo.update_ingredient(gin.id, 'London Dry Gin', 'spirit', 'gin')
+        updated = repo.find_ingredient(gin.id)
+        assert updated.name == 'London Dry Gin'
+
+    def test_category_updated(self, seeded_db):
+        repo = IngredientRepository(seeded_db)
+        campari = repo.find_ingredient_by_name('Campari')
+        repo.update_ingredient(campari.id, campari.name, 'spirit', 'bitter')
+        updated = repo.find_ingredient(campari.id)
+        assert updated.category == 'spirit'
+        assert updated.subcategory == 'bitter'
+

@@ -43,6 +43,11 @@ def test_home_hot_drinks_tile_redirects_correctly(page):
     page.goto("/")
     page.get_by_role("link", name="Hot Drinks").click()
     expect(page).to_have_url("/hot-drinks")
+
+def test_home_snacks_tile_redirects_correctly(page):
+    page.goto("/")
+    page.get_by_role("link", name="Bar Snacks").click()
+    expect(page).to_have_url("/snacks")
     
 
 

@@ -310,6 +310,19 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## Changelog
 
+### 2026-03-31 — Comprehensive test coverage pass
+
+**352 tests total (up from ~180), all passing. Coverage: 89% on app.py (up from ~85%).**
+
+- `seeds/test_products.sql` — added 2 active snacks + 1 inactive + variants
+- `test_product_repository.py` — `TestAllSnacks` (5 tests), extended `TestSearchProduct` with category filter tests; fixed `image_url` arg in existing write tests; fixed hot drinks ordering (now `ORDER BY p.name`)
+- `test_cocktail_repository.py` — `TestCocktailAdminWrite`: create/update/set_active/delete
+- `test_ingredient_repository.py` — `TestFindIngredientByName`, `TestCreateIngredient`, `TestUpdateIngredient`
+- `test_recipe_item_repository.py` — `TestCreateRecipe`, `TestUpdateRecipe`, `TestDeleteRecipe`
+- `test_app.py` — `TestSnacksRoute`, `TestAdminProductsCategoryFilter`, `TestAdminCreateCocktail`, `TestAdminEditCocktail`, `TestAdminDeleteCocktail`, `TestAdminToggleActiveCocktail`, `TestAdminCocktailRecipe`; validation failures and 404 cases
+- `tests/e2e/test_home.py` — added snacks tile redirect test
+- `tests/e2e/test_snacks.py` — new file: home button, list renders, price, vegan label
+
 ### 2026-03-31 — Bar Snacks page, home footer, admin products filter polish
 
 **Bar Snacks**

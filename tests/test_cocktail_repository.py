@@ -35,7 +35,7 @@ class TestAll:
         negroni = next(c for c in cocktails if c.name == "Negroni")
         assert negroni == Cocktail(
             1, "Negroni", "from_menu", "Bitter Italian classic", "Invented in Florence",
-            "Stirred", "Rocks", "Orange peel", Decimal("24"), Decimal("9.50"), True
+            "Stirred", "Rocks", "Orange peel", Decimal("24"), Decimal("9.50"), True, None
         )
 
     def test_returns_empty_list_when_no_cocktails(self, db_connection):
@@ -256,3 +256,48 @@ class TestAdminMethods:
     def test_search_cocktail_admin_no_match_returns_empty(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         assert repo.search_cocktail_admin('zzznomatch') == []
+
+
+class TestCocktailAdminWrite:
+
+    def test_create_cocktail_returns_id(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        new_id = repo.create_cocktail('Spritz', 'classic', 'Light and bubbly', None, 'Built', 'Wine glass', 'Orange slice', 8, 7.50, None)
+        assert isinstance(new_id, int)
+
+    def test_created_cocktail_findable(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        new_id = repo.create_cocktail('Spritz', 'classic', 'Light and bubbly', None, 'Built', 'Wine glass', 'Orange slice', 8, 7.50, None)
+        found = repo.find_cocktail(new_id)
+        assert found is not None
+        assert found.name == 'Spritz'
+
+    def test_update_cocktail_changes_name(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        repo.update_cocktail(1, 'Negroni Sbagliato', 'from_menu', 'Bitter Italian classic', 'Invented in Florence', 'Stirred', 'Rocks', 'Orange peel', 24, 9.50, None)
+        updated = repo.find_cocktail(1)
+        assert updated.name == 'Negroni Sbagliato'
+
+    def test_set_active_deactivates_cocktail(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        repo.set_active(1, False)
+        cocktails = repo.all()
+        assert not any(c.name == 'Negroni' for c in cocktails)
+
+    def test_set_active_reactivates_cocktail(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        repo.set_active(1, False)
+        repo.set_active(1, True)
+        cocktails = repo.all()
+        assert any(c.name == 'Negroni' for c in cocktails)
+
+    def test_delete_cocktail_not_findable_after(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        repo.delete_cocktail(1)
+        assert repo.find_cocktail(1) is None
+
+    def test_delete_cocktail_not_in_all(self, seeded_db):
+        repo = CocktailRepository(seeded_db)
+        repo.delete_cocktail(1)
+        cocktails = repo.all()
+        assert not any(c.name == 'Negroni' for c in cocktails)

@@ -421,3 +421,209 @@ class TestAdminVariants:
         response = admin_client.get('/admin/products/1/variants')
         # After deletion, only 175ml remains — 125ml label should be absent
         assert response.data.count(b'125ml') == 0
+
+
+class TestSnacksRoute:
+
+    def test_returns_200(self, web_client, seeded_db_products):
+        response = web_client.get('/snacks')
+        assert response.status_code == 200
+
+    def test_returns_snacks(self, web_client, seeded_db_products):
+        response = web_client.get('/snacks')
+        assert b'Crisps' in response.data
+        assert b'Olives' in response.data
+
+    def test_excludes_inactive_snacks(self, web_client, seeded_db_products):
+        response = web_client.get('/snacks')
+        assert b'Nuts' not in response.data
+
+    def test_shows_vegan_label(self, web_client, seeded_db_products):
+        response = web_client.get('/snacks')
+        assert b'(ve)' in response.data
+
+    def test_shows_description(self, web_client, seeded_db_products):
+        response = web_client.get('/snacks')
+        assert b'Salted crisps' in response.data
+
+
+class TestAdminProductsCategoryFilter:
+
+    def test_search_filters_by_category(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products?category=wine')
+        assert b'Malbec Reserva' in response.data
+        assert b'Camden Hells' not in response.data
+
+    def test_category_and_query_combined(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products?q=camden&category=beer')
+        assert b'Camden Hells' in response.data
+        assert b'Guinness' not in response.data
+
+    def test_category_filter_no_match(self, admin_client, seeded_db_products):
+        response = admin_client.get('/admin/search_products?q=camden&category=wine')
+        assert b'Camden Hells' not in response.data
+
+
+class TestAdminToggleActiveCocktailInvalidId:
+
+    def test_toggle_invalid_id_still_redirects(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/99999/toggle')
+        assert response.status_code == 302
+
+
+class TestAdminCreateCocktail:
+
+    def test_creates_cocktail_and_redirects_to_recipe(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/new', data={
+            'name': 'Whisky Sour',
+            'subcategory': 'classic',
+            'abv': '25',
+            'price': '9.00',
+        })
+        assert response.status_code == 302
+        assert '/admin/cocktails/' in response.headers['Location']
+        assert 'recipe' in response.headers['Location']
+
+    def test_new_cocktail_appears_in_admin_search(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/cocktails/new', data={
+            'name': 'Whisky Sour',
+            'subcategory': 'classic',
+            'abv': '25',
+            'price': '9.00',
+        })
+        response = admin_client.get('/admin/search_cocktails?q=Whisky+Sour')
+        assert b'Whisky Sour' in response.data
+
+    def test_create_cocktail_missing_fields_returns_form(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/new', data={
+            'name': '',
+            'subcategory': '',
+        })
+        assert response.status_code == 200
+        assert b'required' in response.data.lower()
+
+    def test_get_new_cocktail_form_returns_200(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/new')
+        assert response.status_code == 200
+
+
+class TestAdminEditCocktail:
+
+    def test_edit_form_returns_200(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/1/edit')
+        assert response.status_code == 200
+
+    def test_edit_form_prepopulates_name(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/1/edit')
+        assert b'Negroni' in response.data
+
+    def test_update_redirects_to_cocktails(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/1/edit', data={
+            'name': 'Negroni Updated',
+            'subcategory': 'from_menu',
+            'abv': '24',
+            'price': '9.50',
+        })
+        assert response.status_code == 302
+        assert '/admin/cocktails' in response.headers['Location']
+
+    def test_updated_name_appears_in_search(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/cocktails/1/edit', data={
+            'name': 'Negroni Updated',
+            'subcategory': 'from_menu',
+            'abv': '24',
+            'price': '9.50',
+        })
+        response = admin_client.get('/admin/search_cocktails?q=Negroni+Updated')
+        assert b'Negroni Updated' in response.data
+
+    def test_edit_missing_fields_returns_form(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/1/edit', data={
+            'name': '',
+            'subcategory': '',
+        })
+        assert response.status_code == 200
+
+    def test_edit_invalid_id_returns_404(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/99999/edit')
+        assert response.status_code == 404
+
+
+class TestAdminDeleteCocktail:
+
+    def test_delete_redirects_to_cocktails(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/1/delete')
+        assert response.status_code == 302
+        assert '/admin/cocktails' in response.headers['Location']
+
+    def test_deleted_cocktail_not_in_search(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/cocktails/1/delete')
+        response = admin_client.get('/admin/search_cocktails?q=Negroni')
+        assert b'Negroni' not in response.data
+
+
+class TestAdminToggleActiveCocktail:
+
+    def test_toggle_deactivates_active_cocktail(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/cocktails/1/toggle')
+        response = admin_client.get('/search_cocktails')
+        assert b'Negroni' not in response.data
+
+    def test_toggle_redirects(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/1/toggle')
+        assert response.status_code == 302
+
+
+class TestAdminCocktailRecipe:
+
+    def test_recipe_page_returns_200(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/1/recipe')
+        assert response.status_code == 200
+
+    def test_recipe_page_shows_ingredients(self, admin_client, seeded_db_cocktails):
+        response = admin_client.get('/admin/cocktails/1/recipe')
+        assert b'Gin' in response.data
+
+    def test_create_recipe_item_redirects(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/cocktails/1/recipe/new', data={
+            'ingredient_name': 'Angostura Bitters',
+            'amount': '2',
+            'unit': 'dash',
+            'sort_order': '4',
+            'optional': '',
+        })
+        assert response.status_code == 302
+
+    def test_created_item_appears_on_recipe_page(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/cocktails/1/recipe/new', data={
+            'ingredient_name': 'Angostura Bitters',
+            'amount': '2',
+            'unit': 'dash',
+            'sort_order': '4',
+            'optional': '',
+        })
+        response = admin_client.get('/admin/cocktails/1/recipe')
+        assert b'Angostura Bitters' in response.data
+
+    def test_edit_recipe_item_redirects(self, admin_client, seeded_db_cocktails):
+        response = admin_client.post('/admin/recipe/1/edit', data={
+            'cocktail_id': '1',
+            'ingredient_name': 'Gin',
+            'amount': '35',
+            'unit': 'ml',
+            'sort_order': '1',
+            'optional': 'false',
+        })
+        assert response.status_code == 302
+
+    def test_delete_recipe_item_redirects(self, admin_client, seeded_db_cocktails):
+        # recipe_item id=1 is Gin in Negroni (first INSERT in test_cocktails.sql)
+        response = admin_client.post('/admin/recipe/1/delete', data={'cocktail_id': '1'})
+        assert response.status_code == 302
+
+    def test_deleted_item_not_on_recipe_page(self, admin_client, seeded_db_cocktails):
+        admin_client.post('/admin/recipe/1/delete', data={'cocktail_id': '1'})
+        response = admin_client.get('/admin/cocktails/1/recipe')
+        # 'value="Gin"' only appears if Gin is still a recipe item (not in any placeholder)
+        assert b'value="Gin"' not in response.data
+        assert b'Campari' in response.data

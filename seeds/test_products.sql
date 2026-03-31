@@ -73,3 +73,13 @@ INSERT INTO product_variants (product_id, serve_label, serve_ml, price, sort_ord
 INSERT INTO product_variants (product_id, serve_label, serve_ml, price, sort_order) VALUES
   ((SELECT id FROM products WHERE code = 'MOCK-001'), 'Glass', NULL, 6.00, 1),
   ((SELECT id FROM products WHERE code = 'MOCK-002'), 'Glass', NULL, 6.00, 1);
+
+-- Snacks
+INSERT INTO products (code, name, category, subcategory, description, producer, country, abv, vegan, organic, is_active) VALUES
+  ('SNACK-001', 'Crisps',  'snack', NULL, 'Salted crisps', NULL, NULL, NULL, TRUE,  NULL, TRUE),
+  ('SNACK-002', 'Olives',  'snack', NULL, NULL,            NULL, NULL, NULL, FALSE, NULL, TRUE),
+  ('SNACK-OFF', 'Nuts',    'snack', NULL, 'Mixed nuts',    NULL, NULL, NULL, TRUE,  NULL, FALSE);
+
+INSERT INTO product_variants (product_id, serve_label, serve_ml, price, sort_order) VALUES
+  ((SELECT id FROM products WHERE code = 'SNACK-001'), 'Portion', NULL, 2.50, 1),
+  ((SELECT id FROM products WHERE code = 'SNACK-002'), 'Portion', NULL, 3.00, 1);
