@@ -86,7 +86,7 @@
     <label>Image</label>
     {% if cocktail and cocktail.image_url %}
       <img src="{{ url_for('static', filename=cocktail.image_url) }}"
-            alt="Current image" style="max-height:120px; display:block; margin-bottom:0.5rem; border-radius:4px">
+            alt="Current image" style="max-height:120px; max-width:240px; width:auto; height:auto; display:block; margin-bottom:0.5rem; border-radius:4px">
       <span class="hint">Upload a new image to replace the current one.</span>
     {% endif %}
     <input type="file" name="image" accept="image/jpeg,image/png,image/webp">

@@ -128,6 +128,33 @@ body {
   color: #666;
 }
 
+/* ---- Products table column widths ---- */
+.products-table {
+  table-layout: fixed;
+}
+.products-table th:nth-child(1) { width: 28%; } /* Name */
+.products-table th:nth-child(2) { width: 9%; }  /* Category */
+.products-table th:nth-child(3) { width: 10%; } /* Subcategory */
+.products-table th:nth-child(4) { width: 16%; } /* Code */
+.products-table th:nth-child(5) { width: 8%; }  /* Status */
+/* Actions takes the remaining ~29% */
+
+.products-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+.products-table td:nth-child(1),
+.products-table td:nth-child(6) {
+  white-space: normal;
+  overflow: visible;
+  max-width: none;
+}
+.products-table .code-cell {
+  font-size: 0.72rem;
+}
+
 /* ---- Status badges ---- */
 .badge {
   display: inline-block;
@@ -145,6 +172,60 @@ body {
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1rem;
+}
+
+/* ---- Filter bar (products page) ---- */
+.admin-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1rem;
+}
+
+.admin-filter-search input {
+  width: 100%;
+  max-width: 360px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-family: inherit;
+  color: #222;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.admin-filter-search input:focus {
+  outline: none;
+  border-color: #2c2c2c;
+  box-shadow: 0 0 0 3px rgba(44,44,44,0.08);
+}
+.admin-filter-search input::placeholder { color: #aaa; }
+
+.admin-filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.admin-filter-controls button {
+  padding: 0.3rem 0.85rem;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #fff;
+  color: #444;
+  font-size: 0.8rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+.admin-filter-controls button:hover {
+  background: #f0f0f0;
+  border-color: #aaa;
+}
+.admin-filter-controls button.active {
+  background: #2c2c2c;
+  border-color: #2c2c2c;
+  color: #fff;
 }
 
 /* ---- Admin search bar ---- */
@@ -374,6 +455,7 @@ body {
   .form-row { grid-template-columns: 1fr; }
 
   .admin-search { max-width: 100%; }
+  .admin-filter-search input { max-width: 100%; }
 
   /* Form action buttons: wrap and stretch on mobile */
   .form-actions {

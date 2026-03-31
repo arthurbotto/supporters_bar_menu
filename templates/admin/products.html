@@ -10,20 +10,46 @@
   <a href="{{ url_for('admin_product_new') }}" class="btn btn-primary">+ New product</a>
 </div>
 
-<div class="admin-search">
-  <input
-    type="text"
-    name="q"
-    placeholder="Search product"
-    hx-get="/admin/search_products"
-    hx-trigger="load, keyup changed delay:300ms"
-    hx-target="#productResults"
-    hx-swap="innerHTML"
-    autocomplete="off"
-  >
+<div id="admin-filters" class="admin-filters">
+  
+  <div class="admin-filter-search">
+    <input
+      type="text"
+      name="q"
+      placeholder="Search product"
+      hx-get="/admin/search_products"
+      hx-trigger="load, keyup changed delay:300ms"
+      hx-target="#productResults"
+      hx-swap="innerHTML"
+      hx-include="#admin-filters"
+      autocomplete="off"
+    >
+  </div>
+
+  <div class="admin-filter-controls">
+    <button type="button" name="category" value=""
+     hx-get="/admin/search_products"
+     hx-trigger="click"
+     hx-include="#admin-filters"
+     hx-target="#productResults"
+     hx-swap="innerHTML"
+     >All</button>
+    {% for cat in ['beer', 'hot', 'mocktail', 'soft', 'spirit', 'wine', 'snack'] %}
+    <button type="button" name="category" value="{{ cat }}"
+     hx-get="/admin/search_products"
+     hx-trigger="click"
+     hx-include="#admin-filters"
+     hx-target="#productResults"
+     hx-swap="innerHTML"
+     >{{ cat }}</button>
+    {% endfor %}
+  </div>
 </div>
 
-<table class="admin-table" id="productResults">
+<table class="admin-table products-table" id="productResults">
   {% include "admin/products_list.html" %}
 </table>
+{% endblock %}
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/admin/products.js') }}"></script>
 {% endblock %}

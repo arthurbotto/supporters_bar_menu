@@ -124,6 +124,16 @@ spirit_grappa_amorosa_di_settembre_poli,Measure,50.0,18.0,1
 spirit_bepi_tosolini_express_premium_espresso_coffee_liqueur_bepi_tosolini,Measure,50.0,8.0,1
 spirit_janneau_vsop_armagnac_janneau,Measure,50.0,11.0,1
 spirit_courvoisier_vsop_fine_cognac_courvoisier,Measure,50.0,13.0,1
+spirit_jameson_irish_whiskey_jameson,Measure,50,11.0,1
+spirit_jack_daniel_s_tennessee_rye_jack_daniel_s,Measure,50,11.0,1
+spirit_bulleit_bourbon_bulleit,Measure,50,11.0,1
+spirit_amaro_montenegro_montenegro,Measure,50,9.0,1
+spirit_cynar_cynar,Measure,50,7.0,1
+spirit_aperol_aperol,Measure,50,5.5,1
+spirit_tanqueray_no_ten_tanqueray,Measure,50,12.0,1
+spirit_chase_gb_extra_dry_gin_chase,Measure,50,9.0,1
+spirit_mount_gay_eclipse_mount_gay,Measure,50,7.5,1
+spirit_chase_premium_vodka_chase,Measure,50,9.0,1
 beer_peroni_nastro_azzurro_non_alcoholic_peroni,Bottle,330.0,4.5,1
 beer_the_small_beer_session_pale_ale_the_small_beer,Bottle,330.0,6.5,1
 beer_peroni_better_peroni_peroni,Bottle,330.0,5.5,1
@@ -164,3 +174,9 @@ hot_flat_white,Cup,,4.5,1
 hot_americano,Cup,,4.0,1
 hot_bicerin,Cup,,4.5,1
 hot_tea_and_infusions,Cup,,3.6,1
+hot_cortado,Cup,,3.5,1
+hot_mocha,Cup,,4.5,1
+snack_nocellara_green_olives_belazu,Serve,,4.0,1
+snack_mixed_nuts_belazu,Serve,,3.5,1
+snack_fennel_taralli_belazu,Serve,,3.5,1
+snack_semi_dried_tomato_tapenade_and_seeded_crackers,Serve,,4.5,1

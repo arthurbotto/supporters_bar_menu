@@ -85,7 +85,13 @@ class ProductRepository:
 
     def all_hot_drinks(self):
         rows = self._connection.execute(
-            "SELECT p.* FROM products p WHERE p.category = 'hot' AND p.is_active = TRUE ORDER BY p.id ASC"
+            "SELECT p.* FROM products p WHERE p.category = 'hot' AND p.is_active = TRUE ORDER BY p.name"
+        )
+        return [self._row_to_product(r) for r in rows]
+    
+    def all_snacks(self):
+        rows = self._connection.execute(
+            "SELECT p.* FROM products p WHERE p.category = 'snack' AND p.is_active = TRUE ORDER BY p.id ASC"
         )
         return [self._row_to_product(r) for r in rows]
 
@@ -158,17 +164,19 @@ class ProductRepository:
         )
         return [row["producer"] for row in rows]
 
-    def search_product(self, query=''):
-        q = f"%{query.strip()}%"
-
+    def search_product(self, query='', category=''):
+        conditions = []
+        params = []
+        if query.strip():
+            conditions.append("p.name ILIKE %s")
+            params.append(f"%{query.strip()}%")
+        if category:
+            conditions.append("p.category = %s")
+            params.append(category)
+        where = ("WHERE " + " AND ".join(conditions)) if conditions else ""
         rows = self._connection.execute(
-            """
-            SELECT p.*
-            FROM products p
-            WHERE p.name ILIKE %s
-            ORDER BY p.category, p.name
-        """, [q])
-
+            f"SELECT p.* FROM products p {where} ORDER BY p.category, p.name",
+            params)
         return [self._row_to_product(r) for r in rows]
 
 

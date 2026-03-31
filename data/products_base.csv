@@ -57,25 +57,32 @@ wine_angelorum_recioto_della_valpolicella_masi,Angelorum Recioto della Valpolice
 item,,,,,,,,,,
 spirit_searcys_london_dry_gin_searcys,Searcys London Dry Gin,spirit,gin,TBD,40,,,Searcys,England,TRUE
 spirit_tanqueray_london_dry_gin_tanqueray,Tanqueray London Dry Gin,spirit,gin,TBD,41.3,,,Tanqueray,England,TRUE
+spirit_tanqueray_no_ten_tanqueray,Tanqueray No. TEN,spirit,gin,TBD,47.3,,,Tanqueray,England,TRUE
 spirit_hendrick_s_hendrick_s,Hendrick's,spirit,gin,TBD,41.4,,,Hendrick's,Scotland,TRUE
 spirit_cygnet_dry_gin_cygnet,Cygnet Dry Gin,spirit,gin,TBD,40,,,Cygnet,Wales,TRUE
+spirit_chase_gb_extra_dry_gin_chase,Chase GB Extra Dry Gin,spirit,gin,TBD,40,,,Chase,England,TRUE
 item,,,,,,,,,,
-spirit_42_below_42_below,42 Below,spirit,vodka,TBD,40,,,42 Below,New Zealand,TRUE
+spirit_42_below_42_below,42 Below,spirit,vodka,TBD,40,,,42 Below,New Zealand,FALSE
 spirit_sipsmith_sipping_vodka_sipsmith,Sipsmith Sipping Vodka,spirit,vodka,TBD,40,,,Sipsmith,England,TRUE
 spirit_grey_goose_l_original_grey_goose,Grey Goose L'Original,spirit,vodka,TBD,40,,,Grey Goose,France,TRUE
+spirit_chase_premium_vodka_chase,Chase Premium Vodka,spirit,vodka,TBD,40,,,Chase,England,TRUE
 item,,,,,,,,,,
 spirit_bacardi_carta_blanca_bacardi,Bacardi Carta Blanca,spirit,rum,TBD,37.5,,,Bacardi,Puerto Rico,TRUE
 spirit_cargo_cult_banana_spiced_rum_cargo_cult,Cargo Cult Banana Spiced Rum,spirit,rum,TBD,38,,,Cargo Cult,Australia,TRUE
-spirit_xr_matusalem_15_gran_reserve_matusalem,XR Matusalem 15 Gran Reserve,spirit,rum,TBD,40,,,Matusalem,Dominican Republic,TRUE
+spirit_xr_matusalem_15_gran_reserve_matusalem,Ron Matusalem Gran Reserva 15,spirit,rum,TBD,40,,,Matusalem,Dominican Republic,TRUE
+spirit_mount_gay_eclipse_mount_gay,Mount Gay Eclipse,spirit,rum,TBD,40,,,Mount Gay,Barbados,TRUE
 item,,,,,,,,,,
 spirit_olmeca_silver_olmeca,Olmeca Silver,spirit,tequila,TBD,35,,,Olmeca,Mexico,TRUE
 spirit_quiquiriqu_mezcal_quiquiriqu,Quiquiriquí­ Mezcal,spirit,tequila,TBD,45,,,Quiquiriquí­,Mexico,TRUE
 spirit_patron_reposado_patron,Patron Reposado,spirit,tequila,TBD,40,,,Patron,Mexico,TRUE
 item,,,,,,,,,,
 spirit_jack_daniel_s_old_no7_jack_daniel_s,Jack Daniel's Old No7,spirit,whisky,TBD,40,,,Jack Daniel's,USA,TRUE
+spirit_jack_daniel_s_tennessee_rye_jack_daniel_s,Jack Daniel's Tennessee Rye,spirit,whisky,TBD,45,,,Jack Daniel's,USA,TRUE
+spirit_bulleit_bourbon_bulleit,Bulleit Bourbon,spirit,whisky,TBD,45,,,Bulleit,USA,TRUE
 spirit_chivas_regal_12yo_chivas_regal,Chivas Regal 12yo,spirit,whisky,TBD,40,,,Chivas Regal,Scotland,TRUE
 spirit_johnnie_walker_black_label_johnnie_walker,Johnnie Walker Black Label,spirit,whisky,TBD,40,,,Johnnie Walker,Scotland,TRUE
 spirit_ardbeg_10yo_ardbeg,Ardbeg 10yo,spirit,whisky,TBD,46,,,Ardbeg,Scotland,TRUE
+spirit_jameson_irish_whiskey_jameson,Jameson Irish Whiskey,spirit,whisky,TBD,40,,,Jameson,Ireland,TRUE
 item,,,,,,,,,,
 spirit_mancino_rosso_amaranto_mancino,Mancino Rosso Amaranto,spirit,vermouth,TBD,16,,,Mancino,,TRUE
 spirit_mancino_bianco_ambrato_mancino,Mancino Bianco Ambrato,spirit,vermouth,TBD,16,,,Mancino,,TRUE
@@ -87,6 +94,9 @@ spirit_disaronno_amaretto_disaronno,Disaronno Amaretto,spirit,liqueur,TBD,28,,,D
 spirit_nardini_bianco_grappa_nardini,Nardini Bianco Grappa,spirit,liqueur,TBD,40,,,Nardini,Italy,TRUE
 spirit_grappa_amorosa_di_settembre_poli,Grappa Amorosa di Settembre,spirit,liqueur,TBD,40,,,Poli,Italy,TRUE
 spirit_bepi_tosolini_express_premium_espresso_coffee_liqueur_bepi_tosolini,Bepi Tosolini Express Premium Espresso Coffee Liqueur,spirit,liqueur,TBD,28,,,Bepi Tosolini,Italy,TRUE
+spirit_amaro_montenegro_montenegro,Amaro Montenegro,spirit,liqueur,TBD,23,,,Montenegro,Italy,TRUE
+spirit_cynar_cynar,Cynar,spirit,liqueur,TBD,16.5,,,Cynar,Italy,TRUE
+spirit_aperol_aperol,Aperol,spirit,liqueur,TBD,11,,,Aperol,Italy,TRUE
 item,,,,,,,,,,
 spirit_janneau_vsop_armagnac_janneau,Janneau VSOP Armagnac,spirit,brandy,TBD,40,,,Janneau,France,TRUE
 spirit_courvoisier_vsop_fine_cognac_courvoisier,Courvoisier VSOP Fine Cognac,spirit,brandy,TBD,40,,,Courvoisier,France,TRUE
@@ -134,4 +144,10 @@ hot_latte,Latte,hot,coffee,,,,,,,TRUE
 hot_flat_white,Flat white,hot,coffee,,,,,,,TRUE
 hot_americano,Americano,hot,coffee,,,,,,,TRUE
 hot_bicerin,Bicerin,hot,coffee,,,,,,,TRUE
-hot_tea_and_infusions,Tea and infusions,hot,tea,"English Breakfast, Earl Grey Imperial, Rooibos African Nights, Green Tea, Peppermint Moroccan Secret, Fresh Mint",,,,,,TRUE
+hot_cortado,Cortado,hot,coffee,,,,,,,TRUE
+hot_mocha,Mocha,hot,coffee,,,,,,,TRUE
+hot_tea_and_infusions,Tea and infusions,hot,tea,"English Breakfast, Earl Grey Imperial, Rooibos African Nights, Green Tea, Peppermint Moroccan Secret, Chamomile, Fresh Mint",,,,,,TRUE
+snack_nocellara_green_olives_belazu,Nocellara Green Olives,snack,bar_snack,"Large green olives with a buttery texture, gentle brine and a clean, savoury finish",,TRUE,,Belazu,,TRUE
+snack_mixed_nuts_belazu,Mixed Nuts,snack,bar_snack,"Roasted luxury nut mix with almonds, cashews, macadamias and pecans, lightly spiced for a warm savoury finish",,TRUE,,Belazu,,TRUE
+snack_fennel_taralli_belazu,Fennel Taralli,snack,bar_snack,"Crisp Italian savoury biscuits with fennel seeds and a light, moreish crunch",,TRUE,,Belazu,,TRUE
+snack_semi_dried_tomato_tapenade_and_seeded_crackers,Semi-dried Tomato Tapenade & Seeded Crackers,snack,bar_snack,"Rich semi-dried tomato tapenade served with seeded crackers for a savoury, tangy bite",,TRUE,,,,TRUE

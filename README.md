@@ -8,7 +8,7 @@ A Flask-based digital bar menu for browsing all drink categories.
 
 ## What it is
 
-A web app serving as the in-house menu for Supporters House Bar. Customers can browse cocktails, mocktails, wines, spirits, beers, soft drinks and hot drinks — search by name or ingredient, expand ingredient accordions, and open modals with full item details. Built with Flask, PostgreSQL, HTMX for live search, and vanilla JS for modals.
+A web app serving as the in-house menu for Supporters House Bar. Customers can browse cocktails, mocktails, wines, spirits, beers, soft drinks, hot drinks and bar snacks — search by name or ingredient, expand ingredient accordions, and open modals with full item details. Built with Flask, PostgreSQL, HTMX for live search, and vanilla JS for modals.
 
 ---
 
@@ -21,6 +21,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Beers** — flat list with price columns per serve size
 - **Soft Drinks** — grouped by subcategory (classic, juice, fever tree, san pellegrino, water)
 - **Hot Drinks** — flat list with name and price
+- **Bar Snacks** — flat list with name, vegan label, description, and price per serve size
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
 - **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
 - **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited

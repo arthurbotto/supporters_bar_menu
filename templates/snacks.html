@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Snacks{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/snacks.css') }}">
+{% endblock %}
+
+{% block content %}
+  <header class="header">
+    <h1 class="title">Bar Snacks</h1>
+    <a class="home-btn" href="{{ url_for('get_home_page') }}">Home</a>
+  </header>
+
+  <main class="container">
+    <div style="--price-cols: {{ sizes|length }}">
+      <ul class="product-list">
+        {% for snack in snacks %}
+          <li class="product-item">
+            <div class="snack-row">
+              <div class="product-name-stack">
+                <span class="product-name">{{ snack.name|e }} - {{ ' (ve)' if snack.vegan else '' }}</span>
+                {% if snack.description %}
+                  <span class="subtitle">{{ snack.description }}</span>
+                {% endif %}
+                {% for variant in snack.variants %}
+              </div>
+                  <span class="product-price-cell">£{{ "%.2f"|format(variant.price) }}</span>
+                {% endfor %}
+            </div>
+          </li>
+        {% endfor %}
+    </ul>
+  </div>
+  </main>
+{% endblock %}

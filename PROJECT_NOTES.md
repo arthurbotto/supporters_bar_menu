@@ -16,7 +16,8 @@ A digital bar menu for Supporters House Bar. Customers browse all drink categori
 - **Beers page** — flat list with price columns per serve size
 - **Soft Drinks page** — grouped by subcategory (fever_tree, san_pellegrino, classic, juice, water)
 - **Hot Drinks page** — flat list with name and price
-- **Home page** — landing page with tiles linking to all category pages
+- **Bar Snacks page** — flat list with name, vegan label, description, and price per serve size
+- **Home page** — landing page with tiles linking to all category pages; footer with allergen info and pricing notes
 
 Run with: `python app.py` (port 5001)
 
@@ -72,6 +73,7 @@ codebase returns model objects, not dicts.
 | `GET /beers` | `beers.html` | flat list, price columns per serve |
 | `GET /softs` | `softs.html` | grouped by subcategory |
 | `GET /hot-drinks` | `hot_drinks.html` | flat list |
+| `GET /snacks` | `snacks.html` | flat list with vegan label and price per serve |
 
 `GET /products` has been removed.
 
@@ -149,6 +151,12 @@ No HTML changes were needed.
 - `all_hot_drinks()` queries `category = 'hot'`, filters `is_active = TRUE`
 - `hot_drinks.css` adds only `.hot-row` (flex, space-between); all other styles from `base.css`
 
+### Bar Snacks (fully built)
+
+- `GET /snacks` — flat list, name + vegan label + description + price per serve size
+- `all_snacks()` queries `category = 'snack'`, filters `is_active = TRUE`, ordered by id
+- `snacks.css` adds only `.snack-row` (flex, space-between); all other styles from `base.css`
+
 ### is_active field (added)
 
 `products.is_active BOOLEAN NOT NULL DEFAULT TRUE`
@@ -177,6 +185,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `all_beers()` | Active beers |
 | `all_softs()` | Active soft drinks (`category = 'soft'`; juices are `subcategory = 'juice'`) |
 | `all_hot_drinks()` | Active hot drinks (`category = 'hot'`) |
+| `all_snacks()` | Active snacks (`category = 'snack'`), ordered by id |
 | `product_variants(product_id)` | All variants for a given product |
 | `find(product_id)` | Single product by id (no is_active filter) |
 | `find_wine(wine_id)` | Single wine by id with LEFT JOIN on `wine_details`; filters by `category='wine'` |
@@ -212,6 +221,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `mocktails.css` | (empty — mocktails uses base.css classes only) |
 | `softs.css` | (empty — softs uses base.css classes only) |
 | `hot_drinks.css` | `.hot-row` (flex, space-between) |
+| `snacks.css` | `.snack-row` (flex, space-between) |
 
 **The accordion evolution:** the original `menu.js` (kept in `old_menu_dot_js.md` for reference)
 attached `addEventListener` to each `.cocktail-toggle` on page load. After HTMX was added for search,
@@ -299,6 +309,26 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 ---
 
 ## Changelog
+
+### 2026-03-31 — Bar Snacks page, home footer, admin products filter polish
+
+**Bar Snacks**
+- `GET /snacks` route, `all_snacks()` repository method, `snacks.html` template, `snacks.css`
+- Flat list: name, vegan label `(ve)`, description (if set), price per serve size
+- Home page tile added; admin category filter updated to include `snack`
+
+**Home page footer**
+- `.footer` + `.footer-description` added to `home.html` — allergen info, pricing notes, service charge
+- `home.css`: `.footer` (separator line, centred, max-width 640px); `.footer-description` (`0.78rem`, muted, `var(--muted)`)
+
+**Admin products filter**
+- Category filter changed from `<select>` to pill `<button>` elements (All + beer/hot/mocktail/soft/spirit/wine/snack)
+- `search_product(query, category)` now uses dynamic WHERE — empty category returns all products; empty query returns all names
+- Active button highlighted via `.active` class toggled by `static/js/admin/products.js` (extracted from inline script; loaded via `{% block scripts %}` at bottom of body)
+- Admin products table: `table-layout: fixed` with explicit column widths; code column truncated with ellipsis; actions column always visible
+
+**`templates/base.html` created**
+- All customer-facing templates extend `base.html`; consistent `<head>`, admin bar link, `{% block scripts %}` slot
 
 ### 2026-03-30 — Admin cocktail CRUD, image upload, rate limiting, UX polish
 

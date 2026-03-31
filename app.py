@@ -399,6 +399,23 @@ def get_hot_drinks_page():
     
     return render_template('hot_drinks.html', hot_drinks=hot_drinks)
 
+# ---------------
+# snacks page
+# ---------------
+
+@app.route('/snacks')
+def get_snacks_page():
+    connection = get_flask_database_connection(app)
+    product_repo = ProductRepository(connection)
+    snacks = product_repo.all_snacks()
+
+    for snack in snacks:
+        snack.variants = product_repo.product_variants(snack.id)
+    
+    return render_template('snacks.html', snacks=snacks)
+
+
+
 
 # ===========================
 # Admin routes
@@ -446,13 +463,11 @@ def admin_products():
 @login_required
 def admin_search_products():
     q = request.args.get('q', '').strip()
+    category = request.args.get('category', '')
     connection = get_flask_database_connection(app)
     repo = ProductRepository(connection)
 
-    if q == '':
-        products = repo.all_products_for_admin()
-    else:
-        products = repo.search_product(q)
+    products = repo.search_product(q, category)
     
     return render_template('admin/products_list.html', products=products)
 
