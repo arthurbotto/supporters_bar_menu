@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 import uuid
 from decimal import Decimal, InvalidOperation
@@ -19,6 +20,7 @@ from lib.product_code import make_product_code
 from lib.recipe_item_repository import RecipeItemRepository
 
 app = Flask(__name__)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=2)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-fallback-change-me')
 app.config['WTF_CSRF_ENABLED'] = True
 app.config['RATELIMIT_ENABLED'] = os.getenv('APP_ENV') != 'test'
@@ -433,6 +435,7 @@ def admin_login():
         expected_user = os.getenv('ADMIN_USERNAME', '')
         expected_hash = os.getenv('ADMIN_PASSWORD_HASH', '')
         if username == expected_user and expected_hash and check_password_hash(expected_hash, password):
+            session.permanent = True
             session['admin_logged_in'] = True
             return redirect(url_for('get_home_page'))
         error = 'Invalid username or password.'
