@@ -43,7 +43,8 @@ jobs:
               --name bar-menu \
               --restart unless-stopped \
               -p 5001:5001 \
-              -v /home/ec2-user/bar-menu-images:/app/static/images \
+              -v /home/ec2-user/bar-menu-images/wine:/app/static/images/wine \
+              -v /home/ec2-user/bar-menu-images/cocktails:/app/static/images/cocktails \
               -e DATABASE_URL='${{ secrets.DATABASE_URL }}' \
               -e SECRET_KEY='${{ secrets.SECRET_KEY }}' \
               -e ADMIN_USERNAME='${{ secrets.ADMIN_USERNAME }}' \
