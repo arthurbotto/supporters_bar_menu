@@ -206,12 +206,13 @@ consistent with the existing `_row_to_product()` pattern.
 | Accordion | Event delegation on `document` | HTMX replaces the DOM on search — per-element listeners attached at page load would be lost |
 | Cocktail modal | `fetch()` + HTML injection | Fetches `/cocktails/<id>/modal` fragment, injects into `#modalBody` |
 | Wine modal | `fetch()` + HTML injection | Fetches `/wines/<id>/modal` fragment via `wine_modal.js`, same pattern as cocktail modal |
+| Dark mode toggle | `localStorage` + CSS variables | `darkmode.js` toggles `dark-mode` class on `<html>`; preference persisted in `localStorage`; anti-flash inline script in `<head>` applies class before CSS loads |
 
 ### CSS structure
 
 | File | What it covers |
 |---|---|
-| `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `--price-cols` grid rule, `.search` input; `@media (max-width: 600px)` for all menu routes |
+| `base.css` | Shared layout: variables, `.header`, `.container`, `.home-btn`, `.product-list`, `.product-item`, `.product-name`, `.product-price-cell`, `.product-price-header`, `.product-price-row`, `--price-cols` grid rule, `.search` input; `:root.dark-mode` variable overrides; `.theme-toggle` fixed button; `@media (max-width: 600px)` for all menu routes |
 | `home.css` | Home grid: `.grid` (3-col, max-width 860px), `.tile` (180px height, hover shadow) |
 | `cocktails.css` | `.cocktail-toggle` (accordion button), `.cocktail-panel`, `.chevron`, `.ingredients`, `.more-button` |
 | `wines.css` | `.more-button-wines`, `.wine-filters` container, `.filter-search`, `.filter-controls`, `.filter-select`, `.filter-apply-btn`, `.filter-clear-btn`, `.filter-checkbox-label` |
@@ -222,6 +223,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `softs.css` | (empty — softs uses base.css classes only) |
 | `hot_drinks.css` | `.hot-row` (flex, space-between) |
 | `snacks.css` | `.snack-row` (flex, space-between) |
+| `static/js/darkmode.js` | `toggleTheme()` — toggles `dark-mode` class on `<html>`, saves to `localStorage`, updates button icon (☾/☀); wired via `addEventListener` on `.theme-toggle` |
 
 **The accordion evolution:** the original `menu.js` (kept in `old_menu_dot_js.md` for reference)
 attached `addEventListener` to each `.cocktail-toggle` on page load. After HTMX was added for search,
@@ -294,6 +296,58 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ---
 
+## Deployment
+
+**Production URL:** https://supportersmenu.com
+
+### Infrastructure
+
+| Component | Service |
+|---|---|
+| Server | AWS EC2 (t2/t3.micro, eu-west-2) |
+| Database | AWS RDS PostgreSQL (db.t3.micro) |
+| Static IP | AWS Elastic IP (attached to EC2) |
+| Reverse proxy | nginx — forwards 80/443 → localhost:5001 |
+| HTTPS | Certbot / Let's Encrypt (auto-renewal via systemd timer) |
+| DNS | A record pointing `supportersmenu.com` → Elastic IP |
+
+### Docker
+
+The app runs inside a Docker container on EC2.
+
+- `Dockerfile` — `python:3.13-slim` + `libpq-dev` (required for psycopg v3) + pip install + COPY app
+- `.dockerignore` — excludes venv, pycache, .env, tests/, data/
+- Uploaded images persist via Docker volumes:
+  - `/home/ec2-user/bar-menu-images/wine` → `/app/static/images/wine`
+  - `/home/ec2-user/bar-menu-images/cocktails` → `/app/static/images/cocktails`
+  - Volumes survive `docker rm` on every deploy; committed static assets (logo etc.) are unaffected
+
+### nginx config (`/etc/nginx/conf.d/supportersmenu.conf`)
+
+- `client_max_body_size 10M` in the 443 server block (default 1MB would reject image uploads)
+- Certbot manages the SSL directives and HTTP→HTTPS redirect block
+
+### CI/CD (GitHub Actions)
+
+- `.github/workflows/ci.yml` — runs pytest on every push and pull request; PostgreSQL 16 service container; ignores E2E tests
+- `.github/workflows/deploy.yml` — triggers on push to `main`; calls ci.yml first; only deploys if tests pass
+- Deploy steps: SCP files to EC2 → `docker build` → `docker stop/rm` → `docker run` with env vars from secrets
+- GitHub secrets required: `EC2_HOST`, `EC2_SSH_KEY`, `DATABASE_URL`, `SECRET_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`
+
+### Manual deploy
+
+`deploy.sh` — rsync files to EC2 then SSH to rebuild and restart the container. Gitignored (contains RDS password). Use for emergency deploys when GitHub Actions is unavailable.
+
+### Running the CSV importer against production
+
+```bash
+DATABASE_URL='postgresql://postgres:<password>@<rds-endpoint>:5432' python scripts/import_from_csv_v4.py
+```
+
+Your local IP must be in the RDS security group inbound rules (port 5432). Run locally — `data/` CSVs are not on EC2.
+
+---
+
 ## Practice / Learning Files
 
 - `practice_wines.py` — standalone script simulating `get_wines()` without a DB.
@@ -304,11 +358,31 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 ## What Still Needs Doing
 
-- [ ] Deploy (evaluating AWS EC2 vs Render)
+- `_normalize_query()` in `product_repository.py` is dead code — safe to delete
 
 ---
 
 ## Changelog
+
+### 2026-04-01 — Dark mode
+
+- **`base.css`** — `:root.dark-mode` variable overrides (bg, surface, panel, text, muted, border, accent, accent-soft); `.theme-toggle` fixed circular button (bottom-right)
+- **`base.html`** — anti-flash inline script in `<head>` applies `dark-mode` class before CSS loads; `<button class="theme-toggle">` wired to `darkmode.js`
+- **`static/js/darkmode.js`** — `toggleTheme()` toggles class + saves to `localStorage` + updates icon; `addEventListener` on `.theme-toggle`
+- **`modal.css`** — replaced hardcoded `#fffaf2` and `#f3f4f6` with `var(--panel)` and `var(--surface)`
+- **`wines.css`** — same replacements for wine modal detail box and image frame
+- **Logo** — replaced screenshot PNG with transparent-background export from Canva (arch fill: none, stroke: maroon); no CSS filter needed
+
+### 2026-04-01 — Deployment to AWS + production hardening
+
+**App is live at https://supportersmenu.com**
+
+- **Docker** — `Dockerfile` (python:3.13-slim + libpq-dev + pip install); `.dockerignore` excludes venv/tests/data
+- **AWS EC2 + RDS** — EC2 t2/t3.micro (eu-west-2); RDS PostgreSQL db.t3.micro; Elastic IP assigned; RDS security group restricts port 5432 to EC2 private IP only
+- **nginx** — reverse proxy on EC2; `client_max_body_size 10M` (default 1MB blocked image uploads); Certbot/Let's Encrypt HTTPS; HTTP→HTTPS redirect
+- **GitHub Actions CI/CD** — `.github/workflows/ci.yml` (tests on every push); `.github/workflows/deploy.yml` (deploy to EC2 only if CI passes); deploy uses `appleboy/scp-action` + `appleboy/ssh-action`
+- **Docker volumes** — uploaded images persisted at `/home/ec2-user/bar-menu-images/{wine,cocktails}` on EC2 host; survive container rebuilds on every deploy; committed static assets unaffected
+- **Session timeout** — `PERMANENT_SESSION_LIFETIME = timedelta(hours=2)`; `session.permanent = True` at login; sessions expire after 2 hours
 
 ### 2026-03-31 — Comprehensive test coverage pass
 

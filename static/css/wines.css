@@ -68,7 +68,7 @@
   padding: 12px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: #fffaf2;
+  background: var(--panel);
 }
 
 .modal-subtitle {
@@ -256,7 +256,7 @@ body.modal-open {
   margin: 0 auto 1rem;
   padding: 16px;
   border-radius: 14px;
-  background: #f8f8f8;
+  background: var(--surface);
   border: 1px solid var(--border);
 }
 

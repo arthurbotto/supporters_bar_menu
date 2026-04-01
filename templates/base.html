@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Supporters House Bar Menu{% endblock %}</title>
@@ -12,6 +17,8 @@
   {% if session.get('admin_logged_in') %}
     <a href="{{ url_for('admin_dashboard') }}" class="admin-bar-btn">Admin</a>
   {% endif %}
+  <button class="theme-toggle" aria-label="Toggle theme">☾</button>
   {% block content %}{% endblock %}
+  <script src="{{ url_for('static', filename='js/darkmode.js') }}"></script>
 </body>
 </html>

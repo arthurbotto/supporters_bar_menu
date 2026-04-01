@@ -102,7 +102,6 @@ def login_required(f):
     return decorated
 
 
-
 # ----------------------
 # home page
 # ----------------------

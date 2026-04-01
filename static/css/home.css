@@ -6,7 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 8px;
 }
 
 .logo {
@@ -78,6 +78,7 @@
   line-height: 1.55;
   opacity: 0.85;
 }
+
 
 @media (max-width: 600px) {
   .grid {

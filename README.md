@@ -2,7 +2,7 @@
 
 A Flask-based digital bar menu for browsing all drink categories.
 
-> **Work in progress** — actively being developed.
+**Live at [https://supportersmenu.com](https://supportersmenu.com)**
 
 ---
 
@@ -24,7 +24,8 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Bar Snacks** — flat list with name, vegan label, description, and price per serve size
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
 - **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
-- **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited
+- **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited; sessions expire after 2 hours
+- **Dark mode** — toggle button on every page; preference persisted in `localStorage`; instant switch with no page reload; anti-flash script prevents white flicker on load
 - **Mobile responsive** — all menu and admin pages adapt to small screens; price columns tighten, form rows stack to single column, tables scroll horizontally
 - **Architecture** — repository pattern, psycopg v3 with `dict_row` results, per-request DB connection via Flask's `g` object
 
@@ -119,7 +120,7 @@ pytest tests/e2e/
 pytest
 ```
 
-251 tests total. Unit/integration tests cover all repositories, all Flask routes, and all admin CRUD routes (auth protection, product/variant management, toggle active). E2E tests cover every customer-facing page plus admin login, HTMX admin search, and JS-driven product form behaviour (category toggle, subcategory input swap, wine field visibility).
+352 tests total. Unit/integration tests cover all repositories, all Flask routes, and all admin CRUD routes (auth protection, product/variant management, toggle active, cocktail CRUD, recipe management, snacks route). E2E tests cover every customer-facing page plus admin login, HTMX admin search, and JS-driven product form behaviour (category toggle, subcategory input swap, wine field visibility).
 
 ---
 
@@ -167,6 +168,10 @@ tests/
 
 ---
 
-## What's coming next
+## Deployment
 
-- Deployment (evaluating AWS EC2 vs Render)
+Hosted on **AWS EC2** (eu-west-2) with **RDS PostgreSQL**. The app runs in a Docker container behind an nginx reverse proxy with HTTPS via Certbot/Let's Encrypt.
+
+- **CI/CD** — GitHub Actions: tests run on every push; deploy to EC2 only when tests pass on `main`
+- **Images** — uploaded images persisted via Docker volumes on the EC2 host; survive container rebuilds on every deploy
+- **Domain** — [supportersmenu.com](https://supportersmenu.com) pointed at an AWS Elastic IP
