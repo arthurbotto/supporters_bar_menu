@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS wine_details;
 DROP TABLE IF EXISTS products;
 DROP TABLE IF EXISTS ingredients;
 DROP TABLE IF EXISTS cocktails;
+DROP TABLE IF EXISTS admin_logs;
 
 
 CREATE TABLE cocktails (
