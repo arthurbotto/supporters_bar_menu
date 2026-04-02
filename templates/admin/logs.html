@@ -1,0 +1,35 @@
+{% extends "admin/base.html" %}
+{% block title %}Logs{% endblock %}
+
+{% block content %}
+<div class="admin-toolbar">
+  <h1 class="admin-page-title" style="margin:0">Logs</h1>
+</div>
+
+<table class="admin-table logs-table">
+    <thead>
+        <tr>
+            <th>Action</th>
+            <th>Entity Type</th>
+            <th>Entity Name</th>
+            <th>Detail</th>
+            <th>Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for log in logs %}
+        <tr>
+            <td>{{ log['action'] }}</td>
+            <td>{{ log['entity_type'] }}</td>
+            <td>{{ log['entity_name'] }}</td>
+            <td>{{ log['detail'] or '—' }}</td>
+            <td>{{ log['created_at'].strftime('%d %b %Y %H:%M') }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5" style="text-align:center; color:#888; padding:2rem">No logs yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

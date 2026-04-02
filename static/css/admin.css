@@ -155,6 +155,27 @@ body {
   font-size: 0.72rem;
 }
 
+.logs-table {
+  table-layout: fixed;
+}
+.logs-table th:nth-child(1) { width: 10%; }  /* Action */
+.logs-table th:nth-child(2) { width: 10%; }  /* Entity Type */
+.logs-table th:nth-child(3) { width: 30%; }  /* Entity Name */
+.logs-table th:nth-child(4) { width: 30%; }  /* Detail */
+.logs-table th:nth-child(5) { width: 20%; }  /* Time */
+.logs-table td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+}
+.logs-table td:nth-child(3),
+.logs-table td:nth-child(4) {
+  white-space: normal;
+  overflow: visible;
+  max-width: none;
+}
+
 /* ---- Status badges ---- */
 .badge {
   display: inline-block;

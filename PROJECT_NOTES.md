@@ -364,6 +364,17 @@ Your local IP must be in the RDS security group inbound rules (port 5432). Run l
 
 ## Changelog
 
+### 2026-04-02 — Admin activity log
+
+- **New table** `admin_logs (id, action, entity_type, entity_id, entity_name, detail, created_at TIMESTAMPTZ DEFAULT NOW())`
+- **New file** `lib/admin_log_repository.py` — no model class (logs are read as plain dicts); `log(action, entity_type, entity_id, entity_name, detail=None)` inserts a row; `all_logs(limit=200)` returns all rows newest-first
+- **New route** `GET /admin/logs` → `templates/admin/logs.html` — table with Action, Entity Type, Entity Name, Detail, Time columns; `.logs-table` CSS class in `admin.css` with fixed column widths
+- **Nav link** added to `templates/admin/base.html`
+- **Logging added to all 13 admin write routes** in `app.py`: product create/update/delete/toggle, variant create/update/delete, cocktail create/update/delete/toggle, recipe add/update/remove
+- Detail field: `active`/`inactive` for toggles; category for product/cocktail creates; `{serve_label} · £{price}` for variant writes; ingredient name for recipe changes
+- `templates/admin/variants.html` — hidden `serve_label` field added to delete form so the route has it for the log
+- `templates/admin/recipe.html` — hidden `ingredient_name` field added to delete form for the same reason
+
 ### 2026-04-01 — Dark mode
 
 - **`base.css`** — `:root.dark-mode` variable overrides (bg, surface, panel, text, muted, border, accent, accent-soft); `.theme-toggle` fixed circular button (bottom-right)

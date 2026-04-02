@@ -118,3 +118,13 @@ CREATE INDEX IF NOT EXISTS idx_product_variants_sort ON product_variants (produc
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_product_variants_unique
 ON product_variants (product_id, serve_label, serve_ml);
+
+CREATE TABLE admin_logs (
+    id SERIAL PRIMARY KEY,
+    action VARCHAR(50) NOT NULL,
+    entity_type VARCHAR(50) NOT NULL,
+    entity_id INTEGER,         
+    entity_name VARCHAR(255),
+    detail TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

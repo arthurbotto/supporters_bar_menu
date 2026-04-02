@@ -24,7 +24,7 @@ A web app serving as the in-house menu for Supporters House Bar. Customers can b
 - **Bar Snacks** — flat list with name, vegan label, description, and price per serve size
 - **Search** — ranked results: name matches scored above ingredient matches, using PostgreSQL `ILIKE` and word-boundary regex
 - **is_active flag** — products can be hidden from all menus without being deleted, controlled via CSV or directly in the DB
-- **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited; sessions expire after 2 hours
+- **Admin panel** — password-protected area at `/admin/`; full CRUD for products and cocktails; manage serve sizes and prices (variants); manage cocktail recipes (ingredients, amounts, units); wine-specific fields (region, vintage, sweetness, body, acidity); image upload for cocktails and wines; CSRF protection on all forms; login rate-limited; sessions expire after 2 hours; activity log at `/admin/logs` showing all create/update/delete/toggle actions with entity name, detail, and timestamp
 - **Dark mode** — toggle button on every page; preference persisted in `localStorage`; instant switch with no page reload; anti-flash script prevents white flicker on load
 - **Mobile responsive** — all menu and admin pages adapt to small screens; price columns tighten, form rows stack to single column, tables scroll horizontally
 - **Architecture** — repository pattern, psycopg v3 with `dict_row` results, per-request DB connection via Flask's `g` object
@@ -134,6 +134,7 @@ lib/
   recipe_item.py / recipe_item_repository.py
   product.py / product_repository.py
   product_variant.py
+  admin_log_repository.py
   database_connection.py
 templates/              # Jinja2 templates + HTMX/modal fragments
 static/

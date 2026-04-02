@@ -11,6 +11,7 @@ from psycopg.errors import UniqueViolation
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 from PIL import Image as PilImage
+from lib.admin_log_repository import AdminLogRepository
 from lib.database_connection import get_flask_database_connection
 from lib.cocktail_repository import CocktailRepository
 from lib.ingredient_repository import IngredientRepository
@@ -452,6 +453,14 @@ def admin_logout():
 def admin_dashboard():
     return render_template('admin/dashboard.html')
 
+@app.route('/admin/logs')
+@login_required
+def admin_logs_all():
+    connection = get_flask_database_connection(app)
+    log_repo = AdminLogRepository(connection)
+    logs = log_repo.all_logs()
+    return render_template('admin/logs.html', logs=logs)
+
 # --------------------
 # ADMIN PRODUCT ROUTES
 # --------------------
@@ -479,12 +488,14 @@ def admin_search_products():
 def admin_toggle_active(product_id):
     connection = get_flask_database_connection(app)
     repo = ProductRepository(connection)
+    log_repo = AdminLogRepository(connection)
     product = repo.find(product_id)
     if product is None:
         flash('Product not found.', 'error')
     else:
         repo.set_active(product_id, not product.is_active)
         status = 'active' if not product.is_active else 'inactive'
+        log_repo.log('toggle', 'product', product_id, product.name, detail=status)
         flash(f'"{product.name}" set to {status}.', 'success')
     return redirect(url_for('admin_products'))
 
@@ -527,6 +538,8 @@ def admin_product_new():
                 request.form.get('acidity', '').strip() or None,
             )
 
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('create', 'product', product_id, name, detail=category)
         flash(f'"{name}" created. Now add at least one serve size and price.', 'success')
         return redirect(url_for('admin_product_variants', product_id=product_id))
 
@@ -573,6 +586,8 @@ def admin_product_edit(product_id):
                 request.form.get('acidity', '').strip() or None,
             )
 
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('update', 'product', product_id, name, detail='updated')
         flash(f'"{name}" updated.', 'success')
         return redirect(url_for('admin_products'))
 
@@ -610,6 +625,8 @@ def admin_product_delete(product_id):
     product = repo.find(product_id)
     if product:
         repo.delete_product(product_id)
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('delete', 'product', product_id, product.name, detail=product.category)
         flash(f'"{product.name}" deleted.', 'success')
     return redirect(url_for('admin_products'))
 
@@ -640,6 +657,9 @@ def admin_variant_create(product_id):
         connection = get_flask_database_connection(app)
         repo = ProductRepository(connection)
         repo.create_variant(product_id, serve_label, serve_ml, price, sort_order)
+        product = repo.find(product_id)
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('create', 'variant', product_id, product.name if product else None, detail=f'{serve_label} · £{price}')
         flash('Variant added.', 'success')
     return redirect(url_for('admin_product_variants', product_id=product_id))
 
@@ -659,6 +679,9 @@ def admin_variant_update(variant_id):
         connection = get_flask_database_connection(app)
         repo = ProductRepository(connection)
         repo.update_variant(variant_id, serve_label, serve_ml, price, sort_order)
+        product = repo.find(product_id)
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('update', 'variant', product_id, product.name if product else None, detail=f'{serve_label} · £{price}')
         flash('Variant updated.', 'success')
     return redirect(url_for('admin_product_variants', product_id=product_id))
 
@@ -667,9 +690,13 @@ def admin_variant_update(variant_id):
 @login_required
 def admin_variant_delete(variant_id):
     product_id = _parse_int(request.form.get('product_id'))
+    serve_label = request.form.get('serve_label', '').strip()
     connection = get_flask_database_connection(app)
     repo = ProductRepository(connection)
+    product = repo.find(product_id)
     repo.delete_variant(variant_id)
+    log_repo = AdminLogRepository(connection)
+    log_repo.log('delete', 'variant', product_id, product.name if product else None, detail=serve_label or None)
     flash('Variant deleted.', 'success')
     return redirect(url_for('admin_product_variants', product_id=product_id))
 
@@ -708,6 +735,8 @@ def admin_toggle_active_cocktail(cocktail_id):
     else:
         repo.set_active(cocktail_id, not cocktail.is_active)
         status = 'active' if not cocktail.is_active else 'inactive'
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('toggle', 'cocktail', cocktail_id, cocktail.name, detail=status)
         flash(f'"{cocktail.name}" set to {status}.', 'success')
     return redirect(url_for('admin_cocktails'))
 
@@ -739,6 +768,8 @@ def admin_cocktail_new():
             flash(f'A cocktail named "{name}" already exists.', 'error')
             return render_template('admin/cocktail_form.html', cocktail=None, form=request.form)
 
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('create', 'cocktail', cocktail_id, name, detail=subcategory)
         flash(f'"{name}" created.', 'success')
         return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
 
@@ -778,6 +809,8 @@ def admin_cocktail_edit(cocktail_id):
             cocktail = repo.find_cocktail(cocktail_id)
             return render_template('admin/cocktail_form.html', cocktail=cocktail, form=request.form)
 
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('update', 'cocktail', cocktail_id, name, detail='updated')
         flash(f'"{name}" updated.', 'success')
         return redirect(url_for('admin_cocktails'))
     
@@ -807,6 +840,8 @@ def admin_cocktail_delete(cocktail_id):
     cocktail = repo.find_cocktail(cocktail_id)
     if cocktail:
         repo.delete_cocktail(cocktail_id)
+        log_repo = AdminLogRepository(connection)
+        log_repo.log('delete', 'cocktail', cocktail_id, cocktail.name, detail=cocktail.subcategory)
         flash(f'"{cocktail.name}" deleted.', 'success')
     return redirect(url_for('admin_cocktails'))
 
@@ -845,6 +880,9 @@ def admin_recipe_create(cocktail_id):
         ingredient_id = ingredient.id
 
     r_repo.create_recipe(cocktail_id, ingredient_id, amount, unit, sort_order, optional)
+    cocktail = CocktailRepository(connection).find_cocktail(cocktail_id)
+    log_repo = AdminLogRepository(connection)
+    log_repo.log('add ingredient', 'cocktail', cocktail_id, cocktail.name if cocktail else None, detail=ingredient_name)
     flash('Recipe item added.', 'success')
     return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
 
@@ -870,6 +908,9 @@ def admin_recipe_update(recipe_id):
         ingredient_id = ingredient.id
 
     r_repo.update_recipe(recipe_id, ingredient_id, amount, unit, sort_order, optional)
+    cocktail = CocktailRepository(connection).find_cocktail(cocktail_id)
+    log_repo = AdminLogRepository(connection)
+    log_repo.log('update ingredient', 'cocktail', cocktail_id, cocktail.name if cocktail else None, detail=new_name)
     flash('Recipe updated.', 'success')
     return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
 
@@ -878,9 +919,13 @@ def admin_recipe_update(recipe_id):
 @login_required
 def admin_recipe_delete(recipe_id):
     cocktail_id = _parse_int(request.form.get('cocktail_id'))
+    ingredient_name = request.form.get('ingredient_name', '').strip()
     connection = get_flask_database_connection(app)
     r_repo = RecipeItemRepository(connection)
+    cocktail = CocktailRepository(connection).find_cocktail(cocktail_id)
     r_repo.delete_recipe(recipe_id)
+    log_repo = AdminLogRepository(connection)
+    log_repo.log('remove ingredient', 'cocktail', cocktail_id, cocktail.name if cocktail else None, detail=ingredient_name or None)
     flash('Ingredient removed from recipe.', 'success')
     return redirect(url_for('admin_cocktail_recipe', cocktail_id=cocktail_id))
 

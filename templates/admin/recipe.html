@@ -58,6 +58,7 @@
                   onsubmit="return confirm('Remove {{ r.ingredient_name | e }} from this recipe?')">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="cocktail_id" value="{{ cocktail.id }}">
+                <input type="hidden" name="ingredient_name" value="{{ r.ingredient_name or '' }}">
                 <button type="submit" class="btn btn-danger btn-sm">Remove</button>
             </form>
         </td>
