@@ -18,8 +18,8 @@ class TestAllWines:
     def test_returns_all_wines(self, seeded_db):
         repo = ProductRepository(seeded_db)
         wines = repo.all_wines()
-        assert len(wines) == 4
-        assert [w.name for w in wines] == ['Malbec Reserva', 'Prosecco', 'Rioja Crianza', 'Sauvignon Blanc']
+        assert len(wines) == 5
+        assert [w.name for w in wines] == ['Malbec Reserva', 'No ABV Wine', 'Prosecco', 'Rioja Crianza', 'Sauvignon Blanc']
 
     def test_returns_wine_instances(self, seeded_db):
         repo = ProductRepository(seeded_db)

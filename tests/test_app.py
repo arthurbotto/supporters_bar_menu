@@ -77,6 +77,11 @@ class TestWineModalRoute:
         response = web_client.get("/wines/10/modal")
         assert response.status_code == 404
 
+    def test_wine_modal_with_null_abv_returns_200(self, web_client, seeded_db_products):
+        response = web_client.get("/wines/24/modal")
+        assert response.status_code == 200
+        assert b'No ABV Wine' in response.data
+
 
 class TestSpiritsRoute:
 
@@ -156,6 +161,11 @@ class TestCocktailModalRoute:
     def test_returns_404_if_no_cocktail(self, web_client, seeded_db_cocktails):
         response = web_client.get("/cocktails/10/modal")
         assert response.status_code == 404
+
+    def test_cocktail_modal_with_null_abv_returns_200(self, web_client, seeded_db_cocktails):
+        response = web_client.get("/cocktails/4/modal")
+        assert response.status_code == 200
+        assert b'No ABV Cocktail' in response.data
 
 
 class TestMocktailsRoute:

@@ -851,7 +851,6 @@ def admin_cocktail_recipe(cocktail_id):
     connection = get_flask_database_connection(app)
     repo = CocktailRepository(connection)
     recipe_repo = RecipeItemRepository(connection)
-    i_repo = IngredientRepository(connection)
     cocktail = repo.find_cocktail(cocktail_id)
     if cocktail is None:
         return render_template('404.html'), 404

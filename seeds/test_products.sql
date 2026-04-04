@@ -83,3 +83,7 @@ INSERT INTO products (code, name, category, subcategory, description, producer, 
 INSERT INTO product_variants (product_id, serve_label, serve_ml, price, sort_order) VALUES
   ((SELECT id FROM products WHERE code = 'SNACK-001'), 'Portion', NULL, 2.50, 1),
   ((SELECT id FROM products WHERE code = 'SNACK-002'), 'Portion', NULL, 3.00, 1);
+
+-- Null-ABV wine (id 24) — for testing modal renders correctly without ABV
+INSERT INTO products (code, name, category, subcategory, abv, is_active)
+VALUES ('WINE-NOABV', 'No ABV Wine', 'wine', 'red', NULL, TRUE);

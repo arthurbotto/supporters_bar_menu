@@ -21,8 +21,8 @@ class TestAll:
     def test_returns_all_cocktails(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         cocktails = repo.all()
-        assert len(cocktails) == 3
-        assert {c.name for c in cocktails} == {"Negroni", "Mojito", "Margarita"}
+        assert len(cocktails) == 4
+        assert {c.name for c in cocktails} == {"Negroni", "Mojito", "Margarita", "No ABV Cocktail"}
 
     def test_returns_cocktail_instances(self, seeded_db):
         repo = CocktailRepository(seeded_db)
@@ -199,8 +199,8 @@ class TestAdminMethods:
     def test_all_cocktails_for_admin_returns_all(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         cocktails = repo.all_cocktails_for_admin()
-        assert len(cocktails) == 3
-        assert {c.name for c in cocktails} == {'Negroni', 'Mojito', 'Margarita'}
+        assert len(cocktails) == 4
+        assert {c.name for c in cocktails} == {'Negroni', 'Mojito', 'Margarita', 'No ABV Cocktail'}
 
     def test_all_cocktails_for_admin_returns_cocktail_instances(self, seeded_db):
         repo = CocktailRepository(seeded_db)
@@ -215,7 +215,7 @@ class TestAdminMethods:
         )
         repo = CocktailRepository(seeded_db)
         cocktails = repo.all_cocktails_for_admin()
-        assert len(cocktails) == 4
+        assert len(cocktails) == 5
         assert any(c.name == 'Hidden Sour' for c in cocktails)
 
     def test_all_cocktails_for_admin_ordered_by_subcategory_then_name(self, seeded_db):
@@ -251,7 +251,7 @@ class TestAdminMethods:
     def test_search_cocktail_admin_empty_query_returns_all(self, seeded_db):
         repo = CocktailRepository(seeded_db)
         results = repo.search_cocktail_admin('')
-        assert len(results) == 3
+        assert len(results) == 4
 
     def test_search_cocktail_admin_no_match_returns_empty(self, seeded_db):
         repo = CocktailRepository(seeded_db)

@@ -12,18 +12,18 @@
   </div>
 {% endif %}
 
-<p class="modal-description">{{wine.description|e}}</p>
+<p class="modal-description">{{wine.description or '' }}</p>
 
 <h3 class="modal-subtitle">Details</h3>
 
 <div class="modal-meta">
-  <div><strong>Producer:</strong> {{ wine.producer|e }}</div>
-  <div><strong>Country:</strong> {{ wine.country|e }}</div>
-  <div><strong>Region:</strong> {{ wine.region|e }}</div>
-  <div><strong>Vintage:</strong> {{ wine.vintage|e }}</div>
-  <div><strong>Sweetness:</strong> {{ wine.sweetness|capitalize }}</div>
-  <div><strong>Body:</strong> {{ wine.body|capitalize }}</div>
-  <div><strong>Acidity:</strong> {{ wine.acidity|capitalize }}</div>
+  <div><strong>Producer:</strong> {{ wine.producer or '' }}</div>
+  <div><strong>Country:</strong> {{ wine.country or '' }}</div>
+  <div><strong>Region:</strong> {{ wine.region or '' }}</div>
+  <div><strong>Vintage:</strong> {{ wine.vintage or '' }}</div>
+  <div><strong>Sweetness:</strong> {{ wine.sweetness|capitalize if wine.sweetness else '' }}</div>
+  <div><strong>Body:</strong> {{ wine.body|capitalize if wine.body else '' }}</div>
+  <div><strong>Acidity:</strong> {{ wine.acidity|capitalize if wine.acidity else '' }}</div>
   {% if wine.vegan %}
     <div><strong>Vegan:</strong> Yes</div>
   {% else %}
@@ -34,6 +34,6 @@
   {% else %}
     <div><strong>Organic:</strong> No</div>
   {% endif %}
-  <div><strong>Alcohol Content:</strong> {{ "%.1f"|format(wine.abv) }}%</div>
+  <div><strong>Alcohol Content:</strong> {{ "%.1f"|format(wine.abv) + '%' if wine.abv }}</div>
 </div>
 

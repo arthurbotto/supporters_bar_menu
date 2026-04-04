@@ -364,6 +364,14 @@ Your local IP must be in the RDS security group inbound rules (port 5432). Run l
 
 ## Changelog
 
+### 2026-04-04 — Null-ABV bug fix and regression tests
+
+- **Bug fix** — `wines_list.html` line 26: `"%.1f"|format(wine.abv)` raised `TypeError` when `abv` is `NULL`; guarded with `if wine.abv` (same guard already applied to cocktail modal earlier)
+- **Root cause** — the HTMX call to `/search_wines` returned 500, so HTMX didn't update `#wineResults`, leaving the static `{% include "wines_list.html" %}` placeholder with undefined `grouped` — showing "No wines found"
+- **New seed rows** — `seeds/test_products.sql`: `WINE-NOABV` (id 24); `seeds/test_cocktails.sql`: `No ABV Cocktail` (id 4) — both with `abv = NULL`
+- **New tests** — `tests/test_app.py`: `TestWineModalRoute.test_wine_modal_with_null_abv_returns_200`, `TestCocktailModalRoute.test_cocktail_modal_with_null_abv_returns_200`
+- **Count assertions updated** — `test_cocktail_repository.py` and `test_product_repository.py` counts and name sets updated to reflect the extra seed rows
+
 ### 2026-04-02 — Admin activity log
 
 - **New table** `admin_logs (id, action, entity_type, entity_id, entity_name, detail, created_at TIMESTAMPTZ DEFAULT NOW())`

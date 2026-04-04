@@ -21,7 +21,7 @@
           </button>
 
           <div class="cocktail-panel" id="panel-{{ cocktail.id }}" hidden>
-            <span class="cocktail-description">{{ cocktail.description }}</span>
+            <span class="cocktail-description">{{ cocktail.description if cocktail.description else '' }}</span>
             <ul class="ingredients">
               {% for item in cocktail.recipe_items %}
                 {% if item.ingredient_category != 'garnish' %}

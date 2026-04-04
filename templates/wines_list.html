@@ -23,7 +23,7 @@
                         {{- wine.country if wine.country else '' -}}
                         {{- ' · ' + wine.region if wine.region else '' -}}
                         {{- ' · ' + (wine.vintage|string) if wine.vintage else ' · NV' -}}
-                        {{- ' · ' + "%.1f"|format(wine.abv) + '%' -}}
+                        {{- ' · ' + "%.1f"|format(wine.abv) + '%' if wine.abv else '' -}}
                       </span>
                     </div>
                     {% for size in sizes %}
