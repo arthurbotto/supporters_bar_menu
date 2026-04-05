@@ -75,8 +75,6 @@ codebase returns model objects, not dicts.
 | `GET /hot-drinks` | `hot_drinks.html` | flat list |
 | `GET /snacks` | `snacks.html` | flat list with vegan label and price per serve |
 
-`GET /products` has been removed.
-
 ### Cocktails (fully built)
 
 - `GET /cocktails` — shell route; renders `cocktails.html` with no data. Cocktail list loads via HTMX `hx-trigger="load, keyup changed delay:300ms"` calling `/search_cocktails`
@@ -225,7 +223,7 @@ consistent with the existing `_row_to_product()` pattern.
 | `snacks.css` | `.snack-row` (flex, space-between) |
 | `static/js/darkmode.js` | `toggleTheme()` — toggles `dark-mode` class on `<html>`, saves to `localStorage`, updates button icon (☾/☀); wired via `addEventListener` on `.theme-toggle` |
 
-**The accordion evolution:** the original `menu.js` (kept in `old_menu_dot_js.md` for reference)
+**The accordion evolution:** the original `menu.js` (kept in `old_menu_dot_js.md` for reference (file deleted now))
 attached `addEventListener` to each `.cocktail-toggle` on page load. After HTMX was added for search,
 those listeners broke because HTMX swaps out the DOM. The fix was event delegation — one listener
 on `document` that checks `e.target` at click time, so it always works regardless of DOM swaps.
@@ -251,7 +249,7 @@ on `document` that checks `e.target` at click time, so it always works regardles
 |---|---|
 | `tests/test_app.py` | TestHomeRoute, TestWineRoute, TestSearchWinesRoute, TestWineModalRoute, TestSpiritsRoute, TestCocktailsRoute, TestSearchCocktailsRoute, TestCocktailModalRoute, TestMocktailsRoute, TestBeersRoute, TestSoftsRoute, TestHotDrinksRoute, TestErrorHandlers |
 
-**Coverage:** `pytest tests/ --cov=app --cov-report=term-missing` → 98% (only error handlers and `__main__` block uncovered). Run `tests/` not `tests/e2e/` — E2E tests use a subprocess and don't contribute to coverage.
+**Coverage:** `pytest tests/ --cov=app --cov-report=term-missing` → 98% (not final result, this was mid project) (only error handlers and `__main__` block uncovered). Run `tests/` not `tests/e2e/` — E2E tests use a subprocess and don't contribute to coverage.
 
 ### E2E tests (`tests/e2e/`)
 
@@ -585,6 +583,4 @@ Seed data updates:
 
 ## Known Issues / Technical Debt
 
-- Flask-WTF is active (CSRF protection on all admin POST forms).
-- `_normalize_query()` in `lib/product_repository.py` is defined but never called — dead code.
-- Uploaded images in `static/images/` are not tracked by git (gitignored or ephemeral on Render free tier) — will need cloud storage (S3 / Cloudinary) before deploying to an ephemeral host.
+---

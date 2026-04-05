@@ -176,3 +176,28 @@ Hosted on **AWS EC2** (eu-west-2) with **RDS PostgreSQL**. The app runs in a Doc
 - **CI/CD** — GitHub Actions: tests run on every push; deploy to EC2 only when tests pass on `main`
 - **Images** — uploaded images persisted via Docker volumes on the EC2 host; survive container rebuilds on every deploy
 - **Domain** — [supportersmenu.com](https://supportersmenu.com) pointed at an AWS Elastic IP
+
+
+## 🖼 Demo Images
+
+<img width="1811" height="1126" alt="Image" src="https://github.com/user-attachments/assets/58839f40-1284-452d-aa7a-811d52d61385" />
+
+<img width="2147" height="1193" alt="Image" src="https://github.com/user-attachments/assets/6753cd17-2630-4c03-99b1-6df5c1889307" />
+
+<img width="2092" height="939" alt="Image" src="https://github.com/user-attachments/assets/5a5690ce-d2f4-4b15-8128-f808fe499c01" />
+
+<img width="1140" height="1152" alt="Image" src="https://github.com/user-attachments/assets/5348f37a-08b1-4486-9bdd-0dbe56d4bc9d" />
+
+<img width="2222" height="1160" alt="Image" src="https://github.com/user-attachments/assets/5b2ef2ea-da88-4cdc-afa7-723b33bdc028" />
+
+<img width="1126" height="1072" alt="Image" src="https://github.com/user-attachments/assets/db623ce1-986f-4237-8592-de9d38d26e3b" />
+
+<img width="1263" height="890" alt="Image" src="https://github.com/user-attachments/assets/adb91c94-a7fd-4b18-8d83-c023c6c9b28c" />
+
+<img width="2544" height="540" alt="Image" src="https://github.com/user-attachments/assets/463e22f9-ae62-4112-8e01-9fe24db2f5ec" />
+
+<img width="1250" height="920" alt="Image" src="https://github.com/user-attachments/assets/a05c3f46-9d07-49cb-8126-d69e1b2bf9b8" />
+
+<img width="1134" height="827" alt="Image" src="https://github.com/user-attachments/assets/20d65cef-7e6c-4530-85b4-d90ad9c63edd" />
+
+<img width="1274" height="939" alt="Image" src="https://github.com/user-attachments/assets/39e38399-6772-4f0c-9850-e682347c3f12" />
