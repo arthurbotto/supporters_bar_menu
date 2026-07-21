@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the full app
 COPY . .
 
-CMD ["python", "app.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "--workers", "3", "app:app"]
