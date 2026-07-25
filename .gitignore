@@ -10,3 +10,11 @@ bar_menu_venv/
 deploy.sh
 deploy.sh
 deploy.sh
+
+# Runtime image uploads (persisted on host via Docker bind-mounts, backed up separately)
+static/images/wine/
+static/images/cocktails/
+
+# One-time migration artifacts
+supportersmenu-db-*.dump
+supportersmenu-images-*.tar.gz
