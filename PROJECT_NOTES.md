@@ -302,23 +302,26 @@ Playwright + pytest-playwright + xprocess. Covers all routes.
 
 | Component | Service |
 |---|---|
-| Server | AWS EC2 (t2/t3.micro, eu-west-2) |
-| Database | AWS RDS PostgreSQL (db.t3.micro) |
-| Static IP | AWS Elastic IP (attached to EC2) |
+| Server | Hetzner CX23 VPS (Falkenstein) |
+| Database | PostgreSQL 17, running as a container in the same Docker Compose stack (no longer managed AWS RDS) |
+| Static IP | Hetzner-assigned IPv4 |
 | Reverse proxy | nginx — forwards 80/443 → localhost:5001 |
 | HTTPS | Certbot / Let's Encrypt (auto-renewal via systemd timer) |
-| DNS | A record pointing `supportersmenu.com` → Elastic IP |
+| DNS | A record managed at Namecheap, pointing `supportersmenu.com` → Hetzner IPv4 |
+
+Migrated off AWS EC2 + RDS in July 2026 — see Changelog.
 
 ### Docker
 
-The app runs inside a Docker container on EC2.
+The app runs as two containers via `docker-compose.yml` on the Hetzner box:
 
-- `Dockerfile` — `python:3.13-slim` + `libpq-dev` (required for psycopg v3) + pip install + COPY app
-- `.dockerignore` — excludes venv, pycache, .env, tests/, data/
-- Uploaded images persist via Docker volumes:
-  - `/home/ec2-user/bar-menu-images/wine` → `/app/static/images/wine`
-  - `/home/ec2-user/bar-menu-images/cocktails` → `/app/static/images/cocktails`
-  - Volumes survive `docker rm` on every deploy; committed static assets (logo etc.) are unaffected
+- `db` — `postgres:17`, healthcheck (`pg_isready`), data persisted in a named volume (`pgdata`)
+- `web` — builds from `Dockerfile`, depends on `db` being healthy, binds to `127.0.0.1:5001` only (nginx fronts it)
+- `Dockerfile` — `python:3.13-slim` + `libpq-dev` (required for psycopg v3) + pip install + COPY app; `CMD` runs `gunicorn --bind 0.0.0.0:5001 --workers 3 app:app` (switched from the Flask dev server — `gunicorn` added to `requirements.txt`)
+- `.dockerignore` — excludes venv, pycache, .env, tests/, data/, `docker-compose.yml`, `images/`
+- Uploaded images persist via direct bind mounts on the `web` service: `./static/images/wine` → `/app/static/images/wine`, `./static/images/cocktails` → `/app/static/images/cocktails`
+  - These directories are now gitignored — previously the uploaded images were committed straight into the repo; they were stripped out and untracked when the bind-mount setup replaced the old EC2 named-volume paths
+  - Mounts survive `docker compose up -d --build` on every deploy; committed static assets (logo etc.) are unaffected
 
 ### nginx config (`/etc/nginx/conf.d/supportersmenu.conf`)
 
@@ -327,22 +330,22 @@ The app runs inside a Docker container on EC2.
 
 ### CI/CD (GitHub Actions)
 
-- `.github/workflows/ci.yml` — runs pytest on every push and pull request; PostgreSQL 16 service container; ignores E2E tests
-- `.github/workflows/deploy.yml` — triggers on push to `main`; calls ci.yml first; only deploys if tests pass
-- Deploy steps: SCP files to EC2 → `docker build` → `docker stop/rm` → `docker run` with env vars from secrets
-- GitHub secrets required: `EC2_HOST`, `EC2_SSH_KEY`, `DATABASE_URL`, `SECRET_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD_HASH`
+- `.github/workflows/ci.yml` — runs pytest on every push and pull request; PostgreSQL service container; ignores E2E tests
+- `.github/workflows/deploy.yml` — pull-based deploy. On push to `main`, calls `ci.yml` first; if tests pass, SSHes into the Hetzner box and runs `git pull origin main && docker compose up -d --build && docker image prune -f` — the server pulls its own code rather than files being pushed to it (no more SCP step)
+- Old EC2 SCP-based workflow archived as `.github/workflows/OLD_ec2_deploy.md` for reference
+- GitHub secrets required: `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY` — app secrets (DB credentials, `SECRET_KEY`, admin login) now live in a `.env` file on the server itself, read directly by `docker-compose.yml`'s `${...}` interpolation, instead of being injected through Actions
 
 ### Manual deploy
 
-`deploy.sh` — rsync files to EC2 then SSH to rebuild and restart the container. Gitignored (contains RDS password). Use for emergency deploys when GitHub Actions is unavailable.
+`deploy.sh` — rsync files to EC2 then SSH to rebuild and restart the container. Gitignored (contains credentials). **Stale post-migration** — still targets the decommissioned EC2 host and RDS endpoint with a manual `docker run`; hasn't been rewritten for Hetzner. Do not use as-is; see "What Still Needs Doing".
 
-### Running the CSV importer against production
+### Running the CSV importer against production — open item, no working procedure yet
 
-```bash
-DATABASE_URL='postgresql://postgres:<password>@<rds-endpoint>:5432' python scripts/import_from_csv_v4.py
-```
+Production data on Hetzner was loaded once via `pg_restore` from the 7 July 2026 dump. The CSV importer has not been run against production since the migration, and there is currently no confirmed-working way to do so:
 
-Your local IP must be in the RDS security group inbound rules (port 5432). Run locally — `data/` CSVs are not on EC2.
+- The `db` service has no host port mapping — Postgres is reachable only from the `web` container on the Docker network now, unlike the old RDS setup with a security-group-gated public endpoint. The old "run the importer locally against a public DB endpoint" workflow no longer applies at all.
+- `scripts/import_from_csv_v4.py` doesn't use `lib/database_connection.py` — it reads `DATABASE_URL` from the environment directly — but it does append `/supporters_bar_menu` to it itself, the same convention `lib/database_connection.py` uses per-request. Whether `docker compose exec web python scripts/import_from_csv_v4.py` actually lands on the right database has **not** been verified against the production `POSTGRES_DB` value — treat it as unconfirmed, not as a documented method.
+- **Precondition before ever running it against production**: automated database backups must exist first. The importer upserts, and any admin changes made through the UI since 7 July 2026 exist only in the live database — a bad run has no safety net.
 
 ---
 
@@ -357,10 +360,29 @@ Your local IP must be in the RDS security group inbound rules (port 5432). Run l
 ## What Still Needs Doing
 
 - `_normalize_query()` in `product_repository.py` is dead code — safe to delete
+- `deploy.sh` (manual/emergency deploy script) is stale post-Hetzner-migration — still targets the old EC2 host and RDS endpoint; needs a Hetzner rewrite or removal
+- No automated backups exist on Hetzner yet. Until they do, the CSV importer must not be run against production — it upserts, and admin changes made through the UI since the 7 July 2026 migration only exist in the live database
+- No confirmed working procedure for re-running the CSV importer against production post-migration (see Deployment section) — needs a decision once backups are in place
 
 ---
 
 ## Changelog
+
+### 2026-07-26 — Migrate hosting from AWS EC2/RDS to Hetzner; untrack runtime images
+
+- Migrated production off AWS EC2 + RDS onto a single Hetzner CX23 VPS running the new Compose stack; data moved via a one-off `pg_restore` from the 7 July 2026 dump (artifacts gitignored, not committed)
+- `.gitignore` — `static/images/{wine,cocktails}/` no longer tracked (previously-committed upload images removed from the repo); they now persist purely via the `web` service's bind mounts on the host; also ignores one-time migration dump/tar artifacts (`supportersmenu-db-*.dump`, `supportersmenu-images-*.tar.gz`)
+- `.github/workflows/deploy.yml` rewritten for a pull-based deploy (SSH in, `git pull` + `docker compose up -d --build` + `docker image prune -f`); old EC2 SCP-based workflow archived as `.github/workflows/OLD_ec2_deploy.md`
+- GitHub secrets simplified to `SERVER_HOST`, `SERVER_USER`, `SERVER_SSH_KEY` — app secrets now live in a `.env` file on the server, read directly by `docker-compose.yml`
+- `deploy.sh` is now stale (still targets the decommissioned EC2 host/RDS) — needs rewriting for Hetzner or removal
+- CSV importer has not been run against production since the migration; no confirmed working procedure yet (see Deployment section)
+
+### 2026-07-21 — Docker Compose + gunicorn, prep for Hetzner migration
+
+- Added `docker-compose.yml`: `db` (postgres:17, healthcheck, named volume `pgdata`) + `web` (builds from `Dockerfile`, depends on `db` healthy, binds `127.0.0.1:5001`, bind-mounts `static/images/{wine,cocktails}`)
+- `Dockerfile` `CMD` switched from the Flask dev server to `gunicorn --bind 0.0.0.0:5001 --workers 3 app:app`
+- `requirements.txt` — added `gunicorn`
+- `.dockerignore` — now also excludes `docker-compose.yml` and `images/` from the build context
 
 ### 2026-04-04 — Null-ABV bug fix and regression tests
 

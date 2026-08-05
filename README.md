@@ -171,11 +171,13 @@ tests/
 
 ## Deployment
 
-Hosted on **AWS EC2** (eu-west-2) with **RDS PostgreSQL**. The app runs in a Docker container behind an nginx reverse proxy with HTTPS via Certbot/Let's Encrypt.
+Hosted on a single **Hetzner CX23 VPS** (Falkenstein) running **Docker Compose** — one container for the Flask app (served by gunicorn), one for PostgreSQL 17. nginx runs on the host as a reverse proxy, with HTTPS via Certbot/Let's Encrypt (auto-renewing).
 
-- **CI/CD** — GitHub Actions: tests run on every push; deploy to EC2 only when tests pass on `main`
-- **Images** — uploaded images persisted via Docker volumes on the EC2 host; survive container rebuilds on every deploy
-- **Domain** — [supportersmenu.com](https://supportersmenu.com) pointed at an AWS Elastic IP
+- **CI/CD** — GitHub Actions: tests run on every push; on `main`, if tests pass, Actions SSHes into the server, which pulls the latest code (`git pull`) and rebuilds with `docker compose up -d --build` — a pull-based deploy, not a push
+- **Images** — uploaded images persisted via Docker bind mounts (`static/images/wine`, `static/images/cocktails`) to the host filesystem; survive container rebuilds on every deploy
+- **Domain** — [supportersmenu.com](https://supportersmenu.com) DNS managed at Namecheap, A records pointed at the Hetzner box's public IPv4
+
+Migrated from AWS EC2 + RDS in July 2026 after AWS free-tier credits ran out; Hetzner costs ~€7/month versus ~$27-32/month on the equivalent AWS setup.
 
 
 ## 🖼 Demo Images
